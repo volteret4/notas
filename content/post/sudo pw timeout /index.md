@@ -1,15 +1,18 @@
 ---
-title = "Sudo Pw Timeout "
-date = "2025-07-09"
-image = ""
-tags = ["tags:"]
-categories = [sudo]
-description = "sudo timeout"
-showFullContent = false
-readingTime = true
-hideComments = false
+title: Sudo Pw Timeout
+date: 2025-07-09
+tags:
+  - linux
+  - sudo
+  - contraseña
+  - password
+  - pw
+  - timeout
+  - ssh
+categories:
+  - sudo
+description: sudo timeout
 ---
-
 
 ## ✅ 1. **Configurar el tiempo antes de volver a pedir la contraseña**
 
@@ -21,18 +24,15 @@ Edita o crea un archivo en `/etc/sudoers.d/`, por ejemplo:
 
 `sudo visudo -f /etc/sudoers.d/timeout`
 
-
 Y agrega esta línea:
 
 `Defaults timestamp_timeout=5`
 
-
 🕐 Esto significa que **sudo recordará la contraseña durante 5 minutos**. Puedes poner:
 
 - `0`: pide siempre la contraseña.
-    
+
 - `-1`: no la vuelve a pedir durante la sesión.
-    
 
 ---
 
@@ -46,9 +46,7 @@ Edita el archivo PAM de tu shell, por ejemplo para `bash` (esto depende de tu di
 
 `sudo nano /etc/pam.d/sshd`
 
-
 Agrega esta línea al **final** del archivo:
-
 
 `session optional pam_exec.so type=close_session /usr/bin/sudo -K`
 
@@ -63,7 +61,6 @@ Si no quieres meterte con `pam`, puedes hacer algo más simple:
 En tu Raspberry o servidor remoto, edita:
 
 `nano ~/.bash_logout`
-
 
 Agregá esta línea:
 
@@ -81,8 +78,6 @@ Podés comprobar si el caché está activo con:
 
 `sudo -v`
 
-
 Y ver si está activo con:
 
 `sudo -n true && echo "Tiene caché sudo" || echo "No tiene caché sudo"`
-
