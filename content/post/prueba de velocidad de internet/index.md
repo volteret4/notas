@@ -1,11 +1,10 @@
 ---
-title : "Prueba De Velocidad De Internet"
-date : "2025-07-09"
-image : ""
-tags : ["linux", "test", "speed", "velocidad", "prueba", "oneline", "terminal"]
-categories : [network]
-description : "Comprueba la velocidad de internet con este script online"
-
+title: "Prueba De Velocidad De Internet"
+date: "2025-07-09 16:06"
+image: ""
+tags: ["linux", "test", "speed", "velocidad", "prueba", "oneline", "terminal"]
+categories: [network]
+description: "Comprueba la velocidad de internet con este script online"
 ---
 
 Comprueba la velocidad de internet con este script online

@@ -1,6 +1,6 @@
 ---
 title: Sudo Pw Timeout
-date: 2025-07-09
+date: 2025-07-09 16:00
 tags:
   - linux
   - sudo
