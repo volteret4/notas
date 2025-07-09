@@ -16,17 +16,21 @@ description: sudo timeout
 
 ## ✅ 1. **Configurar el tiempo antes de volver a pedir la contraseña**
 
-Esto lo controla `sudo` mediante la opción `timestamp_timeout`.
+Esto lo controla **sudo** mediante la opción **timestamp_timeout**
 
 ### 🔧 ¿Cómo cambiarlo?
 
 Edita o crea un archivo en `/etc/sudoers.d/`, por ejemplo:
 
-`sudo visudo -f /etc/sudoers.d/timeout`
+```bash
+sudo visudo -f /etc/sudoers.d/timeout
+```
 
 Y agrega esta línea:
 
-`Defaults timestamp_timeout=5`
+```bash
+Defaults timestamp_timeout=5
+```
 
 🕐 Esto significa que **sudo recordará la contraseña durante 5 minutos**. Puedes poner:
 
@@ -44,11 +48,15 @@ Esto se puede hacer de varias formas. La más directa:
 
 Edita el archivo PAM de tu shell, por ejemplo para `bash` (esto depende de tu distribución):
 
-`sudo nano /etc/pam.d/sshd`
+```bash
+sudo nano /etc/pam.d/sshd`
+```
 
 Agrega esta línea al **final** del archivo:
 
-`session optional pam_exec.so type=close_session /usr/bin/sudo -K`
+```bash
+session optional pam_exec.so type=close_session /usr/bin/sudo -K
+```
 
 Esto ejecutará `sudo -K` cuando se cierre una sesión SSH, que **borra el timestamp de sudo**.
 
@@ -60,11 +68,15 @@ Si no quieres meterte con `pam`, puedes hacer algo más simple:
 
 En tu Raspberry o servidor remoto, edita:
 
-`nano ~/.bash_logout`
+```bash
+nano ~/.bash_logout
+```
 
 Agregá esta línea:
 
-`sudo -K`
+```bash
+sudo -K
+```
 
 Eso hace que, cuando cierras una sesión interactiva (`exit`, cerrar shell), se borre el caché de `sudo`.
 
@@ -76,8 +88,12 @@ Eso hace que, cuando cierras una sesión interactiva (`exit`, cerrar shell), se 
 
 Podés comprobar si el caché está activo con:
 
-`sudo -v`
+```bash
+sudo -v
+```
 
 Y ver si está activo con:
 
-`sudo -n true && echo "Tiene caché sudo" || echo "No tiene caché sudo"`
+```bash
+sudo -n true && echo "Tiene caché sudo" || echo "No tiene caché sudo"
+```

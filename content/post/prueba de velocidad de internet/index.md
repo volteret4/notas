@@ -8,4 +8,7 @@ description: "Comprueba la velocidad de internet con este script online"
 ---
 
 Comprueba la velocidad de internet con este script online
-`curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -`
+
+```
+curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
+```
