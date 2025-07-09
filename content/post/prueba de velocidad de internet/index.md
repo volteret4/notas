@@ -1,6 +1,6 @@
 ---
 title: "Prueba De Velocidad De Internet"
-date: "2025-07-09 16:06"
+date: "2025-07-09 16:06 UTC"
 image: ""
 tags: ["linux", "test", "speed", "velocidad", "prueba", "oneline", "terminal"]
 categories: [network]

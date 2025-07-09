@@ -1,6 +1,6 @@
 ---
 title: "Crear Commit Aleatorio"
-date: "2025-07-09 16:30"
+date: "2025-07-09 16:30 UTC"
 image: ""
 tags: ["linux", "commit", "git", "oneline", "terminal"]
 categories: [git]
