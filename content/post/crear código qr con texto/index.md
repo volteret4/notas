@@ -1,6 +1,6 @@
 ---
 title: "Crear Código Qr Con Texto"
-date: "2025-07-09 18:00 UTC"
+date: "2025-07-09"
 image: ""
 tags: ["linux", "qr", "url", "share", "compartir", "texto", "enlace", "oneline"]
 categories: [pamplinas]

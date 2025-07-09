@@ -1,6 +1,6 @@
 ---
 title: "Obtener Geolocalización"
-date: "2025-07-09 16:04 UTC"
+date: "2025-07-09"
 image: ""
 tags: ["linux", "geolocalización", "geolocation", "ip"]
 categories: [network]

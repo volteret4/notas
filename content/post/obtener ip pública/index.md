@@ -1,6 +1,6 @@
 ---
 title: "Obtener Ip Pública"
-date: "2025-07-09  16:05 UTC"
+date: "2025-07-09"
 image: ""
 tags: ["linux", "ip", "public-ip", "terminal", "bash", "oneline"]
 categories: [network]

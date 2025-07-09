@@ -1,6 +1,6 @@
 ---
 title: "El Tiempo En El Terminal Oneline"
-date: "2025-07-09 18:00 UTC"
+date: "2025-07-09"
 image: ""
 tags: ["linux", "tiempo", "weather", "oneline", "terminal"]
 categories: [pamplinas]

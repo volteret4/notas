@@ -1,6 +1,6 @@
 ---
 title: "Compartir Archivo Oneline"
-date: "2025-07-09 18:00 UTC"
+date: "2025-07-09"
 image: ""
 tags: ["linux", "compartir", "archivos", "oneline", "share", "files"]
 categories: [pamplinas]

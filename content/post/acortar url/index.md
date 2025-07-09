@@ -1,6 +1,6 @@
 ---
 title: "Acortar Url"
-date: "2025-07-09 21:21 UTC"
+date: "2025-07-09"
 image: ""
 tags: ["linux", "url", "shortener", "acortar", "online"]
 categories: [pamplinas]
