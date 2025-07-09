@@ -5,8 +5,6 @@ image: ""
 tags: ["linux", "criptomonedas", "crypto", "bitcoin", "oneline", "terminal"]
 categories: [pamplinas]
 description: "Muestra el valor de las criptomonedas en el terminal"
-published: "Jul 02, 2025"
-lastUpdated: "Jul 02, 2025 14:00 UTC"
 ---
 
 Con este linea puedes obtener información sobre el valor de diversas criptomonedas:
