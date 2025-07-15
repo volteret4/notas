@@ -5,7 +5,6 @@ image : ""
 tags : []
 categories : [network]
 description : "Cambia la MAC en Linux"
-weight : 1
 ---
 
 

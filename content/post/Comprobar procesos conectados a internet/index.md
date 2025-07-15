@@ -1,15 +1,13 @@
 ---
-title : "Comprobar Procesos Conectados A Internet"
-date : "2025-07-15"
-image : ""
-tags : []
-categories : [network]
-description : "Detectar las conexiones de cada aplicación"
-weight : 3
+title: "Comprobar Procesos Conectados A Internet"
+date: "2025-07-15"
+image: ""
+tags: []
+categories: [network]
+description: "Detectar las conexiones de cada aplicación"
 ---
 
-
-``` bash
+```bash
 sudo netstat -tulnp  # requiere instalar net-tools (en debian)
 sudo ss -tulnp
 
@@ -32,4 +30,3 @@ lsof +D /ruta/al/directorio
 # Actualiza la salida cada 5 segundos
 lsof -i -n -P -r 5
 ```
-
