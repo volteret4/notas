@@ -9,7 +9,6 @@ tags:
   - lan
 categories: [network]
 description: "Conoce los dispositivos conectados a tu LAN"
-weight: 1
 ---
 
 > [Origen](https://nosololinux.es/escanear-red-local-con-nmap-en-linux/)

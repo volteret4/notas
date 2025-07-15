@@ -3,8 +3,8 @@ title : "Comparando Dos Archivos Y Removiendo Coincidencias En Solo Uno"
 date : "2025-07-15"
 image : ""
 tags : []
-categories : [básico]
-description : "Elimina las lineas de file1 que ya existen en file2"
+categories : [arch]
+description : "Problemas con firma PGP y pacman"
 ---
 
 
