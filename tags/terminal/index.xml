@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Terminal on memoria digital</title><link>https://volteret4.github.io/notas/tags/terminal/</link><description>Recent content in Terminal on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Tue, 15 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/terminal/index.xml" rel="self" type="application/rss+xml"/><item><title>Buscar Cadena De Texto En Multiples Archivos</title><link>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="sb">`&lt;/span>grep -rHni &lt;span class="s1">&amp;#39;cadena_de_texto&amp;#39;&lt;/span> .&lt;span class="sb">`&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>-r&lt;/code> Recursivo.
+&lt;code>-H&lt;/code> mostrar nombre del archivo.
+&lt;code>-n&lt;/code> mostrar línea.&lt;/p></description></item><item><title>Crear Commit Aleatorio</title><link>https://volteret4.github.io/notas/p/crear-commit-aleatorio/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-commit-aleatorio/</guid><description>&lt;p>Puedes usar estos comandos para añadir aleatoriedad a diferentes programas.&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>Commits aleatorios
+&lt;code>curl -s https://whatthecommit.com/index.txt&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Chistes de padres
+&lt;code>curl https://icanhazdadjoke.com&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>Puede usarse por ejemplo en un &lt;strong>alias&lt;/strong>:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Para chezmoi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">chzu&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;chezmoi git add . ; chezmoi git -- commit -m &amp;#34;$(curl -s https://whatthecommit.com/index.txt)&amp;#34; ; chezmoi git push&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Para git&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gitodo&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git add . ; git commit -m &amp;#34;$(curl -s https://whatthecommit.com/index.txt)&amp;#34; ; git push&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>El Tiempo En El Terminal Oneline</title><link>https://volteret4.github.io/notas/p/el-tiempo-en-el-terminal-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/el-tiempo-en-el-terminal-oneline/</guid><description>&lt;p>Muestra la previsión metereológica para la ciudad que elijas durante los próximos días&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl wttr.in/Jerez
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Obtener Ip Pública</title><link>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</guid><description>&lt;p>Ejecuta cualquiera de estos comandos en un terminal para obtener la ip pública del host.&lt;/p>
+&lt;p>&lt;a class="link" href="https://github.com/chubin/awesome-console-services?tab=readme-ov-file#new-line" target="_blank" rel="noopener"
+>Ip publica&lt;/a>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>curl ipaddy.net&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl eth0.me&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipaddr.site&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.co&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.pro&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl curlmyip.net&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipinfo.io/ip&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl icanhazip.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl checkip.amazonaws.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ip-api.com/line?fields=query&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.io/ip&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl -s ip.liquidweb.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.es&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipaddress.sh&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl 2ip.ru&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>Prueba De Velocidad De Internet</title><link>https://volteret4.github.io/notas/p/prueba-de-velocidad-de-internet/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/prueba-de-velocidad-de-internet/</guid><description>&lt;p>Comprueba la velocidad de internet con este script online&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Valor Criptomonedas Oneline</title><link>https://volteret4.github.io/notas/p/valor-criptomonedas-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/valor-criptomonedas-oneline/</guid><description>&lt;p>Con este linea puedes obtener información sobre el valor de diversas criptomonedas:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl rate.sx
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

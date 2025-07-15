@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on memoria digital</title><link>https://volteret4.github.io/notas/tags/linux/</link><description>Recent content in Linux on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Tue, 15 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Buscar Cadena De Texto En Multiples Archivos</title><link>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="sb">`&lt;/span>grep -rHni &lt;span class="s1">&amp;#39;cadena_de_texto&amp;#39;&lt;/span> .&lt;span class="sb">`&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>-r&lt;/code> Recursivo.
+&lt;code>-H&lt;/code> mostrar nombre del archivo.
+&lt;code>-n&lt;/code> mostrar línea.&lt;/p></description></item><item><title>Acortar Url</title><link>https://volteret4.github.io/notas/p/acortar-url/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/acortar-url/</guid><description>&lt;p>Devuelve un link corto para compartir facilmente&lt;/p>
+&lt;blockquote>
+&lt;p>Desconozco la duración de dichos enlaces&lt;/p>&lt;/blockquote>
+&lt;p>&lt;code>curl https://is.gd/create.php\?format\=simple\&amp;amp;url\=google.com&lt;/code>&lt;/p></description></item><item><title>Compartir Archivo Oneline</title><link>https://volteret4.github.io/notas/p/compartir-archivo-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/compartir-archivo-oneline/</guid><description>&lt;p>Con este comando puedes subir un archivo de texto para compartirlo fácilmente&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl -F &lt;span class="nv">file&lt;/span>&lt;span class="o">=&lt;/span>@starship.toml https://0x0.st
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crear Código Qr Con Texto</title><link>https://volteret4.github.io/notas/p/crear-c%C3%B3digo-qr-con-texto/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-c%C3%B3digo-qr-con-texto/</guid><description>&lt;p>&lt;code>curl qrenco.de/STRING&lt;/code>&lt;/p>
+&lt;p>&lt;code>echo STRING | curl -F-=\&amp;lt;- qrenco.de&lt;/code>&lt;/p></description></item><item><title>Crear Commit Aleatorio</title><link>https://volteret4.github.io/notas/p/crear-commit-aleatorio/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-commit-aleatorio/</guid><description>&lt;p>Puedes usar estos comandos para añadir aleatoriedad a diferentes programas.&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>Commits aleatorios
+&lt;code>curl -s https://whatthecommit.com/index.txt&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Chistes de padres
+&lt;code>curl https://icanhazdadjoke.com&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>Puede usarse por ejemplo en un &lt;strong>alias&lt;/strong>:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Para chezmoi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">chzu&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;chezmoi git add . ; chezmoi git -- commit -m &amp;#34;$(curl -s https://whatthecommit.com/index.txt)&amp;#34; ; chezmoi git push&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Para git&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gitodo&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git add . ; git commit -m &amp;#34;$(curl -s https://whatthecommit.com/index.txt)&amp;#34; ; git push&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>El Tiempo En El Terminal Oneline</title><link>https://volteret4.github.io/notas/p/el-tiempo-en-el-terminal-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/el-tiempo-en-el-terminal-oneline/</guid><description>&lt;p>Muestra la previsión metereológica para la ciudad que elijas durante los próximos días&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl wttr.in/Jerez
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Escanear red local</title><link>https://volteret4.github.io/notas/p/escanear-red-local/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/escanear-red-local/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://nosololinux.es/escanear-red-local-con-nmap-en-linux/" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;p>Muestra los dispositivos conectados a tu LAN en la subnet especificada&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -sn 192.168.1.0/24
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Obtener Geolocalización</title><link>https://volteret4.github.io/notas/p/obtener-geolocalizaci%C3%B3n/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-geolocalizaci%C3%B3n/</guid><description>&lt;p>Para obtener datos sobre la localización de tu servidor usa cualquiera de estos comandos&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>curl ip-api.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl http://ifconfig.co/json&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.es/geo&lt;/code> or &lt;code>curl ifconfig.es/json&lt;/code> or &lt;code>curl ifconfig.es/country&lt;/code> or &lt;code>curl ifconfig.es/code&lt;/code> or &lt;code>curl ifconfig.es/city&lt;/code> or &lt;code>curl ifconfig.es/latitude&lt;/code> or &lt;code>curl ifconfig.es/longitude&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>Obtener Ip Pública</title><link>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</guid><description>&lt;p>Ejecuta cualquiera de estos comandos en un terminal para obtener la ip pública del host.&lt;/p>
+&lt;p>&lt;a class="link" href="https://github.com/chubin/awesome-console-services?tab=readme-ov-file#new-line" target="_blank" rel="noopener"
+>Ip publica&lt;/a>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>curl ipaddy.net&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl eth0.me&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipaddr.site&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.co&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.pro&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl curlmyip.net&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipinfo.io/ip&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl icanhazip.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl checkip.amazonaws.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ip-api.com/line?fields=query&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.io/ip&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl -s ip.liquidweb.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.es&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipaddress.sh&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl 2ip.ru&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>Prueba De Velocidad De Internet</title><link>https://volteret4.github.io/notas/p/prueba-de-velocidad-de-internet/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/prueba-de-velocidad-de-internet/</guid><description>&lt;p>Comprueba la velocidad de internet con este script online&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Ruta Al Path</title><link>https://volteret4.github.io/notas/p/ruta-al-path/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/ruta-al-path/</guid><description>&lt;p>Añadir &lt;code>~/local/bin&lt;/code> al path&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/home/&lt;/span>&lt;span class="nv">$USER&lt;/span>&lt;span class="s2">/.local/bin:&lt;/span>&lt;span class="nv">$PATH&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Sudo Pw Timeout</title><link>https://volteret4.github.io/notas/p/sudo-pw-timeout/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/sudo-pw-timeout/</guid><description>&lt;h2 id="-1-configurar-el-tiempo-antes-de-volver-a-pedir-la-contraseña">✅ 1. &lt;strong>Configurar el tiempo antes de volver a pedir la contraseña&lt;/strong>
+&lt;/h2>&lt;p>Esto lo controla &lt;strong>sudo&lt;/strong> mediante la opción &lt;strong>timestamp_timeout&lt;/strong>&lt;/p>
+&lt;h3 id="-cómo-cambiarlo">🔧 ¿Cómo cambiarlo?
+&lt;/h3>&lt;p>Edita o crea un archivo en &lt;code>/etc/sudoers.d/&lt;/code>, por ejemplo:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo visudo -f /etc/sudoers.d/timeout
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Y agrega esta línea:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Defaults &lt;span class="nv">timestamp_timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">5&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>🕐 Esto significa que &lt;strong>sudo recordará la contraseña durante 5 minutos&lt;/strong>. Puedes poner:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>0&lt;/code>: pide siempre la contraseña.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>-1&lt;/code>: no la vuelve a pedir durante la sesión.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="-2-hacer-que-sudo-se">✅ 2. &lt;strong>Hacer que sudo se &amp;ldquo;olvide&amp;rdquo; cuando cerrás SSH&lt;/strong>
+&lt;/h2>&lt;p>Esto se puede hacer de varias formas. La más directa:&lt;/p>
+&lt;h3 id="-método-usar-pam_exec-para-limpiar-sudo-al-cerrar-sesión">🔧 Método: usar &lt;code>pam_exec&lt;/code> para limpiar sudo al cerrar sesión
+&lt;/h3>&lt;p>Edita el archivo PAM de tu shell, por ejemplo para &lt;code>bash&lt;/code> (esto depende de tu distribución):&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nano /etc/pam.d/sshd&lt;span class="sb">`&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Agrega esta línea al &lt;strong>final&lt;/strong> del archivo:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">session optional pam_exec.so &lt;span class="nv">type&lt;/span>&lt;span class="o">=&lt;/span>close_session /usr/bin/sudo -K
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Esto ejecutará &lt;code>sudo -K&lt;/code> cuando se cierre una sesión SSH, que &lt;strong>borra el timestamp de sudo&lt;/strong>.&lt;/p>
+&lt;hr>
+&lt;h2 id="-alternativa-simple-alias-en-bash_logout">🧪 Alternativa simple: alias en &lt;code>.bash_logout&lt;/code>
+&lt;/h2>&lt;p>Si no quieres meterte con &lt;code>pam&lt;/code>, puedes hacer algo más simple:&lt;/p>
+&lt;p>En tu Raspberry o servidor remoto, edita:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">nano ~/.bash_logout
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Agregá esta línea:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo -K
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Eso hace que, cuando cierras una sesión interactiva (&lt;code>exit&lt;/code>, cerrar shell), se borre el caché de &lt;code>sudo&lt;/code>.&lt;/p>
+&lt;blockquote>
+&lt;p>📌 Esto &lt;strong>no funciona&lt;/strong> si usas otro shell que no lee &lt;code>.bash_logout&lt;/code>, como &lt;code>zsh&lt;/code>. Para &lt;code>zsh&lt;/code>, puedes usar &lt;code>~/.zlogout&lt;/code>.&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h2 id="-verificación-rápida">🧠 Verificación rápida
+&lt;/h2>&lt;p>Podés comprobar si el caché está activo con:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo -v
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Y ver si está activo con:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo -n &lt;span class="nb">true&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Tiene caché sudo&amp;#34;&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;No tiene caché sudo&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Valor Criptomonedas Oneline</title><link>https://volteret4.github.io/notas/p/valor-criptomonedas-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/valor-criptomonedas-oneline/</guid><description>&lt;p>Con este linea puedes obtener información sobre el valor de diversas criptomonedas:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl rate.sx
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>
