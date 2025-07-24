@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Básico on memoria digital</title><link>https://volteret4.github.io/notas/categories/b%C3%A1sico/</link><description>Recent content in Básico on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Thu, 24 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/categories/b%C3%A1sico/index.xml" rel="self" type="application/rss+xml"/><item><title>Atuin Historial Del Terminal Con Superpodéres</title><link>https://volteret4.github.io/notas/p/atuin-historial-del-terminal-con-superpod%C3%A9res/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/atuin-historial-del-terminal-con-superpod%C3%A9res/</guid><description/></item><item><title>Desactivar Mayúsculas</title><link>https://volteret4.github.io/notas/p/desactivar-may%C3%BAsculas/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/desactivar-may%C3%BAsculas/</guid><description>&lt;p>Desactiva Capslock:
+&lt;code>setxkbmap -option ctrl:nocaps&lt;/code>&lt;/p>
+&lt;p>Para volver a activarlo:&lt;/p></description></item><item><title>Eliminar Clave De Known_hosts</title><link>https://volteret4.github.io/notas/p/eliminar-clave-de-known_hosts/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/eliminar-clave-de-known_hosts/</guid><description>&lt;p>Para eliminar las claves que referencien a dietpi:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl"> ssh-keygen -f &lt;span class="s2">&amp;#34;/home/&lt;/span>&lt;span class="nv">$USER&lt;/span>&lt;span class="s2">/.ssh/known_hosts&amp;#34;&lt;/span> -R &lt;span class="s2">&amp;#34;dietpi&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crontab</title><link>https://volteret4.github.io/notas/p/crontab/</link><pubDate>Tue, 22 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crontab/</guid><description>&lt;h1 id="crontab">Crontab
+&lt;/h1>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">crontab -e
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>[1;33mImagen no encontrada: /mnt/windows/FTP/wiki/Obsidian/Dibujos/img/Pasted image 20240920220109.png[0m&lt;/p>
+&lt;!-- Imagen no encontrada: Pasted image 20240920220109.png -->
+&lt;h2 id="cada-5-minutos">Cada 5 minutos
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">*/5 * * * * /ruta/a/tu/script.sh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Buscar Cadena De Texto En Multiples Archivos</title><link>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="sb">`&lt;/span>grep -rHni &lt;span class="s1">&amp;#39;cadena_de_texto&amp;#39;&lt;/span> .&lt;span class="sb">`&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>-r&lt;/code> Recursivo.
+&lt;code>-H&lt;/code> mostrar nombre del archivo.
+&lt;code>-n&lt;/code> mostrar línea.&lt;/p></description></item><item><title>Comando Para Copiar A Exfat</title><link>https://volteret4.github.io/notas/p/comando-para-copiar-a-exfat/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/comando-para-copiar-a-exfat/</guid><description>&lt;h3 id="montar">Montar
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">sudo mount -t exfat -o &lt;span class="nv">uid&lt;/span>&lt;span class="o">=&lt;/span>1000,gid&lt;span class="o">=&lt;/span>1000,umask&lt;span class="o">=&lt;/span>&lt;span class="m">022&lt;/span> /source /dest
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="copiar">Copiar
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">rsync -avh --info&lt;span class="o">=&lt;/span>progress2 --no-perms --no-owner --no-group --ignore-existing --exclude&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;temp/*&amp;#39;&lt;/span> /mnt/dietpi_userdata/NFS/2TB/moode/ /mnt/500GB/Musica/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Comprobar Que Proceso Usa El Disco</title><link>https://volteret4.github.io/notas/p/comprobar-que-proceso-usa-el-disco/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/comprobar-que-proceso-usa-el-disco/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo iotop -o
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Copia De Particiones Con Dd</title><link>https://volteret4.github.io/notas/p/copia-de-particiones-con-dd/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/copia-de-particiones-con-dd/</guid><description>&lt;h3 id="usar-sfdisk-para-copiar-la-estructura-de-particiones">Usar &lt;code>sfdisk&lt;/code> para copiar la estructura de particiones
+&lt;/h3>&lt;p>&lt;code>Sfdisk&lt;/code> es una herramienta de línea de comandos que permite gestionar las particiones de un disco y copiar su tabla de particiones a un archivo. Esta herramienta solo maneja la &lt;strong>estructura de particiones&lt;/strong>, no los datos contenidos en ellas.&lt;/p>
+&lt;h4 id="copiar-la-estructura-de-particiones">Copiar la estructura de particiones:
+&lt;/h4>&lt;ol>
+&lt;li>&lt;strong>Exportar la tabla de particiones a un archivo&lt;/strong>: Usando &lt;code>sfdisk&lt;/code>, puedes copiar la tabla de particiones de un dispositivo (por ejemplo, &lt;code>/dev/sda&lt;/code>) a un archivo de texto:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl"> sudo sfdisk --dump /dev/sda &amp;gt; particiones.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Esto creará un archivo de texto (&lt;code>particiones.txt&lt;/code>) que contiene la estructura de particiones del dispositivo. Este archivo incluye la información sobre los tamaños y las ubicaciones de las particiones, pero no los datos dentro de ellas.&lt;/p>
+&lt;h4 id="restaurar-la-estructura-de-particiones-en-otro-dispositivo">Restaurar la estructura de particiones en otro dispositivo:
+&lt;/h4>&lt;ol start="2">
+&lt;li>&lt;strong>Restaurar la tabla de particiones en otro dispositivo&lt;/strong>: Si quieres crear la misma estructura de particiones en otro dispositivo (por ejemplo, &lt;code>/dev/sdb&lt;/code>), puedes usar el archivo exportado para restaurar la tabla de particiones:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl"> sudo sfdisk /dev/sdb &amp;lt; particiones.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Formatear Disco</title><link>https://volteret4.github.io/notas/p/formatear-disco/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/formatear-disco/</guid><description>&lt;h2 id="formatear-disco">Formatear disco
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Crear nueva tabla de particiones &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo fdisk /dev/sdXY
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Orden: g, n, w&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Formatear disco&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mkfs &lt;span class="o">[&lt;/span>options&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-t &lt;span class="nb">type&lt;/span> fs-options&lt;span class="o">]&lt;/span> device &lt;span class="o">[&lt;/span>size&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> sudo mkfs -t ext4 /dev/sdb1 &lt;span class="c1"># EJEMPLO&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Listar Servicios Systemctl</title><link>https://volteret4.github.io/notas/p/listar-servicios-systemctl/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/listar-servicios-systemctl/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo systemctl list-units --type&lt;span class="o">=&lt;/span>service
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Montar NTFS</title><link>https://volteret4.github.io/notas/p/montar-ntfs/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/montar-ntfs/</guid><description>&lt;h2 id="instalar">Instalar
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo apt install fuse
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo apt install ntfs-3g
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="montar">Montar
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo mount -t ntfs /dev/sdXy /path
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crear ISO De Dispositivo</title><link>https://volteret4.github.io/notas/p/crear-iso-de-dispositivo/</link><pubDate>Thu, 10 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-iso-de-dispositivo/</guid><description>&lt;p>Crea una imagen de una unidad como un disco duro o una tarjeta de memoria.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo dd &lt;span class="k">if&lt;/span>&lt;span class="o">=&lt;/span>/dev/sdX &lt;span class="nv">of&lt;/span>&lt;span class="o">=&lt;/span>name-of-iso.iso &lt;span class="nv">status&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;progress&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crear Servidor Para Compartir Carpeta</title><link>https://volteret4.github.io/notas/p/crear-servidor-para-compartir-carpeta/</link><pubDate>Thu, 10 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-servidor-para-compartir-carpeta/</guid><description>&lt;p>Crea un servidor http en una carpeta para poder descargar archivos rápidamente&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">python3 -m http.server &lt;span class="m">8000&lt;/span> --bind 0.0.0.0 --directory /ruta/al/directorio
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Ruta Al Path</title><link>https://volteret4.github.io/notas/p/ruta-al-path/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/ruta-al-path/</guid><description>&lt;p>Añadir &lt;code>~/local/bin&lt;/code> al path&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/home/&lt;/span>&lt;span class="nv">$USER&lt;/span>&lt;span class="s2">/.local/bin:&lt;/span>&lt;span class="nv">$PATH&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

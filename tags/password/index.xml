@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Password on memoria digital</title><link>https://volteret4.github.io/notas/tags/password/</link><description>Recent content in Password on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Wed, 09 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/password/index.xml" rel="self" type="application/rss+xml"/><item><title>Sudo Pw Timeout</title><link>https://volteret4.github.io/notas/p/sudo-pw-timeout/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/sudo-pw-timeout/</guid><description>&lt;h2 id="-1-configurar-el-tiempo-antes-de-volver-a-pedir-la-contraseña">✅ 1. &lt;strong>Configurar el tiempo antes de volver a pedir la contraseña&lt;/strong>
+&lt;/h2>&lt;p>Esto lo controla &lt;strong>sudo&lt;/strong> mediante la opción &lt;strong>timestamp_timeout&lt;/strong>&lt;/p>
+&lt;h3 id="-cómo-cambiarlo">🔧 ¿Cómo cambiarlo?
+&lt;/h3>&lt;p>Edita o crea un archivo en &lt;code>/etc/sudoers.d/&lt;/code>, por ejemplo:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo visudo -f /etc/sudoers.d/timeout
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Y agrega esta línea:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Defaults &lt;span class="nv">timestamp_timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">5&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>🕐 Esto significa que &lt;strong>sudo recordará la contraseña durante 5 minutos&lt;/strong>. Puedes poner:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>0&lt;/code>: pide siempre la contraseña.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>-1&lt;/code>: no la vuelve a pedir durante la sesión.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="-2-hacer-que-sudo-se">✅ 2. &lt;strong>Hacer que sudo se &amp;ldquo;olvide&amp;rdquo; cuando cerrás SSH&lt;/strong>
+&lt;/h2>&lt;p>Esto se puede hacer de varias formas. La más directa:&lt;/p>
+&lt;h3 id="-método-usar-pam_exec-para-limpiar-sudo-al-cerrar-sesión">🔧 Método: usar &lt;code>pam_exec&lt;/code> para limpiar sudo al cerrar sesión
+&lt;/h3>&lt;p>Edita el archivo PAM de tu shell, por ejemplo para &lt;code>bash&lt;/code> (esto depende de tu distribución):&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nano /etc/pam.d/sshd&lt;span class="sb">`&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Agrega esta línea al &lt;strong>final&lt;/strong> del archivo:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">session optional pam_exec.so &lt;span class="nv">type&lt;/span>&lt;span class="o">=&lt;/span>close_session /usr/bin/sudo -K
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Esto ejecutará &lt;code>sudo -K&lt;/code> cuando se cierre una sesión SSH, que &lt;strong>borra el timestamp de sudo&lt;/strong>.&lt;/p>
+&lt;hr>
+&lt;h2 id="-alternativa-simple-alias-en-bash_logout">🧪 Alternativa simple: alias en &lt;code>.bash_logout&lt;/code>
+&lt;/h2>&lt;p>Si no quieres meterte con &lt;code>pam&lt;/code>, puedes hacer algo más simple:&lt;/p>
+&lt;p>En tu Raspberry o servidor remoto, edita:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">nano ~/.bash_logout
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Agregá esta línea:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo -K
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Eso hace que, cuando cierras una sesión interactiva (&lt;code>exit&lt;/code>, cerrar shell), se borre el caché de &lt;code>sudo&lt;/code>.&lt;/p>
+&lt;blockquote>
+&lt;p>📌 Esto &lt;strong>no funciona&lt;/strong> si usas otro shell que no lee &lt;code>.bash_logout&lt;/code>, como &lt;code>zsh&lt;/code>. Para &lt;code>zsh&lt;/code>, puedes usar &lt;code>~/.zlogout&lt;/code>.&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h2 id="-verificación-rápida">🧠 Verificación rápida
+&lt;/h2>&lt;p>Podés comprobar si el caché está activo con:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo -v
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Y ver si está activo con:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo -n &lt;span class="nb">true&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Tiene caché sudo&amp;#34;&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;No tiene caché sudo&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

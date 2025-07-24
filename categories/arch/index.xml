@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Arch on memoria digital</title><link>https://volteret4.github.io/notas/categories/arch/</link><description>Recent content in Arch on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Tue, 15 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/categories/arch/index.xml" rel="self" type="application/rss+xml"/><item><title>Comparando Dos Archivos Y Removiendo Coincidencias En Solo Uno</title><link>https://volteret4.github.io/notas/p/comparando-dos-archivos-y-removiendo-coincidencias-en-solo-uno/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/comparando-dos-archivos-y-removiendo-coincidencias-en-solo-uno/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://stackoverflow.com/questions/37503186/comparing-two-files-by-lines-and-removing-duplicates-from-first-file%22%20class=%22tc-tiddlylink-external" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;p>Remove lines from test1 because they are in test2:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">grep -vxFf test2 test1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>To overwrite test1:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">grep -vxFf test2 test1 &amp;gt;test1.tmp &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> mv test1.tmp test1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

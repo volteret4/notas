@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>memoria digital</title><link>https://volteret4.github.io/notas/</link><description>Recent content on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Thu, 24 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/index.xml" rel="self" type="application/rss+xml"/><item><title>Atuin Historial Del Terminal Con Superpodéres</title><link>https://volteret4.github.io/notas/p/atuin-historial-del-terminal-con-superpod%C3%A9res/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/atuin-historial-del-terminal-con-superpod%C3%A9res/</guid><description/></item><item><title>Desactivar Mayúsculas</title><link>https://volteret4.github.io/notas/p/desactivar-may%C3%BAsculas/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/desactivar-may%C3%BAsculas/</guid><description>&lt;p>Desactiva Capslock:
+&lt;code>setxkbmap -option ctrl:nocaps&lt;/code>&lt;/p>
+&lt;p>Para volver a activarlo:&lt;/p></description></item><item><title>Eliminar Clave De Known_hosts</title><link>https://volteret4.github.io/notas/p/eliminar-clave-de-known_hosts/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/eliminar-clave-de-known_hosts/</guid><description>&lt;p>Para eliminar las claves que referencien a dietpi:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl"> ssh-keygen -f &lt;span class="s2">&amp;#34;/home/&lt;/span>&lt;span class="nv">$USER&lt;/span>&lt;span class="s2">/.ssh/known_hosts&amp;#34;&lt;/span> -R &lt;span class="s2">&amp;#34;dietpi&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Fail2ban How To Unban Ips That Are Blocked</title><link>https://volteret4.github.io/notas/p/fail2ban-how-to-unban-ips-that-are-blocked/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/fail2ban-how-to-unban-ips-that-are-blocked/</guid><description/></item><item><title>Wake On LAN</title><link>https://volteret4.github.io/notas/p/wake-on-lan/</link><pubDate>Wed, 23 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/wake-on-lan/</guid><description>&lt;h2 id="configure-the-host-waking-up">Configure the host waking up
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">sudo ethtool -s eth0 wol g
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Access BIOS and enable Wake On Lan.&lt;/p>
+&lt;h2 id="how-do-i-send-wol-magic-packets-under-linux">How Do I Send WOL Magic Packets Under Linux?
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">wakeonlan MAC-Address-Here
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">wakeonlan &lt;span class="s2">&amp;#34;74:56:3C:5D:E6:1D&amp;#34;&lt;/span> &lt;span class="c1"># proxmox&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">wakeonlan &lt;span class="s2">&amp;#34;30:65:ec:a8:9b:37&amp;#34;&lt;/span> &lt;span class="c1"># kodi&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>OR&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">etherwake MAC-Address-Here
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="crea-un-servicio-para-activar-wol-al-inicio">Crea un servicio para activar wol al inicio
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>Unit&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Description&lt;/span>&lt;span class="o">=&lt;/span>Enable Wake On Lan
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Requires&lt;/span>&lt;span class="o">=&lt;/span>network.target
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">After&lt;/span>&lt;span class="o">=&lt;/span>network.target
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>Service&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Type&lt;/span>&lt;span class="o">=&lt;/span>oneshot
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ExecStart&lt;/span> &lt;span class="o">=&lt;/span> /sbin/ethtool --change enp1s0 wol g
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>Install&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">WantedBy&lt;/span>&lt;span class="o">=&lt;/span>basic.target
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crontab</title><link>https://volteret4.github.io/notas/p/crontab/</link><pubDate>Tue, 22 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crontab/</guid><description>&lt;h1 id="crontab">Crontab
+&lt;/h1>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">crontab -e
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>[1;33mImagen no encontrada: /mnt/windows/FTP/wiki/Obsidian/Dibujos/img/Pasted image 20240920220109.png[0m&lt;/p>
+&lt;!-- Imagen no encontrada: Pasted image 20240920220109.png -->
+&lt;h2 id="cada-5-minutos">Cada 5 minutos
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">*/5 * * * * /ruta/a/tu/script.sh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Git. Retroceder En Github</title><link>https://volteret4.github.io/notas/p/git.-retroceder-en-github/</link><pubDate>Tue, 22 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/git.-retroceder-en-github/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl"> git restore archivo1 archivo2
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Si además de restaurarlos quieres deshacer cualquier cambio que hayas &lt;em>staged&lt;/em> con &lt;code>git add&lt;/code>, usa:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl"> git restore --staged archivo1 archivo2 git restore archivo1 archivo2
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Buscar Cadena De Texto En Multiples Archivos</title><link>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="sb">`&lt;/span>grep -rHni &lt;span class="s1">&amp;#39;cadena_de_texto&amp;#39;&lt;/span> .&lt;span class="sb">`&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>-r&lt;/code> Recursivo.
+&lt;code>-H&lt;/code> mostrar nombre del archivo.
+&lt;code>-n&lt;/code> mostrar línea.&lt;/p></description></item><item><title>Comando Para Copiar A Exfat</title><link>https://volteret4.github.io/notas/p/comando-para-copiar-a-exfat/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/comando-para-copiar-a-exfat/</guid><description>&lt;h3 id="montar">Montar
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">sudo mount -t exfat -o &lt;span class="nv">uid&lt;/span>&lt;span class="o">=&lt;/span>1000,gid&lt;span class="o">=&lt;/span>1000,umask&lt;span class="o">=&lt;/span>&lt;span class="m">022&lt;/span> /source /dest
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="copiar">Copiar
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">rsync -avh --info&lt;span class="o">=&lt;/span>progress2 --no-perms --no-owner --no-group --ignore-existing --exclude&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;temp/*&amp;#39;&lt;/span> /mnt/dietpi_userdata/NFS/2TB/moode/ /mnt/500GB/Musica/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Comparando Dos Archivos Y Removiendo Coincidencias En Solo Uno</title><link>https://volteret4.github.io/notas/p/comparando-dos-archivos-y-removiendo-coincidencias-en-solo-uno/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/comparando-dos-archivos-y-removiendo-coincidencias-en-solo-uno/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://stackoverflow.com/questions/37503186/comparing-two-files-by-lines-and-removing-duplicates-from-first-file%22%20class=%22tc-tiddlylink-external" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;p>Remove lines from test1 because they are in test2:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">grep -vxFf test2 test1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>To overwrite test1:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">grep -vxFf test2 test1 &amp;gt;test1.tmp &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> mv test1.tmp test1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Comprobar Procesos Conectados A Internet</title><link>https://volteret4.github.io/notas/p/comprobar-procesos-conectados-a-internet/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/comprobar-procesos-conectados-a-internet/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netstat -tulnp &lt;span class="c1"># requiere instalar net-tools (en debian)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo ss -tulnp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Puertos especificos:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo fuser -n tcp &amp;lt;puerto&amp;gt; &lt;span class="c1"># se puede cambiar tcp por udp&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ps -p &lt;span class="k">$(&lt;/span>sudo fuser -n tcp 80&lt;span class="k">)&lt;/span> &lt;span class="c1"># muestra nombre de los PID&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Conexiones activas&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo lsof -i -n -P
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Usuario concreto&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lsof -u username
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Archivos abiertos por un proceso&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lsof -p &lt;span class="m">1234&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Procesos abiertos en un directorio&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lsof +D /ruta/al/directorio
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Actualiza la salida cada 5 segundos&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lsof -i -n -P -r &lt;span class="m">5&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Comprobar Que Proceso Usa El Disco</title><link>https://volteret4.github.io/notas/p/comprobar-que-proceso-usa-el-disco/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/comprobar-que-proceso-usa-el-disco/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo iotop -o
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Copia De Particiones Con Dd</title><link>https://volteret4.github.io/notas/p/copia-de-particiones-con-dd/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/copia-de-particiones-con-dd/</guid><description>&lt;h3 id="usar-sfdisk-para-copiar-la-estructura-de-particiones">Usar &lt;code>sfdisk&lt;/code> para copiar la estructura de particiones
+&lt;/h3>&lt;p>&lt;code>Sfdisk&lt;/code> es una herramienta de línea de comandos que permite gestionar las particiones de un disco y copiar su tabla de particiones a un archivo. Esta herramienta solo maneja la &lt;strong>estructura de particiones&lt;/strong>, no los datos contenidos en ellas.&lt;/p>
+&lt;h4 id="copiar-la-estructura-de-particiones">Copiar la estructura de particiones:
+&lt;/h4>&lt;ol>
+&lt;li>&lt;strong>Exportar la tabla de particiones a un archivo&lt;/strong>: Usando &lt;code>sfdisk&lt;/code>, puedes copiar la tabla de particiones de un dispositivo (por ejemplo, &lt;code>/dev/sda&lt;/code>) a un archivo de texto:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl"> sudo sfdisk --dump /dev/sda &amp;gt; particiones.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Esto creará un archivo de texto (&lt;code>particiones.txt&lt;/code>) que contiene la estructura de particiones del dispositivo. Este archivo incluye la información sobre los tamaños y las ubicaciones de las particiones, pero no los datos dentro de ellas.&lt;/p>
+&lt;h4 id="restaurar-la-estructura-de-particiones-en-otro-dispositivo">Restaurar la estructura de particiones en otro dispositivo:
+&lt;/h4>&lt;ol start="2">
+&lt;li>&lt;strong>Restaurar la tabla de particiones en otro dispositivo&lt;/strong>: Si quieres crear la misma estructura de particiones en otro dispositivo (por ejemplo, &lt;code>/dev/sdb&lt;/code>), puedes usar el archivo exportado para restaurar la tabla de particiones:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl"> sudo sfdisk /dev/sdb &amp;lt; particiones.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Formatear Disco</title><link>https://volteret4.github.io/notas/p/formatear-disco/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/formatear-disco/</guid><description>&lt;h2 id="formatear-disco">Formatear disco
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Crear nueva tabla de particiones &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo fdisk /dev/sdXY
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Orden: g, n, w&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Formatear disco&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mkfs &lt;span class="o">[&lt;/span>options&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-t &lt;span class="nb">type&lt;/span> fs-options&lt;span class="o">]&lt;/span> device &lt;span class="o">[&lt;/span>size&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> sudo mkfs -t ext4 /dev/sdb1 &lt;span class="c1"># EJEMPLO&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Listar Servicios Systemctl</title><link>https://volteret4.github.io/notas/p/listar-servicios-systemctl/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/listar-servicios-systemctl/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo systemctl list-units --type&lt;span class="o">=&lt;/span>service
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Montar NTFS</title><link>https://volteret4.github.io/notas/p/montar-ntfs/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/montar-ntfs/</guid><description>&lt;h2 id="instalar">Instalar
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo apt install fuse
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo apt install ntfs-3g
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="montar">Montar
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo mount -t ntfs /dev/sdXy /path
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crear ISO De Dispositivo</title><link>https://volteret4.github.io/notas/p/crear-iso-de-dispositivo/</link><pubDate>Thu, 10 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-iso-de-dispositivo/</guid><description>&lt;p>Crea una imagen de una unidad como un disco duro o una tarjeta de memoria.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo dd &lt;span class="k">if&lt;/span>&lt;span class="o">=&lt;/span>/dev/sdX &lt;span class="nv">of&lt;/span>&lt;span class="o">=&lt;/span>name-of-iso.iso &lt;span class="nv">status&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;progress&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crear Servidor Para Compartir Carpeta</title><link>https://volteret4.github.io/notas/p/crear-servidor-para-compartir-carpeta/</link><pubDate>Thu, 10 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-servidor-para-compartir-carpeta/</guid><description>&lt;p>Crea un servidor http en una carpeta para poder descargar archivos rápidamente&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">python3 -m http.server &lt;span class="m">8000&lt;/span> --bind 0.0.0.0 --directory /ruta/al/directorio
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crear Web En Hugo</title><link>https://volteret4.github.io/notas/p/crear-web-en-hugo/</link><pubDate>Thu, 10 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-web-en-hugo/</guid><description>&lt;h2 id="1crear-el-blog">1.Crear El blog
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">hugo new site &amp;lt;nombre del sitio&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">cd&lt;/span> &amp;lt;nombre del sitio&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git init
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="3elegir-un-tema-e-instalarlo">3.Elegir Un tema e instalarlo
+&lt;/h2>&lt;p>&lt;a class="link" href="https://themes.gohugo.io/themes/lightbi-hugo/" target="_blank" rel="noopener"
+>https://themes.gohugo.io/themes/lightbi-hugo/&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">git submodule add https://github.com/binokochumolvarghese/lightbi-hugo themes/lightbi-hugo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;theme = &amp;#39;lightbi-hugo&amp;#39;&amp;#34;&lt;/span> &amp;gt;&amp;gt; hugo.toml
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hugo server
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cp -r &lt;span class="s2">&amp;#34;themes/lightbi-hugo/example site/*&amp;#34;&lt;/span> &lt;span class="nv">$web_dir&lt;/span>/content/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="4comprueba-que-funciona-localmente">4.Comprueba Que funciona localmente
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">hugo serve --bind &lt;span class="s2">&amp;#34;0.0.0.0&amp;#34;&lt;/span> &lt;span class="c1">#--baseURL 192.168.1.14 # ip of server&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="5crea-repositorio-en-github-terminado-en-githubio">5.Crea Repositorio en github terminado en &lt;code>.github.io&lt;/code>
+&lt;/h2>&lt;h2 id="6sube-el-directorio-de-la-web-recien-creada">6.Sube El directorio de la web recien creada
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">git add . &lt;span class="c1"># subira todo el contendio de la carpeta en la que se está&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git commit -m &lt;span class="s2">&amp;#34;comentario&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="7accede-a-github-y-ve-a-settings--pages-hasta-ver-esto">7.Accede A github y ve a &lt;code>Settings&lt;/code> &amp;gt; &lt;code>Pages&lt;/code> hasta ver esto
+&lt;/h2>&lt;p>[1;33mImagen no encontrada: /mnt/windows/FTP/wiki/Obsidian/Dibujos/img/Pasted image 20240723144203.png[0m&lt;/p>
+&lt;!-- Imagen no encontrada: Pasted image 20240723144203.png -->
+&lt;h2 id="8cambia-source-a-github-actions-se-guarda-solo">8.Cambia &lt;code>source&lt;/code> A &lt;code>Github Actions&lt;/code> (se guarda solo)
+&lt;/h2>&lt;p>[1;33mImagen no encontrada: /mnt/windows/FTP/wiki/Obsidian/Dibujos/img/Pasted image 20240723144218.png[0m&lt;/p>
+&lt;!-- Imagen no encontrada: Pasted image 20240723144218.png -->
+&lt;h2 id="9crea-un-archivo-en-githubworkflowshugoyaml">9.Crea Un archivo en &lt;code>.github/workflows/hugo.yaml&lt;/code>
+&lt;/h2>&lt;h3 id="importante-cambiar-la-versión-de-hugo-a-la-que-esté-instalada">¡Importante! Cambiar la versión de hugo a la que esté instalada
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;span class="lnt">76
+&lt;/span>&lt;span class="lnt">77
+&lt;/span>&lt;span class="lnt">78
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># Sample workflow for building and deploying a Hugo site to GitHub Pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy Hugo site to Pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># Runs on pushes targeting the default branch&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">push&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">branches&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">main&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># Allows you to run this workflow manually from the Actions tab&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">workflow_dispatch&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">permissions&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">contents&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">read&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">pages&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">write&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">id-token&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">write&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">concurrency&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">group&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;pages&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">cancel-in-progress&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Default to bash&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">defaults&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">shell&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">bash&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">jobs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># Build job&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">build&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">runs-on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu-latest&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">env&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">HUGO_VERSION&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">0.128.0&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">steps&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Install Hugo CLI&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">|&lt;/span>&lt;span class="sd">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sd"> wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sd"> &amp;amp;&amp;amp; sudo dpkg -i ${{ runner.temp }}/hugo.deb&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Install Dart Sass&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">sudo snap install dart-sass&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Checkout&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/checkout@v4&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">submodules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">recursive&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">fetch-depth&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Setup Pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">id&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/configure-pages@v5&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Install Node.js dependencies&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;[[ -f package-lock.json || -f npm-shrinkwrap.json ]] &amp;amp;&amp;amp; npm ci || true&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Build with Hugo&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">env&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">HUGO_CACHEDIR&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ runner.temp }}/hugo_cache&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">HUGO_ENVIRONMENT&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">production&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">TZ&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">America/Los_Angeles&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">|&lt;/span>&lt;span class="sd">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sd"> hugo \
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sd"> --gc \
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sd"> --minify \
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sd"> --baseURL &amp;#34;${{ steps.pages.outputs.base_url }}/&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Upload artifact&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/upload-pages-artifact@v3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./public&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># Deployment job&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">deploy&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">environment&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">github-pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">url&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ steps.deployment.outputs.page_url }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">runs-on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu-latest&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">needs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">build&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">steps&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy to GitHub Pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">id&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">deployment&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/deploy-pages@v4&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="10crear-un-commit-en-el-repositorio-y-subirlo">10.Crear Un commit en el repositorio y subirlo
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">git add . &lt;span class="c1"># subira todo el contendio de la carpeta en la que se está&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git commit -m &lt;span class="s2">&amp;#34;comentario&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="11en-github-elije-actions">11.En Github, elije &lt;code>Actions&lt;/code>
+&lt;/h2>&lt;p>[1;33mImagen no encontrada: /mnt/windows/FTP/wiki/Obsidian/Dibujos/img/Pasted image 20240723144801.png[0m&lt;/p>
+&lt;!-- Imagen no encontrada: Pasted image 20240723144801.png -->
+&lt;p>Una vez terminado el push y la creación del sitio debes ver algo así
+[1;33mImagen no encontrada: /mnt/windows/FTP/wiki/Obsidian/Dibujos/img/Pasted image 20240723144903.png[0m&lt;/p>
+&lt;!-- Imagen no encontrada: Pasted image 20240723144903.png -->
+&lt;p>Se veria asi en el commit&lt;/p></description></item><item><title>Acortar Url</title><link>https://volteret4.github.io/notas/p/acortar-url/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/acortar-url/</guid><description>&lt;p>Devuelve un link corto para compartir facilmente&lt;/p>
+&lt;blockquote>
+&lt;p>Desconozco la duración de dichos enlaces&lt;/p>&lt;/blockquote>
+&lt;p>&lt;code>curl https://is.gd/create.php\?format\=simple\&amp;amp;url\=google.com&lt;/code>&lt;/p></description></item><item><title>Compartir Archivo Oneline</title><link>https://volteret4.github.io/notas/p/compartir-archivo-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/compartir-archivo-oneline/</guid><description>&lt;p>Con este comando puedes subir un archivo de texto para compartirlo fácilmente&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl -F &lt;span class="nv">file&lt;/span>&lt;span class="o">=&lt;/span>@starship.toml https://0x0.st
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crear Código Qr Con Texto</title><link>https://volteret4.github.io/notas/p/crear-c%C3%B3digo-qr-con-texto/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-c%C3%B3digo-qr-con-texto/</guid><description>&lt;p>&lt;code>curl qrenco.de/STRING&lt;/code>&lt;/p>
+&lt;p>&lt;code>echo STRING | curl -F-=\&amp;lt;- qrenco.de&lt;/code>&lt;/p></description></item><item><title>Crear Commit Aleatorio</title><link>https://volteret4.github.io/notas/p/crear-commit-aleatorio/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-commit-aleatorio/</guid><description>&lt;p>Puedes usar estos comandos para añadir aleatoriedad a diferentes programas.&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>Commits aleatorios
+&lt;code>curl -s https://whatthecommit.com/index.txt&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Chistes de padres
+&lt;code>curl https://icanhazdadjoke.com&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>Puede usarse por ejemplo en un &lt;strong>alias&lt;/strong>:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Para chezmoi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">chzu&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;chezmoi git add . ; chezmoi git -- commit -m &amp;#34;$(curl -s https://whatthecommit.com/index.txt)&amp;#34; ; chezmoi git push&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Para git&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gitodo&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git add . ; git commit -m &amp;#34;$(curl -s https://whatthecommit.com/index.txt)&amp;#34; ; git push&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>El Tiempo En El Terminal Oneline</title><link>https://volteret4.github.io/notas/p/el-tiempo-en-el-terminal-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/el-tiempo-en-el-terminal-oneline/</guid><description>&lt;p>Muestra la previsión metereológica para la ciudad que elijas durante los próximos días&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl wttr.in/Jerez
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Escanear red local</title><link>https://volteret4.github.io/notas/p/escanear-red-local/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/escanear-red-local/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://nosololinux.es/escanear-red-local-con-nmap-en-linux/" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;p>Muestra los dispositivos conectados a tu LAN en la subnet especificada&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -sn 192.168.1.0/24
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Mac Address Spoofing</title><link>https://volteret4.github.io/notas/p/mac-address-spoofing/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mac-address-spoofing/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://wiki.archlinux.org/title/MAC_address_spoofing" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;h2 id="macchanger">Macchanger
+&lt;/h2>&lt;p>Otro método utilize macchanger (también conocido como GNU MAC Changer). Ofrece diversas funciones, como cambiar la dirección para que coincida con un proveedor específico o aleatorizarla completamente.&lt;/p>
+&lt;p>Instala el paquete &lt;code>macchanger&lt;/code>.&lt;/p>
+&lt;p>La suplantación se realiza por interfaz. Especifica el nombre de la interfaz de red como interfaz en cada uno de los siguientes commandos.&lt;/p>
+&lt;p>La dirección MAC se puede suplantar con una dirección completamente aleatoria:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">macchanger -r interface
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Para aleatorizar solo los bytes específicos del dispositivo de la dirección MAC actual (es decir, para que, si se verifica la dirección MAC, se registre como del mismo proveedor), ejecuta el commando:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">macchanger -e interface
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Para cambiar la dirección MAC a un valor específico, ejecuta:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">macchanger --mac&lt;span class="o">=&lt;/span>XX:XX:XX:XX:XX:XX interface
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Donde XX:XX:XX:XX:XX:XX es la MAC a la que deseas cambiar.&lt;/p>
+&lt;p>Finalmente, para restaurar la dirección MAC a su valor de hardware original y permanente:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">macchanger -p interface
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Obtener Geolocalización</title><link>https://volteret4.github.io/notas/p/obtener-geolocalizaci%C3%B3n/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-geolocalizaci%C3%B3n/</guid><description>&lt;p>Para obtener datos sobre la localización de tu servidor usa cualquiera de estos comandos&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>curl ip-api.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl http://ifconfig.co/json&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.es/geo&lt;/code> or &lt;code>curl ifconfig.es/json&lt;/code> or &lt;code>curl ifconfig.es/country&lt;/code> or &lt;code>curl ifconfig.es/code&lt;/code> or &lt;code>curl ifconfig.es/city&lt;/code> or &lt;code>curl ifconfig.es/latitude&lt;/code> or &lt;code>curl ifconfig.es/longitude&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>Obtener Ip Pública</title><link>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</guid><description>&lt;p>Ejecuta cualquiera de estos comandos en un terminal para obtener la ip pública del host.&lt;/p>
+&lt;p>&lt;a class="link" href="https://github.com/chubin/awesome-console-services?tab=readme-ov-file#new-line" target="_blank" rel="noopener"
+>Ip publica&lt;/a>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>curl ipaddy.net&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl eth0.me&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipaddr.site&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.co&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.pro&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl curlmyip.net&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipinfo.io/ip&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl icanhazip.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl checkip.amazonaws.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ip-api.com/line?fields=query&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.io/ip&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl -s ip.liquidweb.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.es&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipaddress.sh&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl 2ip.ru&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>Prueba De Velocidad De Internet</title><link>https://volteret4.github.io/notas/p/prueba-de-velocidad-de-internet/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/prueba-de-velocidad-de-internet/</guid><description>&lt;p>Comprueba la velocidad de internet con este script online&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Ruta Al Path</title><link>https://volteret4.github.io/notas/p/ruta-al-path/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/ruta-al-path/</guid><description>&lt;p>Añadir &lt;code>~/local/bin&lt;/code> al path&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/home/&lt;/span>&lt;span class="nv">$USER&lt;/span>&lt;span class="s2">/.local/bin:&lt;/span>&lt;span class="nv">$PATH&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Sudo Pw Timeout</title><link>https://volteret4.github.io/notas/p/sudo-pw-timeout/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/sudo-pw-timeout/</guid><description>&lt;h2 id="-1-configurar-el-tiempo-antes-de-volver-a-pedir-la-contraseña">✅ 1. &lt;strong>Configurar el tiempo antes de volver a pedir la contraseña&lt;/strong>
+&lt;/h2>&lt;p>Esto lo controla &lt;strong>sudo&lt;/strong> mediante la opción &lt;strong>timestamp_timeout&lt;/strong>&lt;/p>
+&lt;h3 id="-cómo-cambiarlo">🔧 ¿Cómo cambiarlo?
+&lt;/h3>&lt;p>Edita o crea un archivo en &lt;code>/etc/sudoers.d/&lt;/code>, por ejemplo:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo visudo -f /etc/sudoers.d/timeout
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Y agrega esta línea:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Defaults &lt;span class="nv">timestamp_timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">5&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>🕐 Esto significa que &lt;strong>sudo recordará la contraseña durante 5 minutos&lt;/strong>. Puedes poner:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>0&lt;/code>: pide siempre la contraseña.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>-1&lt;/code>: no la vuelve a pedir durante la sesión.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="-2-hacer-que-sudo-se">✅ 2. &lt;strong>Hacer que sudo se &amp;ldquo;olvide&amp;rdquo; cuando cerrás SSH&lt;/strong>
+&lt;/h2>&lt;p>Esto se puede hacer de varias formas. La más directa:&lt;/p>
+&lt;h3 id="-método-usar-pam_exec-para-limpiar-sudo-al-cerrar-sesión">🔧 Método: usar &lt;code>pam_exec&lt;/code> para limpiar sudo al cerrar sesión
+&lt;/h3>&lt;p>Edita el archivo PAM de tu shell, por ejemplo para &lt;code>bash&lt;/code> (esto depende de tu distribución):&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nano /etc/pam.d/sshd&lt;span class="sb">`&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Agrega esta línea al &lt;strong>final&lt;/strong> del archivo:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">session optional pam_exec.so &lt;span class="nv">type&lt;/span>&lt;span class="o">=&lt;/span>close_session /usr/bin/sudo -K
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Esto ejecutará &lt;code>sudo -K&lt;/code> cuando se cierre una sesión SSH, que &lt;strong>borra el timestamp de sudo&lt;/strong>.&lt;/p>
+&lt;hr>
+&lt;h2 id="-alternativa-simple-alias-en-bash_logout">🧪 Alternativa simple: alias en &lt;code>.bash_logout&lt;/code>
+&lt;/h2>&lt;p>Si no quieres meterte con &lt;code>pam&lt;/code>, puedes hacer algo más simple:&lt;/p>
+&lt;p>En tu Raspberry o servidor remoto, edita:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">nano ~/.bash_logout
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Agregá esta línea:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo -K
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Eso hace que, cuando cierras una sesión interactiva (&lt;code>exit&lt;/code>, cerrar shell), se borre el caché de &lt;code>sudo&lt;/code>.&lt;/p>
+&lt;blockquote>
+&lt;p>📌 Esto &lt;strong>no funciona&lt;/strong> si usas otro shell que no lee &lt;code>.bash_logout&lt;/code>, como &lt;code>zsh&lt;/code>. Para &lt;code>zsh&lt;/code>, puedes usar &lt;code>~/.zlogout&lt;/code>.&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h2 id="-verificación-rápida">🧠 Verificación rápida
+&lt;/h2>&lt;p>Podés comprobar si el caché está activo con:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo -v
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Y ver si está activo con:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo -n &lt;span class="nb">true&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Tiene caché sudo&amp;#34;&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;No tiene caché sudo&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Valor Criptomonedas Oneline</title><link>https://volteret4.github.io/notas/p/valor-criptomonedas-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/valor-criptomonedas-oneline/</guid><description>&lt;p>Con este linea puedes obtener información sobre el valor de diversas criptomonedas:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl rate.sx
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Archives</title><link>https://volteret4.github.io/notas/archives/</link><pubDate>Sun, 06 Mar 2022 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/archives/</guid><description/></item><item><title>Links</title><link>https://volteret4.github.io/notas/links/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/links/</guid><description>&lt;p>To use this feature, add &lt;code>links&lt;/code> section to frontmatter.&lt;/p>
+&lt;p>This page&amp;rsquo;s frontmatter:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">links&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">title&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">GitHub&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">description&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">GitHub is the world&amp;#39;s largest software development platform.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">website&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://github.com&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">title&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TypeScript&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">description&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">website&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://www.typescriptlang.org&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ts-logo-128.jpg&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>image&lt;/code> field accepts both local and external images.&lt;/p></description></item><item><title>Search</title><link>https://volteret4.github.io/notas/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/search/</guid><description/></item></channel></rss>

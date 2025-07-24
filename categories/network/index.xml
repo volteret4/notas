@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Network on memoria digital</title><link>https://volteret4.github.io/notas/categories/network/</link><description>Recent content in Network on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Thu, 24 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/categories/network/index.xml" rel="self" type="application/rss+xml"/><item><title>Fail2ban How To Unban Ips That Are Blocked</title><link>https://volteret4.github.io/notas/p/fail2ban-how-to-unban-ips-that-are-blocked/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/fail2ban-how-to-unban-ips-that-are-blocked/</guid><description/></item><item><title>Wake On LAN</title><link>https://volteret4.github.io/notas/p/wake-on-lan/</link><pubDate>Wed, 23 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/wake-on-lan/</guid><description>&lt;h2 id="configure-the-host-waking-up">Configure the host waking up
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">sudo ethtool -s eth0 wol g
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Access BIOS and enable Wake On Lan.&lt;/p>
+&lt;h2 id="how-do-i-send-wol-magic-packets-under-linux">How Do I Send WOL Magic Packets Under Linux?
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">wakeonlan MAC-Address-Here
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">wakeonlan &lt;span class="s2">&amp;#34;74:56:3C:5D:E6:1D&amp;#34;&lt;/span> &lt;span class="c1"># proxmox&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">wakeonlan &lt;span class="s2">&amp;#34;30:65:ec:a8:9b:37&amp;#34;&lt;/span> &lt;span class="c1"># kodi&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>OR&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">etherwake MAC-Address-Here
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="crea-un-servicio-para-activar-wol-al-inicio">Crea un servicio para activar wol al inicio
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>Unit&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Description&lt;/span>&lt;span class="o">=&lt;/span>Enable Wake On Lan
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Requires&lt;/span>&lt;span class="o">=&lt;/span>network.target
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">After&lt;/span>&lt;span class="o">=&lt;/span>network.target
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>Service&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Type&lt;/span>&lt;span class="o">=&lt;/span>oneshot
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ExecStart&lt;/span> &lt;span class="o">=&lt;/span> /sbin/ethtool --change enp1s0 wol g
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>Install&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">WantedBy&lt;/span>&lt;span class="o">=&lt;/span>basic.target
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Comprobar Procesos Conectados A Internet</title><link>https://volteret4.github.io/notas/p/comprobar-procesos-conectados-a-internet/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/comprobar-procesos-conectados-a-internet/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo netstat -tulnp &lt;span class="c1"># requiere instalar net-tools (en debian)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo ss -tulnp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Puertos especificos:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo fuser -n tcp &amp;lt;puerto&amp;gt; &lt;span class="c1"># se puede cambiar tcp por udp&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ps -p &lt;span class="k">$(&lt;/span>sudo fuser -n tcp 80&lt;span class="k">)&lt;/span> &lt;span class="c1"># muestra nombre de los PID&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Conexiones activas&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo lsof -i -n -P
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Usuario concreto&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lsof -u username
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Archivos abiertos por un proceso&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lsof -p &lt;span class="m">1234&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Procesos abiertos en un directorio&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lsof +D /ruta/al/directorio
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Actualiza la salida cada 5 segundos&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lsof -i -n -P -r &lt;span class="m">5&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Escanear red local</title><link>https://volteret4.github.io/notas/p/escanear-red-local/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/escanear-red-local/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://nosololinux.es/escanear-red-local-con-nmap-en-linux/" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;p>Muestra los dispositivos conectados a tu LAN en la subnet especificada&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nmap -sn 192.168.1.0/24
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Mac Address Spoofing</title><link>https://volteret4.github.io/notas/p/mac-address-spoofing/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mac-address-spoofing/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://wiki.archlinux.org/title/MAC_address_spoofing" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;h2 id="macchanger">Macchanger
+&lt;/h2>&lt;p>Otro método utilize macchanger (también conocido como GNU MAC Changer). Ofrece diversas funciones, como cambiar la dirección para que coincida con un proveedor específico o aleatorizarla completamente.&lt;/p>
+&lt;p>Instala el paquete &lt;code>macchanger&lt;/code>.&lt;/p>
+&lt;p>La suplantación se realiza por interfaz. Especifica el nombre de la interfaz de red como interfaz en cada uno de los siguientes commandos.&lt;/p>
+&lt;p>La dirección MAC se puede suplantar con una dirección completamente aleatoria:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">macchanger -r interface
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Para aleatorizar solo los bytes específicos del dispositivo de la dirección MAC actual (es decir, para que, si se verifica la dirección MAC, se registre como del mismo proveedor), ejecuta el commando:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">macchanger -e interface
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Para cambiar la dirección MAC a un valor específico, ejecuta:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">macchanger --mac&lt;span class="o">=&lt;/span>XX:XX:XX:XX:XX:XX interface
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Donde XX:XX:XX:XX:XX:XX es la MAC a la que deseas cambiar.&lt;/p>
+&lt;p>Finalmente, para restaurar la dirección MAC a su valor de hardware original y permanente:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">macchanger -p interface
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Obtener Geolocalización</title><link>https://volteret4.github.io/notas/p/obtener-geolocalizaci%C3%B3n/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-geolocalizaci%C3%B3n/</guid><description>&lt;p>Para obtener datos sobre la localización de tu servidor usa cualquiera de estos comandos&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>curl ip-api.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl http://ifconfig.co/json&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.es/geo&lt;/code> or &lt;code>curl ifconfig.es/json&lt;/code> or &lt;code>curl ifconfig.es/country&lt;/code> or &lt;code>curl ifconfig.es/code&lt;/code> or &lt;code>curl ifconfig.es/city&lt;/code> or &lt;code>curl ifconfig.es/latitude&lt;/code> or &lt;code>curl ifconfig.es/longitude&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>Obtener Ip Pública</title><link>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</guid><description>&lt;p>Ejecuta cualquiera de estos comandos en un terminal para obtener la ip pública del host.&lt;/p>
+&lt;p>&lt;a class="link" href="https://github.com/chubin/awesome-console-services?tab=readme-ov-file#new-line" target="_blank" rel="noopener"
+>Ip publica&lt;/a>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>curl ipaddy.net&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl eth0.me&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipaddr.site&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.co&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.pro&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl curlmyip.net&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipinfo.io/ip&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl icanhazip.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl checkip.amazonaws.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ip-api.com/line?fields=query&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.io/ip&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl -s ip.liquidweb.com&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ifconfig.es&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl ipaddress.sh&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl 2ip.ru&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>Prueba De Velocidad De Internet</title><link>https://volteret4.github.io/notas/p/prueba-de-velocidad-de-internet/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/prueba-de-velocidad-de-internet/</guid><description>&lt;p>Comprueba la velocidad de internet con este script online&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>
