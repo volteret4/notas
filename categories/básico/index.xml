@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Básico on memoria digital</title><link>https://volteret4.github.io/notas/categories/b%C3%A1sico/</link><description>Recent content in Básico on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Thu, 31 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/categories/b%C3%A1sico/index.xml" rel="self" type="application/rss+xml"/><item><title>Archivos Modificados Recientemente</title><link>https://volteret4.github.io/notas/p/archivos-modificados-recientemente/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/archivos-modificados-recientemente/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Muestra archivos modificados en el último día&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">find /ruta/a/tu/directorio -type f -mtime -1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#Esto listará los archivos con detalles como permisos, propietario, tamaño y fecha de modificación.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">find /ruta/a/tu/directorio -type f -mmin -60 -ls
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Automatic Installation Vim Plug</title><link>https://volteret4.github.io/notas/p/automatic-installation-vim-plug/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/automatic-installation-vim-plug/</guid><description>&lt;p> &lt;a class="link" href="https://junegunn.github.io/vim-plug/tips/automatic-installation/#automatic-installation" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>
+&lt;h2 id="vim-script">&lt;a class="link" href="https://junegunn.github.io/vim-plug/tips/automatic-installation/#vim-script" target="_blank" rel="noopener"
+>Vim script&lt;/a>
+&lt;/h2>&lt;p>Place the following code in your .vimrc before plug#begin() call, and Vim will automatically install vim-plug and the plugins when you open Vim.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-vim" data-lang="vim">&lt;span class="line">&lt;span class="cl">&lt;span class="k">let&lt;/span> &lt;span class="nx">data_dir&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nx">has&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;nvim&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> ? &lt;span class="nx">stdpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;data&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> . &lt;span class="s1">&amp;#39;/site&amp;#39;&lt;/span> : &lt;span class="s1">&amp;#39;~/.vim&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="nx">empty&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">glob&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">data_dir&lt;/span> . &lt;span class="s1">&amp;#39;/autoload/plug.vim&amp;#39;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">silent&lt;/span> &lt;span class="k">execute&lt;/span> &lt;span class="s1">&amp;#39;!curl -fLo &amp;#39;&lt;/span>.&lt;span class="nx">data_dir&lt;/span>.&lt;span class="s1">&amp;#39;/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">autocmd&lt;/span> &lt;span class="nx">VimEnter&lt;/span> * &lt;span class="nx">PlugInstall&lt;/span> &lt;span class="p">--&lt;/span>&lt;span class="nx">sync&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nx">source&lt;/span> $&lt;span class="nx">MYVIMRC&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">endif&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;#34; An example of vim-plug section ---------------------------------------------&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">call&lt;/span> &lt;span class="nx">plug&lt;/span>#&lt;span class="nx">begin&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">Plug&lt;/span> &lt;span class="s1">&amp;#39;junegunn/seoul256.vim&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">call&lt;/span> &lt;span class="nx">plug&lt;/span>#&lt;span class="nx">end&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">silent&lt;/span>&lt;span class="p">!&lt;/span> &lt;span class="k">colorscheme&lt;/span> &lt;span class="nx">seoul256&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="lua-script-equivalent-for-neovim">&lt;a class="link" href="https://junegunn.github.io/vim-plug/tips/automatic-installation/#lua-script-equivalent-for-neovim" target="_blank" rel="noopener"
+>Lua script equivalent for Neovim&lt;/a>
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-lua" data-lang="lua">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">local&lt;/span> &lt;span class="n">data_dir&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vim.fn&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">stdpath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;data&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">if&lt;/span> &lt;span class="n">vim.fn&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">empty&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">vim.fn&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">glob&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">data_dir&lt;/span> &lt;span class="o">..&lt;/span> &lt;span class="s1">&amp;#39;/site/autoload/plug.vim&amp;#39;&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="mi">1&lt;/span> &lt;span class="kr">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">vim.cmd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;silent !curl -fLo &amp;#39;&lt;/span> &lt;span class="o">..&lt;/span> &lt;span class="n">data_dir&lt;/span> &lt;span class="o">..&lt;/span> &lt;span class="s1">&amp;#39;/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">vim.o&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">runtimepath&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vim.o&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">runtimepath&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">vim.cmd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;autocmd VimEnter * PlugInstall --sync | source $MYVIMRC&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">end&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- An example of vim-plug section --------------------------------------------&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">local&lt;/span> &lt;span class="n">vim&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vim&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">local&lt;/span> &lt;span class="n">Plug&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vim.fn&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;plug#&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">vim.call&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;plug#begin&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Plug&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;junegunn/seoul256.vim&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">vim.call&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;plug#end&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">vim.cmd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;silent! colorscheme seoul256&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crear Links De Archivos</title><link>https://volteret4.github.io/notas/p/crear-links-de-archivos/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-links-de-archivos/</guid><description>&lt;h2 id="tldr-link-archivos">Tldr link archivos
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ln -s archivo_original link &lt;span class="c1"># soft link&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ln archivo_original link
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crear Multiples Archivos Oneline</title><link>https://volteret4.github.io/notas/p/crear-multiples-archivos-oneline/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-multiples-archivos-oneline/</guid><description/></item><item><title>Desactivar Servicio De Impresión</title><link>https://volteret4.github.io/notas/p/desactivar-servicio-de-impresi%C3%B3n/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/desactivar-servicio-de-impresi%C3%B3n/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://unix.stackexchange.com/questions/480082/how-to-disable-cups-service-on-reboot-with-systemd" target="_blank" rel="noopener"
+>stackexchange&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;p>Suelo conectarme a una red con muchas impresoras. Cuando se detectan impresoras, aparecen muchos mensajes molestos en GNOME. Uso la impresora rara vez, así que preferiría mantener CUPS desactivado la mayor parte del tiempo. Detener CUPS funciona y elimina las notificaciones molestas:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">systemctl stop cups
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Me gustaría desactivarlo al arrancar. Sorprendentemente, después de desactivarlo,&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">systemctl disabled cups
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>CUPS sigue ejecutándose después de reiniciar. El commando de estado&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">systemctl status cups
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Grep</title><link>https://volteret4.github.io/notas/p/grep/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/grep/</guid><description>&lt;h2 id="usar-variables-en-grep">Usar variables en grep
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">grep -io
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="búsqueda-en-una-carpeta-no-recursiva">&lt;strong>Búsqueda En una carpeta (no recursiva)&lt;/strong>
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">grep &lt;span class="s2">&amp;#34;tu_string&amp;#34;&lt;/span> /ruta/a/la/carpeta/*
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Esto buscará &lt;code>&amp;quot;tu_string&amp;quot;&lt;/code> en todos los archivos dentro de la carpeta, pero &lt;strong>no&lt;/strong> en subcarpetas.&lt;/p>
+&lt;h2 id="búsqueda-recursiva-en-subdirectorios">&lt;strong>Búsqueda Recursiva en subdirectorios&lt;/strong>
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">grep -r &lt;span class="s2">&amp;#34;tu_string&amp;#34;&lt;/span> /ruta/a/la/carpeta/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>El flag &lt;code>-r&lt;/code> (o &lt;code>-R&lt;/code>) have que &lt;code>grep&lt;/code> busque recursivamente en todos los subdirectorios.&lt;/p>
+&lt;h2 id="mostrar-número-de-línea-en-los-resultados">&lt;strong>Mostrar Número de línea en los resultados&lt;/strong>
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">grep -rn &lt;span class="s2">&amp;#34;tu_string&amp;#34;&lt;/span> /ruta/a/la/carpeta/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>&lt;code>-n&lt;/code>: Muestra el número de línea donde aparece el string.&lt;/li>
+&lt;/ul>
+&lt;h2 id="ignorar-mayúsculas-y-minúsculas">&lt;strong>Ignorar Mayúsculas y minúsculas&lt;/strong>
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">grep -ri &lt;span class="s2">&amp;#34;tu_string&amp;#34;&lt;/span> /ruta/a/la/carpeta/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>&lt;code>-i&lt;/code>: Ignore diferencias entre mayúsculas y minúsculas.&lt;/li>
+&lt;/ul>
+&lt;h2 id="buscar-archivos-específicos-por-extensión">&lt;strong>Buscar Archivos específicos (por extensión)&lt;/strong>
+&lt;/h2>&lt;p>Si solo quieres buscar en archivos &lt;code>.txt&lt;/code>, usa:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">grep -r &lt;span class="s2">&amp;#34;tu_string&amp;#34;&lt;/span> /ruta/a/la/carpeta/ --include&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;*.txt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="excluir-archivos-o-carpetas">&lt;strong>Excluir Archivos o carpetas&lt;/strong>
+&lt;/h2>&lt;p>Si quieres excluir ciertos archivos o carpetas:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">grep -r &lt;span class="s2">&amp;#34;tu_string&amp;#34;&lt;/span> /ruta/a/la/carpeta/ --exclude-dir&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;logs&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Esto excluirá la carpeta &lt;code>logs&lt;/code> de la búsqueda.&lt;/p>
+&lt;h2 id="mostrar-solo-los-nombres-de-los-archivos-que-contienen-el-string">&lt;strong>Mostrar Solo los nombres de los archivos que contienen el string&lt;/strong>
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">grep -rl &lt;span class="s2">&amp;#34;tu_string&amp;#34;&lt;/span> /ruta/a/la/carpeta/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>El flag &lt;code>-l&lt;/code> have que solo se muestren los nombres de los archivos que contienen la cadena, sin mostrar las líneas.&lt;/p>
+&lt;h2 id="usar">&lt;strong>Usar &lt;code>rg&lt;/code> (ripgrep) Para mayor velocidad&lt;/strong>
+&lt;/h2>&lt;p>Si tienes &lt;code>ripgrep&lt;/code> (&lt;code>rg&lt;/code>) instalado, es mucho más rápido:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">rg &lt;span class="s2">&amp;#34;tu_string&amp;#34;&lt;/span> /ruta/a/la/carpeta/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Hacer Referencia A Argumentos Especificos Del Comando Anterior</title><link>https://volteret4.github.io/notas/p/hacer-referencia-a-argumentos-especificos-del-comando-anterior/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/hacer-referencia-a-argumentos-especificos-del-comando-anterior/</guid><description>&lt;blockquote>
+&lt;p>Origen: ChatGPT&lt;/p>&lt;/blockquote>
+&lt;p>También puedes hacer referencia a argumentos específicos del comando anterior utilizando la sintaxis !:n, donde &amp;ldquo;n&amp;rdquo; es el número del argumento que deseas utilizar. Por ejemplo, si el comando anterior fue ls -l archivo.txt, puedes utilizar la siguiente sintaxis para imprimir el nombre del archivo:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">echo !:2
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Insertar Url En Foro</title><link>https://volteret4.github.io/notas/p/insertar-url-en-foro/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/insertar-url-en-foro/</guid><description>&lt;p>Usa este snippet para poder insertar enlaces en foros&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">[url=https://www.bbcode.org/]This is bbcode.org![/url]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Kopia Server Add User</title><link>https://volteret4.github.io/notas/p/kopia-server-add-user/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/kopia-server-add-user/</guid><description>&lt;p>Añade un nuevo usuario así desde el servidor, reemplazando el texto entre llaves:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-docker" data-lang="docker">&lt;span class="line">&lt;span class="cl"> docker &lt;span class="nb">exec&lt;/span> &lt;span class="o">{&lt;/span>kopia_container_name&lt;span class="o">}&lt;/span> kopia server user add &lt;span class="o">{&lt;/span>user&lt;span class="o">}&lt;/span>@&lt;span class="o">{&lt;/span>hostname&lt;span class="o">}&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Leer Log De Un Servicio</title><link>https://volteret4.github.io/notas/p/leer-log-de-un-servicio/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/leer-log-de-un-servicio/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://unix.stackexchange.com/questions/475292/how-to-watch-output-from-systemd-service" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">journalctl -f -u mystuff.service
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>-f, --follow&lt;/code>
+Mostrar solo las entradas de diario más recientes e imprimir continuamente las nuevas entradas a medida que se añaden al diario.&lt;/p>
+&lt;p>&lt;code>-u, --unit=UNIT|PATTERN&lt;/code>&lt;/p></description></item><item><title>Manejo De Dotfiles Con RCM</title><link>https://volteret4.github.io/notas/p/manejo-de-dotfiles-con-rcm/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/manejo-de-dotfiles-con-rcm/</guid><description>&lt;h2 id="instalación">Instalación
+&lt;/h2>&lt;p>&lt;code>sudo apt install rcm&lt;/code>&lt;/p>
+&lt;h2 id="instalar-configuraciones">Instalar configuraciones
+&lt;/h2>&lt;p>&lt;code>rcup -d /path&lt;/code>&lt;/p>
+&lt;h2 id="crear-configuraciones">Crear configuraciones
+&lt;/h2>&lt;p>&lt;code>mkrc file&lt;/code>&lt;/p></description></item><item><title>Tmux Cerrar Resto De Sesiones</title><link>https://volteret4.github.io/notas/p/tmux-cerrar-resto-de-sesiones/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/tmux-cerrar-resto-de-sesiones/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://superuser.com/posts/1161344/timeline" target="_blank" rel="noopener"
+>superuser&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;p>Prefijo TMUX (p. ej., Ctrl+B) + &lt;code>:kill-session&lt;/code>&lt;/p>
+&lt;p>o&lt;/p>
+&lt;p>&lt;code>tmux kill-session&lt;/code> (puede ejecutarse desde dentro o desde fuera de una sesión)&lt;/p>
+&lt;p>Ambos estilos de invocación pueden usar las siguientes banderas:&lt;/p>
+&lt;p>&lt;code>-t target-session&lt;/code> destruye la sesión dada
+&lt;code>-a&lt;/code> destruye todas las sesiones excepto la dada o la que está asociada&lt;/p>
+&lt;p>Ejecutar &lt;code>kill-session&lt;/code> desde fuera de TMUX elimina la última sesión a la que estaba asociada. &lt;code>-a&lt;/code> invierte la operación.&lt;/p></description></item><item><title>Vim, Guardar Archivo Con Nuevo Nombre</title><link>https://volteret4.github.io/notas/p/vim-guardar-archivo-con-nuevo-nombre/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/vim-guardar-archivo-con-nuevo-nombre/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://www.cyberciti.biz/faq/how-to-save-existing-file-to-a-new-file-save-as-in-vi-vim/" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;p>Si quieres forzar el guardado de un archivo con otro nombre en vim puedes usar:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-vim" data-lang="vim">&lt;span class="line">&lt;span class="cl">&lt;span class="p">:&lt;/span>&lt;span class="nx">w&lt;/span> &lt;span class="p">!&lt;/span>&lt;span class="nx">sudo&lt;/span> &lt;span class="nx">tee&lt;/span> &lt;span class="sr">/etc/&lt;/span>&lt;span class="nx">httpd&lt;/span>/&lt;span class="nx">cyberciti&lt;/span>.&lt;span class="nx">com&lt;/span>.&lt;span class="nx">conf&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Atuin Historial Del Terminal Con Superpodéres</title><link>https://volteret4.github.io/notas/p/atuin-historial-del-terminal-con-superpod%C3%A9res/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/atuin-historial-del-terminal-con-superpod%C3%A9res/</guid><description/></item><item><title>Desactivar Mayúsculas</title><link>https://volteret4.github.io/notas/p/desactivar-may%C3%BAsculas/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/desactivar-may%C3%BAsculas/</guid><description>&lt;p>Desactiva Capslock:
+&lt;code>setxkbmap -option ctrl:nocaps&lt;/code>&lt;/p>
+&lt;p>Para volver a activarlo:&lt;/p></description></item><item><title>Eliminar Clave De Known_hosts</title><link>https://volteret4.github.io/notas/p/eliminar-clave-de-known_hosts/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/eliminar-clave-de-known_hosts/</guid><description>&lt;p>Para eliminar las claves que referencien a dietpi:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl"> ssh-keygen -f &lt;span class="s2">&amp;#34;/home/&lt;/span>&lt;span class="nv">$USER&lt;/span>&lt;span class="s2">/.ssh/known_hosts&amp;#34;&lt;/span> -R &lt;span class="s2">&amp;#34;dietpi&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crontab</title><link>https://volteret4.github.io/notas/p/crontab/</link><pubDate>Tue, 22 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crontab/</guid><description>&lt;h1 id="crontab">Crontab
+&lt;/h1>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">crontab -e
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>[1;33mImagen no encontrada: /mnt/windows/FTP/wiki/Obsidian/Dibujos/img/Pasted image 20240920220109.png[0m&lt;/p>
+&lt;!-- Imagen no encontrada: Pasted image 20240920220109.png -->
+&lt;h2 id="cada-5-minutos">Cada 5 minutos
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">*/5 * * * * /ruta/a/tu/script.sh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Buscar Cadena De Texto En Multiples Archivos</title><link>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="sb">`&lt;/span>grep -rHni &lt;span class="s1">&amp;#39;cadena_de_texto&amp;#39;&lt;/span> .&lt;span class="sb">`&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>-r&lt;/code> Recursivo.
+&lt;code>-H&lt;/code> mostrar nombre del archivo.
+&lt;code>-n&lt;/code> mostrar línea.&lt;/p></description></item><item><title>Comando Para Copiar A Exfat</title><link>https://volteret4.github.io/notas/p/comando-para-copiar-a-exfat/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/comando-para-copiar-a-exfat/</guid><description>&lt;h3 id="montar">Montar
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">sudo mount -t exfat -o &lt;span class="nv">uid&lt;/span>&lt;span class="o">=&lt;/span>1000,gid&lt;span class="o">=&lt;/span>1000,umask&lt;span class="o">=&lt;/span>&lt;span class="m">022&lt;/span> /source /dest
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="copiar">Copiar
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">rsync -avh --info&lt;span class="o">=&lt;/span>progress2 --no-perms --no-owner --no-group --ignore-existing --exclude&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;temp/*&amp;#39;&lt;/span> /mnt/dietpi_userdata/NFS/2TB/moode/ /mnt/500GB/Musica/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Comprobar Que Proceso Usa El Disco</title><link>https://volteret4.github.io/notas/p/comprobar-que-proceso-usa-el-disco/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/comprobar-que-proceso-usa-el-disco/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo iotop -o
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Copia De Particiones Con Dd</title><link>https://volteret4.github.io/notas/p/copia-de-particiones-con-dd/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/copia-de-particiones-con-dd/</guid><description>&lt;h3 id="usar-sfdisk-para-copiar-la-estructura-de-particiones">Usar &lt;code>sfdisk&lt;/code> para copiar la estructura de particiones
+&lt;/h3>&lt;p>&lt;code>Sfdisk&lt;/code> es una herramienta de línea de comandos que permite gestionar las particiones de un disco y copiar su tabla de particiones a un archivo. Esta herramienta solo maneja la &lt;strong>estructura de particiones&lt;/strong>, no los datos contenidos en ellas.&lt;/p>
+&lt;h4 id="copiar-la-estructura-de-particiones">Copiar la estructura de particiones:
+&lt;/h4>&lt;ol>
+&lt;li>&lt;strong>Exportar la tabla de particiones a un archivo&lt;/strong>: Usando &lt;code>sfdisk&lt;/code>, puedes copiar la tabla de particiones de un dispositivo (por ejemplo, &lt;code>/dev/sda&lt;/code>) a un archivo de texto:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl"> sudo sfdisk --dump /dev/sda &amp;gt; particiones.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Esto creará un archivo de texto (&lt;code>particiones.txt&lt;/code>) que contiene la estructura de particiones del dispositivo. Este archivo incluye la información sobre los tamaños y las ubicaciones de las particiones, pero no los datos dentro de ellas.&lt;/p>
+&lt;h4 id="restaurar-la-estructura-de-particiones-en-otro-dispositivo">Restaurar la estructura de particiones en otro dispositivo:
+&lt;/h4>&lt;ol start="2">
+&lt;li>&lt;strong>Restaurar la tabla de particiones en otro dispositivo&lt;/strong>: Si quieres crear la misma estructura de particiones en otro dispositivo (por ejemplo, &lt;code>/dev/sdb&lt;/code>), puedes usar el archivo exportado para restaurar la tabla de particiones:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl"> sudo sfdisk /dev/sdb &amp;lt; particiones.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Formatear Disco</title><link>https://volteret4.github.io/notas/p/formatear-disco/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/formatear-disco/</guid><description>&lt;h2 id="formatear-disco">Formatear disco
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Crear nueva tabla de particiones &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo fdisk /dev/sdXY
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Orden: g, n, w&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Formatear disco&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mkfs &lt;span class="o">[&lt;/span>options&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-t &lt;span class="nb">type&lt;/span> fs-options&lt;span class="o">]&lt;/span> device &lt;span class="o">[&lt;/span>size&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> sudo mkfs -t ext4 /dev/sdb1 &lt;span class="c1"># EJEMPLO&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Listar Servicios Systemctl</title><link>https://volteret4.github.io/notas/p/listar-servicios-systemctl/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/listar-servicios-systemctl/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo systemctl list-units --type&lt;span class="o">=&lt;/span>service
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Montar NTFS</title><link>https://volteret4.github.io/notas/p/montar-ntfs/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/montar-ntfs/</guid><description>&lt;h2 id="instalar">Instalar
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo apt install fuse
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo apt install ntfs-3g
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="montar">Montar
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo mount -t ntfs /dev/sdXy /path
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crear ISO De Dispositivo</title><link>https://volteret4.github.io/notas/p/crear-iso-de-dispositivo/</link><pubDate>Thu, 10 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-iso-de-dispositivo/</guid><description>&lt;p>Crea una imagen de una unidad como un disco duro o una tarjeta de memoria.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo dd &lt;span class="k">if&lt;/span>&lt;span class="o">=&lt;/span>/dev/sdX &lt;span class="nv">of&lt;/span>&lt;span class="o">=&lt;/span>name-of-iso.iso &lt;span class="nv">status&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;progress&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Crear Servidor Para Compartir Carpeta</title><link>https://volteret4.github.io/notas/p/crear-servidor-para-compartir-carpeta/</link><pubDate>Thu, 10 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-servidor-para-compartir-carpeta/</guid><description>&lt;p>Crea un servidor http en una carpeta para poder descargar archivos rápidamente&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">python3 -m http.server &lt;span class="m">8000&lt;/span> --bind 0.0.0.0 --directory /ruta/al/directorio
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Ruta Al Path</title><link>https://volteret4.github.io/notas/p/ruta-al-path/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/ruta-al-path/</guid><description>&lt;p>Añadir &lt;code>~/local/bin&lt;/code> al path&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/home/&lt;/span>&lt;span class="nv">$USER&lt;/span>&lt;span class="s2">/.local/bin:&lt;/span>&lt;span class="nv">$PATH&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

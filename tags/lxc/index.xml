@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lxc on memoria digital</title><link>https://volteret4.github.io/notas/tags/lxc/</link><description>Recent content in Lxc on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Thu, 31 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/lxc/index.xml" rel="self" type="application/rss+xml"/><item><title>Reset Lxc Password</title><link>https://volteret4.github.io/notas/p/reset-lxc-password/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/reset-lxc-password/</guid><description>&lt;h2 id="how-to-reset-your-proxmox-lxc-container-root-password">How to Reset Your Proxmox LXC Container Root Password
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>Grab the container ID&lt;/p>
+&lt;p>First you need to grab the &lt;strong>container ID&lt;/strong>, which is the number next to the container name in the Proxmox node. For example, if the container name is “monitor”, the ID will be the number next to it.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Open up a shell&lt;/p>
+&lt;p>Next, open up a shell (as root) into the container from the Proxmox host. You can do this by running the command &lt;strong>“lxc-attach -n [container_id]”&lt;/strong>, with the appropriate container ID in place of the placeholder.&lt;/p>
+&lt;p>For example, if the container ID is 150, the command would be:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">lxc-attach -n &lt;span class="m">150&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>
+&lt;p>Change your password&lt;/p>
+&lt;p>Finally, change your password by running the command &lt;strong>“passwd”&lt;/strong>. This will prompt you to enter a new password for your container.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">passwd
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ul></description></item></channel></rss>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Video on memoria digital</title><link>https://volteret4.github.io/notas/tags/video/</link><description>Recent content in Video on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Thu, 31 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/video/index.xml" rel="self" type="application/rss+xml"/><item><title>Detecta La RAM De Tu GPU</title><link>https://volteret4.github.io/notas/p/detecta-la-ram-de-tu-gpu/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/detecta-la-ram-de-tu-gpu/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://www.cyberciti.biz/faq/howto-find-linux-vga-video-card-ram" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">glxinfo &lt;span class="p">|&lt;/span> grep -E -i &lt;span class="s1">&amp;#39;device|memory&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Ea, a merendar.&lt;/p></description></item><item><title>Obtener Último Video De Un Canal De Youtube</title><link>https://volteret4.github.io/notas/p/obtener-%C3%BAltimo-video-de-un-canal-de-youtube/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-%C3%BAltimo-video-de-un-canal-de-youtube/</guid><description>&lt;p>&lt;code>curl -s &amp;quot;https://decapi.me/youtube/latest_video?user=NPR&lt;/code>&lt;/p></description></item></channel></rss>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Imágenes on memoria digital</title><link>https://volteret4.github.io/notas/categories/im%C3%A1genes/</link><description>Recent content in Imágenes on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Thu, 31 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/categories/im%C3%A1genes/index.xml" rel="self" type="application/rss+xml"/><item><title>Convierte Svg A Png Con Fondo Transparente</title><link>https://volteret4.github.io/notas/p/convierte-svg-a-png-con-fondo-transparente/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/convierte-svg-a-png-con-fondo-transparente/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">magick input.svg -background none -flatten output.png
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Imagemagick Convertir Imagen A Tono De Grises</title><link>https://volteret4.github.io/notas/p/imagemagick-convertir-imagen-a-tono-de-grises/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/imagemagick-convertir-imagen-a-tono-de-grises/</guid><description>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://stackoverflow.com/questions/13317753/convert-rgb-to-grayscale-in-imagemagick-command-line" target="_blank" rel="noopener"
+>Origen&lt;/a>&lt;/p>&lt;/blockquote>
+&lt;p>Usa esta linea cambiando &lt;code>&amp;lt;img_in&amp;gt;&lt;/code> por la imagen a convertir.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">magick &amp;lt;img_in&amp;gt; -colorspace Gray &amp;lt;img_out&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

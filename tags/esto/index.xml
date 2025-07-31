@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Esto on memoria digital</title><link>https://volteret4.github.io/notas/tags/esto/</link><description>Recent content in Esto on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Thu, 31 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/esto/index.xml" rel="self" type="application/rss+xml"/><item><title>Archivos Modificados Recientemente</title><link>https://volteret4.github.io/notas/p/archivos-modificados-recientemente/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/archivos-modificados-recientemente/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Muestra archivos modificados en el último día&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">find /ruta/a/tu/directorio -type f -mtime -1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#Esto listará los archivos con detalles como permisos, propietario, tamaño y fecha de modificación.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">find /ruta/a/tu/directorio -type f -mmin -60 -ls
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>
