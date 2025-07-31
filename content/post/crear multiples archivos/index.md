@@ -1,14 +1,13 @@
 ---
-title : "Crear Multiples Archivos"
-date : "2025-07-31"
-image : ""
-tags : ["linux", "touch", "multiple", "files", "oneline"]
-categories : []
-description : ""
+title: "Crear Multiples Archivos"
+date: "2025-07-31"
+image: ""
+tags: ["linux", "touch", "multiple", "files", "oneline"]
+categories: []
+description: ""
 ---
 
-
-```bash {1} ❴lineos="true"❵ 
+```bash
 touch roles/system/tasks/{essential,main,user,ssh}.yml
 
 tree roles
@@ -22,4 +21,3 @@ roles
 
 3 directories, 4 files
 ```
-
