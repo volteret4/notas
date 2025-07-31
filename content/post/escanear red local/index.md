@@ -1,0 +1,17 @@
+---
+title : "Escanear Red Local"
+date : "2025-07-31"
+image : ""
+tags : []
+categories : [network]
+description : ""
+---
+
+
+> [Origen](https://nosololinux.es/escanear-red-local-con-nmap-en-linux/)
+
+Muestra los dispositivos conectados a tu LAN en la subnet especificada
+
+```bash
+nmap -sn 192.168.1.0/24
+```
