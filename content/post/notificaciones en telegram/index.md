@@ -28,7 +28,7 @@ send_telegram_message() {
 
 # Verificar si se proporcionó un mensaje
 if [ -z "$1" ]; then
-    echo "Uso: $0 \"Mensaje a enviar\"" >> $LOG_FILE
+    echo "Uso: $0 \"Mensaje a enviar\"" 
     exit 1
 fi
 
