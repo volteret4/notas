@@ -1,10 +1,10 @@
 ---
 title : "Cargar Archivos .Env En Scripts"
-date : "2025-07-31"
+date : "2026-01-17"
 image : ""
-tags : []
-categories : [scripts]
-description : "Carga tus secretos para tus scripts desde un archivo .env"
+tags : ["variables"]
+categories : ["Scripts"]
+description : ""
 ---
 
 
@@ -31,7 +31,7 @@ echo "VAR1 es: $VAR1" echo "VAR2 es: $VAR2"
 ```
 
 ## Python
-Puedes usar el paquete python-dotenv con `pip install python-dotenv`.
+Puedes usar el paquete python-dotenv con `pip install python-dotenv`.r
 
 ```python
 import os
@@ -40,3 +40,4 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.gentenv ('API_KEY')
+```
