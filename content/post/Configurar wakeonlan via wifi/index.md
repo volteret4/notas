@@ -1,10 +1,10 @@
 ---
 title : "Configurar Wakeonlan Via Wifi"
-date : "2025-07-31"
+date : "2026-01-17"
 image : ""
-tags : []
-categories : [network]
-description : "Despierta dispositivos usando la tarjeta wifi"
+tags : ["cloud", "shell"]
+categories : ["Network"]
+description : ""
 ---
 
 
@@ -38,3 +38,4 @@ Habilitar WoWLAN para el dispositivo phy0 con magic-packet:
 sudo iw phy0 wowlan enable magic-packet
 ```
 
+Nota: Para que WoWLAN funcione, la opción de activación de LAN en la BIOS debe estar habilitada.
