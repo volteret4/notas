@@ -1,10 +1,10 @@
 ---
 title : "Grep"
-date : "2025-07-31"
+date : "2026-01-17"
 image : ""
-tags : []
-categories : [básico]
-description : "Flags útiles para grep"
+tags : ["grep"]
+categories : ["terminal"]
+description : ""
 ---
 
 
@@ -103,3 +103,4 @@ Si tienes `ripgrep` (`rg`) instalado, es mucho más rápido:
 rg "tu_string" /ruta/a/la/carpeta/
 ```
 
+`rg` es recursivo por defecto y más eficiente que `grep`.
