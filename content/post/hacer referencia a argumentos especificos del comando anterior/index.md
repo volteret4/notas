@@ -1,16 +1,20 @@
 ---
 title : "Hacer Referencia A Argumentos Especificos Del Comando Anterior"
-date : "2025-07-31"
+date : "2026-01-17"
 image : ""
-tags : []
-categories : [básico]
+tags : ["shell"]
+categories : ["terminal"]
 description : ""
 ---
 
-> Origen: ChatGPT
 
-También puedes hacer referencia a argumentos específicos del comando anterior utilizando la sintaxis !:n, donde "n" es el número del argumento que deseas utilizar. Por ejemplo, si el comando anterior fue ls -l archivo.txt, puedes utilizar la siguiente sintaxis para imprimir el nombre del archivo:
+Puedes usar `!:#` para referenciar segmentos del commando anterior
+```sh
+touch archivo.txt
+echo !:1 
+archivo.txt
 
-```
+touch 1.txt 2.txt
 echo !:2
+2.txt
 ```
