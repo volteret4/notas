@@ -1,10 +1,10 @@
 ---
-title : "Montar NTFS"
-date : "2025-07-15"
+title : "Montar Ntfs"
+date : "2026-01-17"
 image : ""
-tags : []
-categories : [básico]
-description : "Montar disco NTFS en linux"
+tags : ["filesystems"]
+categories : ["terminal"]
+description : ""
 ---
 
 
