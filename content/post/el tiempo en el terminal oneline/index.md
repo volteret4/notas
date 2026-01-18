@@ -1,14 +1,17 @@
 ---
-title: "El Tiempo En El Terminal Oneline"
-date: "2025-07-09"
-image: ""
-tags: ["linux", "tiempo", "weather", "oneline", "terminal"]
-categories: [pamplinas]
-description: "Obtén la previsión metereológica en el terminal"
+title : "El Tiempo En El Terminal Oneline"
+date : "2026-01-18"
+image : ""
+tags : ["oneline", "shell"]
+categories : ["Pamplinas"]
+description : ""
 ---
+
 
 Muestra la previsión metereológica para la ciudad que elijas durante los próximos días
 
 ```bash
 curl wttr.in/Jerez
 ```
+
+
