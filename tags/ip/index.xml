@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ip on memoria digital</title><link>https://volteret4.github.io/notas/tags/ip/</link><description>Recent content in Ip on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Wed, 09 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/ip/index.xml" rel="self" type="application/rss+xml"/><item><title>Obtener Geolocalización</title><link>https://volteret4.github.io/notas/p/obtener-geolocalizaci%C3%B3n/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-geolocalizaci%C3%B3n/</guid><description>&lt;p&gt;Para obtener datos sobre la localización de tu servidor usa cualquiera de estos comandos&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;curl ip-api.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl http://ifconfig.co/json&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.es/geo&lt;/code&gt; or &lt;code&gt;curl ifconfig.es/json&lt;/code&gt; or &lt;code&gt;curl ifconfig.es/country&lt;/code&gt; or &lt;code&gt;curl ifconfig.es/code&lt;/code&gt; or &lt;code&gt;curl ifconfig.es/city&lt;/code&gt; or &lt;code&gt;curl ifconfig.es/latitude&lt;/code&gt; or &lt;code&gt;curl ifconfig.es/longitude&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Obtener Ip Pública</title><link>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</guid><description>&lt;p&gt;Ejecuta cualquiera de estos comandos en un terminal para obtener la ip pública del host.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://github.com/chubin/awesome-console-services?tab=readme-ov-file#new-line" target="_blank" rel="noopener"
+&gt;Ip publica&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;curl ipaddy.net&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl eth0.me&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ipaddr.site&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.co&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.pro&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl curlmyip.net&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ipinfo.io/ip&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl icanhazip.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl checkip.amazonaws.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ip-api.com/line?fields=query&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.io/ip&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl -s ip.liquidweb.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.es&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ipaddress.sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl 2ip.ru&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

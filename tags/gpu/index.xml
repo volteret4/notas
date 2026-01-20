@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Gpu on memoria digital</title><link>https://volteret4.github.io/notas/tags/gpu/</link><description>Recent content in Gpu on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Thu, 31 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/gpu/index.xml" rel="self" type="application/rss+xml"/><item><title>Detecta La RAM De Tu GPU</title><link>https://volteret4.github.io/notas/p/detecta-la-ram-de-tu-gpu/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/detecta-la-ram-de-tu-gpu/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.cyberciti.biz/faq/howto-find-linux-vga-video-card-ram" target="_blank" rel="noopener"
+&gt;Origen&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;glxinfo &lt;span class="p"&gt;|&lt;/span&gt; grep -E -i &lt;span class="s1"&gt;&amp;#39;device|memory&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Ea, a merendar.&lt;/p&gt;</description></item></channel></rss>

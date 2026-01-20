@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Grep on memoria digital</title><link>https://volteret4.github.io/notas/tags/grep/</link><description>Recent content in Grep on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 17 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/grep/index.xml" rel="self" type="application/rss+xml"/><item><title>Grep</title><link>https://volteret4.github.io/notas/p/grep/</link><pubDate>Sat, 17 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/grep/</guid><description>&lt;h2 id="usar-variables-en-grep"&gt;Usar variables en grep
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -io
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="búsqueda-en-una-carpeta-no-recursiva"&gt;&lt;strong&gt;Búsqueda En una carpeta (no recursiva)&lt;/strong&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/*
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Esto buscará &lt;code&gt;&amp;quot;tu_string&amp;quot;&lt;/code&gt; en todos los archivos dentro de la carpeta, pero &lt;strong&gt;no&lt;/strong&gt; en subcarpetas.&lt;/p&gt;
+&lt;h2 id="búsqueda-recursiva-en-subdirectorios"&gt;&lt;strong&gt;Búsqueda Recursiva en subdirectorios&lt;/strong&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -r &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El flag &lt;code&gt;-r&lt;/code&gt; (o &lt;code&gt;-R&lt;/code&gt;) have que &lt;code&gt;grep&lt;/code&gt; busque recursivamente en todos los subdirectorios.&lt;/p&gt;
+&lt;h2 id="mostrar-número-de-línea-en-los-resultados"&gt;&lt;strong&gt;Mostrar Número de línea en los resultados&lt;/strong&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -rn &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-n&lt;/code&gt;: Muestra el número de línea donde aparece el string.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="ignorar-mayúsculas-y-minúsculas"&gt;&lt;strong&gt;Ignorar Mayúsculas y minúsculas&lt;/strong&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -ri &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-i&lt;/code&gt;: Ignore diferencias entre mayúsculas y minúsculas.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="buscar-archivos-específicos-por-extensión"&gt;&lt;strong&gt;Buscar Archivos específicos (por extensión)&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;Si solo quieres buscar en archivos &lt;code&gt;.txt&lt;/code&gt;, usa:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -r &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/ --include&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;*.txt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="excluir-archivos-o-carpetas"&gt;&lt;strong&gt;Excluir Archivos o carpetas&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;Si quieres excluir ciertos archivos o carpetas:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -r &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/ --exclude-dir&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;logs&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Esto excluirá la carpeta &lt;code&gt;logs&lt;/code&gt; de la búsqueda.&lt;/p&gt;
+&lt;h2 id="mostrar-solo-los-nombres-de-los-archivos-que-contienen-el-string"&gt;&lt;strong&gt;Mostrar Solo los nombres de los archivos que contienen el string&lt;/strong&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -rl &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El flag &lt;code&gt;-l&lt;/code&gt; have que solo se muestren los nombres de los archivos que contienen la cadena, sin mostrar las líneas.&lt;/p&gt;
+&lt;h2 id="usar"&gt;&lt;strong&gt;Usar &lt;code&gt;rg&lt;/code&gt; (ripgrep) Para mayor velocidad&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;Si tienes &lt;code&gt;ripgrep&lt;/code&gt; (&lt;code&gt;rg&lt;/code&gt;) instalado, es mucho más rápido:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rg &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;rg&lt;/code&gt; es recursivo por defecto y más eficiente que &lt;code&gt;grep&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>Buscar Cadena De Texto En Multiples Archivos</title><link>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</guid><description>&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="sb"&gt;`&lt;/span&gt;grep -rHni &lt;span class="s1"&gt;&amp;#39;cadena_de_texto&amp;#39;&lt;/span&gt; .&lt;span class="sb"&gt;`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;-r&lt;/code&gt; Recursivo.
+&lt;code&gt;-H&lt;/code&gt; mostrar nombre del archivo.
+&lt;code&gt;-n&lt;/code&gt; mostrar línea.&lt;/p&gt;</description></item></channel></rss>
