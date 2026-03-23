@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Búsqueda on memoria digital</title><link>https://volteret4.github.io/notas/tags/b%C3%BAsqueda/</link><description>Recent content in Búsqueda on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sun, 18 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/b%C3%BAsqueda/index.xml" rel="self" type="application/rss+xml"/><item><title>Excluir Path De Busqueda</title><link>https://volteret4.github.io/notas/p/excluir-path-de-busqueda/</link><pubDate>Sun, 18 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/excluir-path-de-busqueda/</guid><description>&lt;p&gt;Para poder borrar todo el contenido de una carpeta excepto una ruta concreta se puede:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;find &lt;span class="nv"&gt;$carpeta&lt;/span&gt; -maxdepth &lt;span class="m"&gt;1&lt;/span&gt; -type d ! -iname &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;ruta&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt; -delete
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;no termina de funcionar asi&lt;/p&gt;</description></item></channel></rss>

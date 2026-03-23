@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Oneline on memoria digital</title><link>https://volteret4.github.io/notas/categories/oneline/</link><description>Recent content in Oneline on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Tue, 20 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/categories/oneline/index.xml" rel="self" type="application/rss+xml"/><item><title>Watch</title><link>https://volteret4.github.io/notas/p/watch/</link><pubDate>Tue, 20 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/watch/</guid><description>&lt;p&gt;Gracias a esta app puedes vigilar el output de una tarea repetitiva.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;watch ls -alh . &lt;span class="c1"&gt;# mostrará el contenido de la carpeta actual,, actualizando cada dos segundos&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;watch --differences df -h &lt;span class="c1"&gt;# mostrará el uso de los discos casi en tiempo real&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;watch --chgexit lsbl &lt;span class="c1"&gt;# Saldrá del comando al detectar un cambio&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Se Insultado Al Fallar Contraseña De Sudo</title><link>https://volteret4.github.io/notas/p/se-insultado-al-fallar-contrase%C3%B1a-de-sudo/</link><pubDate>Tue, 16 Dec 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/se-insultado-al-fallar-contrase%C3%B1a-de-sudo/</guid><description>&lt;p&gt;Primero edita las opciones de sudo con &lt;code&gt;sudo visudo&lt;/code&gt; y añade la línea:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Defaults insults
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

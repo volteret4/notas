@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Terminal on memoria digital</title><link>https://volteret4.github.io/notas/categories/terminal/</link><description>Recent content in Terminal on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 17 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/categories/terminal/index.xml" rel="self" type="application/rss+xml"/><item><title>Grep</title><link>https://volteret4.github.io/notas/p/grep/</link><pubDate>Sat, 17 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/grep/</guid><description>&lt;h2 id="usar-variables-en-grep"&gt;Usar variables en grep
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -io
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="búsqueda-en-una-carpeta-no-recursiva"&gt;&lt;strong&gt;Búsqueda En una carpeta (no recursiva)&lt;/strong&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/*
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Esto buscará &lt;code&gt;&amp;quot;tu_string&amp;quot;&lt;/code&gt; en todos los archivos dentro de la carpeta, pero &lt;strong&gt;no&lt;/strong&gt; en subcarpetas.&lt;/p&gt;
+&lt;h2 id="búsqueda-recursiva-en-subdirectorios"&gt;&lt;strong&gt;Búsqueda Recursiva en subdirectorios&lt;/strong&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -r &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El flag &lt;code&gt;-r&lt;/code&gt; (o &lt;code&gt;-R&lt;/code&gt;) have que &lt;code&gt;grep&lt;/code&gt; busque recursivamente en todos los subdirectorios.&lt;/p&gt;
+&lt;h2 id="mostrar-número-de-línea-en-los-resultados"&gt;&lt;strong&gt;Mostrar Número de línea en los resultados&lt;/strong&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -rn &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-n&lt;/code&gt;: Muestra el número de línea donde aparece el string.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="ignorar-mayúsculas-y-minúsculas"&gt;&lt;strong&gt;Ignorar Mayúsculas y minúsculas&lt;/strong&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -ri &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-i&lt;/code&gt;: Ignore diferencias entre mayúsculas y minúsculas.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="buscar-archivos-específicos-por-extensión"&gt;&lt;strong&gt;Buscar Archivos específicos (por extensión)&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;Si solo quieres buscar en archivos &lt;code&gt;.txt&lt;/code&gt;, usa:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -r &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/ --include&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;*.txt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="excluir-archivos-o-carpetas"&gt;&lt;strong&gt;Excluir Archivos o carpetas&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;Si quieres excluir ciertos archivos o carpetas:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -r &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/ --exclude-dir&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;logs&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Esto excluirá la carpeta &lt;code&gt;logs&lt;/code&gt; de la búsqueda.&lt;/p&gt;
+&lt;h2 id="mostrar-solo-los-nombres-de-los-archivos-que-contienen-el-string"&gt;&lt;strong&gt;Mostrar Solo los nombres de los archivos que contienen el string&lt;/strong&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -rl &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El flag &lt;code&gt;-l&lt;/code&gt; have que solo se muestren los nombres de los archivos que contienen la cadena, sin mostrar las líneas.&lt;/p&gt;
+&lt;h2 id="usar"&gt;&lt;strong&gt;Usar &lt;code&gt;rg&lt;/code&gt; (ripgrep) Para mayor velocidad&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;Si tienes &lt;code&gt;ripgrep&lt;/code&gt; (&lt;code&gt;rg&lt;/code&gt;) instalado, es mucho más rápido:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rg &lt;span class="s2"&gt;&amp;#34;tu_string&amp;#34;&lt;/span&gt; /ruta/a/la/carpeta/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;rg&lt;/code&gt; es recursivo por defecto y más eficiente que &lt;code&gt;grep&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>Hacer Referencia A Argumentos Especificos Del Comando Anterior</title><link>https://volteret4.github.io/notas/p/hacer-referencia-a-argumentos-especificos-del-comando-anterior/</link><pubDate>Sat, 17 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/hacer-referencia-a-argumentos-especificos-del-comando-anterior/</guid><description>&lt;p&gt;Puedes usar &lt;code&gt;!:#&lt;/code&gt; para referenciar segmentos del commando anterior&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;touch archivo.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; !:1
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;archivo.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;touch 1.txt 2.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; !:2
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;2.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Montar Ntfs</title><link>https://volteret4.github.io/notas/p/montar-ntfs/</link><pubDate>Sat, 17 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/montar-ntfs/</guid><description>&lt;h2 id="instalar"&gt;Instalar
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install fuse
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install ntfs-3g
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="montar"&gt;Montar
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo mount -t ntfs /dev/sdXy /path
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Rsync Evitar Directorio</title><link>https://volteret4.github.io/notas/p/rsync-evitar-directorio/</link><pubDate>Sat, 17 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/rsync-evitar-directorio/</guid><description>&lt;h2 id="exclude-a-specific-directory"&gt;&lt;a class="link" href="https://linuxize.com/post/how-to-exclude-files-and-directories-with-rsync/#exclude-a-specific-directory" target="_blank" rel="noopener"
+&gt;Exclude a Specific Directory&lt;/a&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rsync -a --exclude &lt;span class="s1"&gt;&amp;#39;dir1&amp;#39;&lt;/span&gt; src_directory/ dst_directory/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Cómo Usar El Comando Tar En Linux</title><link>https://volteret4.github.io/notas/p/c%C3%B3mo-usar-el-comando-tar-en-linux/</link><pubDate>Thu, 18 Dec 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/c%C3%B3mo-usar-el-comando-tar-en-linux/</guid><description>&lt;p&gt;Veamos qué operaciones básicas puedes llevar a cabo utilizando Tar. Antes de comenzar, necesitarás SSH en tu servidor VPS. ¡Aquí hay una &lt;a class="link" href="https://www.hostinger.es/tutoriales/conectar-usando-terminal-putty-ssh/" target="_blank" rel="noopener"
+&gt;guía&lt;/a&gt; para ayudarte!&lt;/p&gt;
+&lt;h2 id="crear-un-archivo-tar-en-linux"&gt;Crear un archivo .tar en Linux
+&lt;/h2&gt;&lt;p&gt;Puedes crear compresiones .tar tanto para un archivo como para directorios. Un ejemplo de este tipo de archivo es:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -cvf sampleArchive.tar /home/sampleArchive
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Aquí **/&lt;strong&gt;home&lt;/strong&gt;/**sampleArchive es el directorio que necesita set comprimido creando &lt;strong&gt;sampleArchive.tar&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Este commando usa las opciones **–**cvf que significan:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;c&lt;/strong&gt; – crear un nuevo archivo .tar&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;v&lt;/strong&gt; – muestra una descripción detallada del progreso de la compresión&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;f&lt;/strong&gt; – nombre del archivo&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="crear-un-archivo-targz-en-linux"&gt;Crear un archivo .tar.gz en Linux
+&lt;/h2&gt;&lt;p&gt;Si deseas una mejor compresión, también puedes usar &lt;strong&gt;.tar.gz&lt;/strong&gt;. Un ejemplo de esto es:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -cvzf sampleArchive.tar.gz /home/sampleArchive
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;La opción adicional &lt;strong&gt;z&lt;/strong&gt; representa la &lt;a class="link" href="https://www.hostinger.es/tutoriales/compresion-gzip" target="_blank" rel="noopener"
+&gt;compresión gzip&lt;/a&gt;. Alternativamente, puedes crear un archivo &lt;strong&gt;.tgz&lt;/strong&gt; que sea similar a &lt;strong&gt;tar.gz&lt;/strong&gt;. Te mostramos un ejemplo de esto último a continuación:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -cvzf sampleArchive.tgz /home/sampleArchive
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="crear-un-archivo-tarbz2-en-linux"&gt;Crear un archivo .tar.bz2 en Linux
+&lt;/h2&gt;&lt;p&gt;El archivo &lt;strong&gt;.bz2&lt;/strong&gt; proporciona más compresión en comparación con gzip. Sin embargo, esta alternativa tomará mas tiempo para comprimir y descomprimir. Para usarla, debes usar la opción &lt;strong&gt;-j&lt;/strong&gt;. Un ejemplo de cómo se vería la operación es el siguiente:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -cvjf sampleArchive.tar.bz2 /home/sampleArchive
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Dicha operación es similar a &lt;strong&gt;.tar.tbz&lt;/strong&gt; o &lt;strong&gt;.tar.tb2&lt;/strong&gt;. Te mostramos un ejemplo a continuación:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -cvjf sampleArchive.tar.tbz /home/sampleArchive
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -cvjf sampleArchive.tar.tb2 /home/sampleArchive
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="cómo-descomprimir-archivos-tar-en-linux"&gt;Cómo descomprimir archivos .tar en Linux
+&lt;/h2&gt;&lt;p&gt;El commando Tar de Linux también se puede utilizar para extraer un archivo. El siguiente commando extraerá los archivos en el directorio actual:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -xvf sampleArchive.tar
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si deseas extraer tus archivos a un directorio diferente, puedes usar la opción &lt;strong&gt;-C&lt;/strong&gt;. Te mostramos un ejemplo de esto a continuación:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -xvf sampleArchive.tar -C /home/ExtractedFiles/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Puedes usar un commando similar para descomprimir archivos &lt;strong&gt;.tar.gz&lt;/strong&gt;, tal como se muestra a continuación:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -xvf sampleArchive.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -xvf sampleArchive.tar.gz -C /home/ExtractedFiles/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los archivos &lt;strong&gt;.tar.bz2&lt;/strong&gt; o &lt;strong&gt;.tar.tbz&lt;/strong&gt; o &lt;strong&gt;.tar.tb2&lt;/strong&gt; pueden descomprimirse de manera similar. Para esto deberás teclear el siguiente commando en la línea de commando:&lt;/p&gt;
+&lt;p&gt;tar -xvf sampleArchive.tar.bz2&lt;/p&gt;
+&lt;h2 id="cómo-listar-el-contenido-de-un-archivo-en-linux"&gt;Cómo listar el contenido de un archivo en Linux
+&lt;/h2&gt;&lt;p&gt;Una vez que hayas creado el archivo, puedes listar el contenido mediante un commando similar al siguiente:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -tvf sampleArchive.tar
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Esto mostrará la lista completa de archivos junto con las marcas de tiempo y los permisos. Del mismo modo, para &lt;strong&gt;.tar.gz&lt;/strong&gt;, puedes usar un commando como:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -tvf sampleArchive.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Esto también funcionaría para archivos &lt;strong&gt;.tar.bz2&lt;/strong&gt; como se muestra a continuación:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -tvf sampleArchive.tar.bz2
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="cómo-descomprimir-un-único-archivo-tar"&gt;Cómo descomprimir un único archivo .tar
+&lt;/h2&gt;&lt;p&gt;Una vez que creas un archivo comprimido, puedes extraer un único archivo de ese comprimido. Esto lo puedes lograr con el commando que te mostramos a continuación:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -xvf sampleArchive.tar example.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Aquí &lt;strong&gt;example.sh&lt;/strong&gt; es un archivo único que se extraerá del comprimido sampleArchive.tar. Alternativamente, también puedes usar el siguiente commando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar --extract --file&lt;span class="o"&gt;=&lt;/span&gt; sampleArchive.tar example.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para extraer un solo archivo de un comprimido .tar.gz puedes usar un commando similar al mostrado a continuación:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -zxvf sampleArchive.tar.gz example.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;O alternativamente:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar --extract --file&lt;span class="o"&gt;=&lt;/span&gt; sampleArchive.tar.gz example.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para extraer un solo archivo de un comprimido .tar.bz2 puedes usar un commando como este:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -jxvf sampleArchive.tar.bz2 example.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;O, alternativamente, uno como este:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar --extract --file&lt;span class="o"&gt;=&lt;/span&gt; sampleArchive.tar.bz2 example.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Como puedes ver, el commando tar tiene mucha flexibilidad en su sintaxis.&lt;/p&gt;
+&lt;h2 id="cómo-extraer-múltiples-archivos-de-los-archivos-tar"&gt;Cómo extraer múltiples archivos de los archivos .tar
+&lt;/h2&gt;&lt;p&gt;En caso de que desees extraer varios archivos, usa el siguiente formato del commando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -xvf sampleArchive.tar &lt;span class="s2"&gt;&amp;#34;file1&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;file2&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para .&lt;strong&gt;tar.gz&lt;/strong&gt; puedes usar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -zxvf sampleArchive.tar.gz &lt;span class="s2"&gt;&amp;#34;file1&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;file2&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para &lt;strong&gt;.tar.bz2&lt;/strong&gt; puedes usar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -jxvf sampleArchive.tar.bz2 &lt;span class="s2"&gt;&amp;#34;file1&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;file2&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="extraer-múltiples-archivos-con-un-patrón"&gt;Extraer múltiples archivos con un patrón
+&lt;/h2&gt;&lt;p&gt;Si deseas extraer del comprimido patrones específicos de archivos como solo los &lt;strong&gt;.jpg&lt;/strong&gt;, usa el commando &lt;strong&gt;wildcards&lt;/strong&gt;. Una muestra de dicho commando se muestra a continuación:&lt;/p&gt;
+&lt;p&gt;tar -xvf sampleArchive.tar &amp;ndash;wildcards &amp;lsquo;*.jpg&amp;rsquo;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Para **.tar.gz** puedes usar:
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;tar -zxvf sampleArchive.tar.gz &amp;ndash;wildcards &amp;lsquo;*.jpg&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;Para &lt;strong&gt;.tar.bz2&lt;/strong&gt; puedes usar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tar -jxvf sampleArchive.tar.bz2 --wildcards &lt;span class="s1"&gt;&amp;#39;*.jpg&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="cómo-agregar-archivos-a-un-archivo-tar"&gt;Cómo agregar archivos a un archivo .tar
+&lt;/h2&gt;&lt;p&gt;Si bien puedes extraer archivos específicos, también puedes agregar archivos nuevos a un archivo comprimido existente. Para hacerlo, debes usar la opción &lt;strong&gt;-r&lt;/strong&gt; que significa agregar. El commando Tar puede agregar tanto archivos como directorios.&lt;/p&gt;
+&lt;p&gt;A continuación se muestra un ejemplo en el que estamos agregando example.jpg al &lt;strong&gt;sampleArchive.tar&lt;/strong&gt; existente.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tar -rvf sampleArchive.tar example.jpg&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;También podemos agregar un directorio. En el ejemplo que te mostramos a continuación, el directorio image_dir se agrega al archivo sampleArchive.tar&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tar -rvf sampleArchive.tar image_dir&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;No puedes agregar archivos o carpetas a comprimidos &lt;strong&gt;.tar.gz&lt;/strong&gt; o .&lt;strong&gt;tar.bz2&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id="cómo-verificar-un-archivo-tar-en-linux"&gt;Cómo verificar un archivo .tar en Linux
+&lt;/h2&gt;&lt;p&gt;Usando Tar puedes verificar un archivo. Esta es una de las formas en que puedes hacerlo:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tar -tvf sampleArchive.tar&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Esto no se puede aplicar en archivos &lt;strong&gt;.tar.gz&lt;/strong&gt; o &lt;strong&gt;.tar.bz2&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id="cómo-verificar-el-tamaño-del-archivo-en-linux"&gt;Cómo verificar el tamaño del archivo en Linux
+&lt;/h2&gt;&lt;p&gt;Una vez que crees un archivo, puedes verificar su tamaño. Este se mostrará en KB (Kilobytes).&lt;/p&gt;
+&lt;p&gt;A continuación te mostramos varios ejemplos del commando a usar para verificar el tamaño de diferentes tipos de archivos comprimidos:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tar -czf - sampleArchive.tar | wc -c&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tar -czf - sampleArchive.tar.gz | wc -c&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tar -czf - sampleArchive.tar.bz2 | wc -c&lt;/code&gt;&lt;/p&gt;</description></item></channel></rss>

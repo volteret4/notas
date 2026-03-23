@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lua-Script-Equivalent-for-Neovim on memoria digital</title><link>https://volteret4.github.io/notas/tags/lua-script-equivalent-for-neovim/</link><description>Recent content in Lua-Script-Equivalent-for-Neovim on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Thu, 31 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/lua-script-equivalent-for-neovim/index.xml" rel="self" type="application/rss+xml"/><item><title>Automatic Installation Vim Plug</title><link>https://volteret4.github.io/notas/p/automatic-installation-vim-plug/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/automatic-installation-vim-plug/</guid><description>&lt;p&gt; &lt;a class="link" href="https://junegunn.github.io/vim-plug/tips/automatic-installation/#automatic-installation" target="_blank" rel="noopener"
+&gt;Origen&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="vim-script"&gt;&lt;a class="link" href="https://junegunn.github.io/vim-plug/tips/automatic-installation/#vim-script" target="_blank" rel="noopener"
+&gt;Vim script&lt;/a&gt;
+&lt;/h2&gt;&lt;p&gt;Place the following code in your .vimrc before plug#begin() call, and Vim will automatically install vim-plug and the plugins when you open Vim.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-vim" data-lang="vim"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;data_dir&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;has&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;nvim&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; ? &lt;span class="nx"&gt;stdpath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; . &lt;span class="s1"&gt;&amp;#39;/site&amp;#39;&lt;/span&gt; : &lt;span class="s1"&gt;&amp;#39;~/.vim&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nx"&gt;empty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;glob&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;data_dir&lt;/span&gt; . &lt;span class="s1"&gt;&amp;#39;/autoload/plug.vim&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;silent&lt;/span&gt; &lt;span class="k"&gt;execute&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;!curl -fLo &amp;#39;&lt;/span&gt;.&lt;span class="nx"&gt;data_dir&lt;/span&gt;.&lt;span class="s1"&gt;&amp;#39;/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;autocmd&lt;/span&gt; &lt;span class="nx"&gt;VimEnter&lt;/span&gt; * &lt;span class="nx"&gt;PlugInstall&lt;/span&gt; &lt;span class="p"&gt;--&lt;/span&gt;&lt;span class="nx"&gt;sync&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="nx"&gt;source&lt;/span&gt; $&lt;span class="nx"&gt;MYVIMRC&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;endif&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;&amp;#34; An example of vim-plug section ---------------------------------------------&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;call&lt;/span&gt; &lt;span class="nx"&gt;plug&lt;/span&gt;#&lt;span class="nx"&gt;begin&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;Plug&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;junegunn/seoul256.vim&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;call&lt;/span&gt; &lt;span class="nx"&gt;plug&lt;/span&gt;#&lt;span class="nx"&gt;end&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;silent&lt;/span&gt;&lt;span class="p"&gt;!&lt;/span&gt; &lt;span class="k"&gt;colorscheme&lt;/span&gt; &lt;span class="nx"&gt;seoul256&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="lua-script-equivalent-for-neovim"&gt;&lt;a class="link" href="https://junegunn.github.io/vim-plug/tips/automatic-installation/#lua-script-equivalent-for-neovim" target="_blank" rel="noopener"
+&gt;Lua script equivalent for Neovim&lt;/a&gt;
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-lua" data-lang="lua"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;local&lt;/span&gt; &lt;span class="n"&gt;data_dir&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;vim.fn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;stdpath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;if&lt;/span&gt; &lt;span class="n"&gt;vim.fn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;empty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;vim.fn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;glob&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data_dir&lt;/span&gt; &lt;span class="o"&gt;..&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/site/autoload/plug.vim&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="kr"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;vim.cmd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;silent !curl -fLo &amp;#39;&lt;/span&gt; &lt;span class="o"&gt;..&lt;/span&gt; &lt;span class="n"&gt;data_dir&lt;/span&gt; &lt;span class="o"&gt;..&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;vim.o&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;runtimepath&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;vim.o&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;runtimepath&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;vim.cmd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;autocmd VimEnter * PlugInstall --sync | source $MYVIMRC&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kr"&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- An example of vim-plug section --------------------------------------------&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;local&lt;/span&gt; &lt;span class="n"&gt;vim&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;vim&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;local&lt;/span&gt; &lt;span class="n"&gt;Plug&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;vim.fn&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;plug#&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;vim.call&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;plug#begin&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;Plug&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;junegunn/seoul256.vim&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;vim.call&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;plug#end&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;vim.cmd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;silent! colorscheme seoul256&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>
