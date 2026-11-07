@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Sqlite on memoria digital</title><link>https://volteret4.github.io/notas/tags/sqlite/</link><description>Recent content in Sqlite on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/sqlite/index.xml" rel="self" type="application/rss+xml"/><item><title>Borrar de golpe las playlists temporales de Mixxx</title><link>https://volteret4.github.io/notas/p/mixxx-borrar-playlists/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mixxx-borrar-playlists/</guid><description>&lt;h1 id="para-qué"&gt;Para qué
+&lt;/h1&gt;&lt;p&gt;Uso las playlists de Mixxx para sesiones temporales y, una vez grabadas, sobran. Borrarlas una a una desde la interfaz es un rollo.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh&lt;/code&gt; muestra las listas con su número de canciones y pide confirmación:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Sin preguntar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh -y
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="qué-borra-y-qué-no"&gt;Qué borra y qué no
+&lt;/h1&gt;&lt;p&gt;En la tabla &lt;code&gt;Playlists&lt;/code&gt; de &lt;code&gt;~/.mixxx/mixxxdb.sqlite&lt;/code&gt;, la columna &lt;code&gt;hidden&lt;/code&gt; dice el tipo de lista: &lt;code&gt;0&lt;/code&gt; es una lista normal, &lt;code&gt;1&lt;/code&gt; es Auto DJ y &lt;code&gt;2&lt;/code&gt; es el historial de sesiones (las que tienen fecha). Solo se borran las que cumplen:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;hidden&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AND&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;locked&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;No toca&lt;/strong&gt; Auto DJ, el historial, las listas &lt;strong&gt;bloqueadas&lt;/strong&gt; con el candado de Mixxx ni los &lt;strong&gt;cajones&lt;/strong&gt; (crates). Para conservar alguna lista, bloquéala antes.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mixxx tiene que estar cerrado.&lt;/strong&gt; Si está abierto, el script se niega: Mixxx tiene la base de datos en memoria y pisaría los cambios al cerrar.&lt;/li&gt;
+&lt;li&gt;Antes de borrar hace una copia con &lt;code&gt;sqlite3 .backup&lt;/code&gt; en &lt;code&gt;~/.mixxx/backups_borrar_playlists/&lt;/code&gt; y guarda las 5 últimas.&lt;/li&gt;
+&lt;li&gt;Borra en una transacción: primero &lt;code&gt;PlaylistTracks&lt;/code&gt; y luego &lt;code&gt;Playlists&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="el-script"&gt;El script
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;DB&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.mixxx/mixxxdb.sqlite&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;BACKUP_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.mixxx/backups_borrar_playlists&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# hidden=0: listas normales (1 = Auto DJ, 2 = historial); locked=0: no bloqueadas&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;WHERE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;hidden = 0 AND locked = 0&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; pgrep -x mixxx &amp;gt; /dev/null&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Mixxx está abierto: ciérralo antes de borrar las listas.&amp;#34;&lt;/span&gt; &amp;gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;list&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;sqlite3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$DB&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;SELECT name || &amp;#39; (&amp;#39; || (SELECT count(*) FROM PlaylistTracks WHERE playlist_id = p.id) || &amp;#39;)&amp;#39; FROM Playlists p WHERE &lt;/span&gt;&lt;span class="nv"&gt;$WHERE&lt;/span&gt;&lt;span class="s2"&gt; ORDER BY position&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; -z &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$list&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;No hay listas de reproducción que borrar.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$list&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;count&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$list&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; wc -l&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$1&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; !&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;-y&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;read&lt;/span&gt; -rp &lt;span class="s2"&gt;&amp;#34;¿Borrar estas &lt;/span&gt;&lt;span class="nv"&gt;$count&lt;/span&gt;&lt;span class="s2"&gt; listas? [s/N] &amp;#34;&lt;/span&gt; answer
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="o"&gt;[[&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$answer&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;sS&lt;span class="o"&gt;]&lt;/span&gt;* &lt;span class="o"&gt;]]&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Cancelado.&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; 0&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;mkdir -p &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sqlite3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$DB&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;.backup &amp;#39;&lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;/mixxxdb.&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;date +%Y%m%d%H%M%S&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;.sqlite&amp;#39;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ls -1t &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;/mixxxdb.*.sqlite &lt;span class="p"&gt;|&lt;/span&gt; tail -n +6 &lt;span class="p"&gt;|&lt;/span&gt; xargs -r rm --
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sqlite3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$DB&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;BEGIN; DELETE FROM PlaylistTracks WHERE playlist_id IN (SELECT id FROM Playlists WHERE &lt;/span&gt;&lt;span class="nv"&gt;$WHERE&lt;/span&gt;&lt;span class="s2"&gt;); DELETE FROM Playlists WHERE &lt;/span&gt;&lt;span class="nv"&gt;$WHERE&lt;/span&gt;&lt;span class="s2"&gt;; COMMIT;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Borradas &lt;/span&gt;&lt;span class="nv"&gt;$count&lt;/span&gt;&lt;span class="s2"&gt; listas. Copia en &lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Un alias corto:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;alias mixxx-limpiar=&amp;#39;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh&amp;#39;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; ~/.zsh_aliases
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="recuperar-listas-borradas"&gt;Recuperar listas borradas
+&lt;/h1&gt;&lt;p&gt;Con Mixxx cerrado, copia la última copia de seguridad encima de la base de datos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ls -1t ~/.mixxx/backups_borrar_playlists/mixxxdb.*.sqlite &lt;span class="p"&gt;|&lt;/span&gt; head -1&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; ~/.mixxx/mixxxdb.sqlite
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Ojo: también pierdes cualquier otro cambio en la biblioteca (BPM, cues…) hecho después de esa copia.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm ~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>ensayos-musicales, de podcasts a una base de datos de relaciones entre artistas</title><link>https://volteret4.github.io/notas/p/ensayos-musicales-podcasts-a-base-de-datos/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/ensayos-musicales-podcasts-a-base-de-datos/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Repo: &lt;code&gt;~/gits/pollo/ensayos-musicales&lt;/code&gt; (&lt;code&gt;https://github.com/volteret4/ensayos-musicales.git&lt;/code&gt;). Antes se llamaba &lt;code&gt;podcast_to_text&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Pipeline diario, &lt;code&gt;main.sh&lt;/code&gt;:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Transcribir&lt;/strong&gt; MP3 → TXT con &lt;strong&gt;Whisper&lt;/strong&gt; en local (&lt;code&gt;scripts/1_audio_to_text.py&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Resumir y extraer datos&lt;/strong&gt; de cada transcripción: artistas, discos, sellos, géneros y relaciones (influencias, colaboraciones…). Al principio con &lt;strong&gt;Gemini&lt;/strong&gt; (&lt;code&gt;scripts/2_gemini_resumen.py&lt;/code&gt;); ahora con &lt;strong&gt;Claude&lt;/strong&gt; (&lt;code&gt;claude -p&lt;/code&gt;, mismo prompt) por defecto. &lt;code&gt;RESUMEN=gemini ./main.sh&lt;/code&gt; vuelve a Gemini.&lt;/li&gt;
+&lt;li&gt;Si se acaba la cuota (código 1), el flujo se para.&lt;/li&gt;
+&lt;li&gt;Borrar los MP3 ya transcritos.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Incorporar&lt;/strong&gt; solo los resúmenes nuevos a &lt;code&gt;data/&lt;/code&gt; y &lt;code&gt;pendiente/&lt;/code&gt;, aplicando las decisiones de &lt;code&gt;correcciones/decisiones_artistas.txt&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Premios, charts y listas para los artistas que aún no los tienen.&lt;/li&gt;
+&lt;li&gt;Preparar &lt;code&gt;LOTES_DIARIOS&lt;/code&gt; lotes de &lt;code&gt;LOTE_TAM&lt;/code&gt; artistas para revisar (no llama a Claude; se revisan con &lt;code&gt;/revisar-lotes&lt;/code&gt; o desde el editor).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;LOTES_DIARIOS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt; &lt;span class="nv"&gt;LOTE_TAM&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;25&lt;/span&gt; ./main.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="editor-y-mapa"&gt;Editor y mapa
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Editor web&lt;/strong&gt; (&lt;code&gt;Dockerfile.editor&lt;/code&gt;, &lt;code&gt;ensayos_editor.service&lt;/code&gt;): para revisar y corregir artistas y relaciones, con una pestaña 🤖 &lt;em&gt;Lotes&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mapa&lt;/strong&gt; (&lt;code&gt;Dockerfile.map&lt;/code&gt;, d3.js): grafo de influencias. Los nodos se pueden arrastrar.&lt;/li&gt;
+&lt;li&gt;La base de datos normalizada es &lt;code&gt;music_facts.db&lt;/code&gt;. También la usa &lt;strong&gt;encarta&lt;/strong&gt; (la enciclopedia que cruza ensayos, Music_Books y rym_lastfm).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Los dos se publican en pepecono detrás de SWAG (&lt;code&gt;ensayos_editor.subdomain.conf&lt;/code&gt;, &lt;code&gt;ensayos_map.subdomain.conf&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;sudo systemctl disable --now ensayos_editor&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Y borra los dos &lt;code&gt;proxy-confs&lt;/code&gt; de SWAG. Los datos están en &lt;code&gt;data/&lt;/code&gt; y &lt;code&gt;db/&lt;/code&gt; del repo; haz una copia antes de tocar &lt;code&gt;music_facts.db&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>Flujo de películas pepecono → Proxmox → Tdarr → pepecono con bot de Telegram</title><link>https://volteret4.github.io/notas/p/flujo-de-peliculas-tdarr-con-telegram/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/flujo-de-peliculas-tdarr-con-telegram/</guid><description>&lt;h1 id="el-flujo"&gt;El flujo
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;pepecono:~/Scripts/utilities/tdarr/tdarr_orchestrator.py&lt;/code&gt;, en el contenedor &lt;code&gt;tdarr-orchestrator&lt;/code&gt;:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;qBittorrent termina una descarga y su script &lt;code&gt;telegram-cine-pollo.sh&lt;/code&gt; añade una línea a &lt;code&gt;tdarr_incoming.tsv&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;El orquestador manda un mensaje de Telegram con botones: &lt;strong&gt;categoría&lt;/strong&gt; y luego &lt;strong&gt;tipo&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Cuando Proxmox está encendido, copia el archivo con &lt;code&gt;rsync&lt;/code&gt; a &lt;code&gt;/mnt/pve/datos/shared/pelis/incoming_general&lt;/code&gt;, la carpeta que vigila Tdarr.&lt;/li&gt;
+&lt;li&gt;Detecta que Tdarr ha terminado (el original desaparece de &lt;code&gt;incoming_general&lt;/code&gt; y aparece en &lt;code&gt;transcoded&lt;/code&gt;) y copia el resultado de vuelta a &lt;code&gt;/mnt/NFS/Pelis/tdarr_output&lt;/code&gt;, por categoría.&lt;/li&gt;
+&lt;li&gt;A los &lt;code&gt;RETENTION_DAYS&lt;/code&gt; (30) &lt;strong&gt;no borra&lt;/strong&gt; el original: Ofelia lanza cada hora &lt;code&gt;--deferred-delete-once&lt;/code&gt;, que pregunta por Telegram &lt;em&gt;Borrar ahora / Posponer 7 días&lt;/em&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Estado en SQLite (&lt;code&gt;state/tdarr_queue.db&lt;/code&gt;, tabla &lt;code&gt;jobs&lt;/code&gt;): &lt;code&gt;pending_category → pending_type → queued_tdarr → converted → copied_back → deleted&lt;/code&gt;, más &lt;code&gt;declined&lt;/code&gt; y &lt;code&gt;error&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="comandos-del-bot"&gt;Comandos del bot
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Comando&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;/status&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;tabla resumen: qué hay en cada etapa&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;/pendientes&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;jobs en cola, con botones para actuar sobre cada uno&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;/sinprogramar&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;descargas sin job, con botones para programarlas o ignorarlas&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="docker-composeyml-sin-secretos"&gt;docker-compose.yml (sin secretos)
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;span class="lnt"&gt;29
+&lt;/span&gt;&lt;span class="lnt"&gt;30
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;tdarr-orchestrator&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;.&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;container_name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;tdarr-orchestrator&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;restart&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;always&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PYTHONUNBUFFERED=1&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;RETENTION_DAYS=30&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;DB_PATH=/data/tdarr_queue.db&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;INCOMING_FILE=/qbit-appdata/tdarr_incoming.tsv&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;CONTAINER_DOWNLOADS_PREFIX=/downloads&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;HOST_DOWNLOADS_PREFIX=/mnt/NFS/Pelis&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PROXMOX_SSH_HOST=proxmox&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PROXMOX_SRC_DIR=/mnt/pve/datos/shared/pelis/incoming_general&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PROXMOX_OUT_DIR=/mnt/pve/datos/shared/pelis/transcoded&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;LOCAL_OUTPUT_BASE=/output&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;TDARR_API_URL=http://192.168.1.180:8265&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;./state:/data&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/herramientas/qbittorrent_pelis/appdata:/qbit-appdata&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/mnt/NFS/Pelis:/mnt/NFS/Pelis&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/mnt/NFS/Pelis/tdarr_output:/output&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/.ssh:/root/.ssh:ro&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/.config/age:/root/.config/age:ro&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/Scripts/utilities/notificaciones/telegram/tdarr-confirm/.encrypted.env:/run/secrets/telegram.encrypted.env:ro&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;./.encrypted.env:/run/secrets/qbittorrent.encrypted.env:ro&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;labels&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;ofelia.enabled=true&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;ofelia.job-exec.tdarr-deferred-delete.schedule=0 0 * * * *&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;ofelia.job-exec.tdarr-deferred-delete.command=python3 tdarr_orchestrator.py --deferred-delete-once&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los secretos se descifran con sops &lt;strong&gt;dentro del script&lt;/strong&gt; y no solo en el &lt;code&gt;entrypoint.sh&lt;/code&gt;, porque &lt;code&gt;docker exec&lt;/code&gt;, que usa Ofelia, no pasa por el entrypoint.&lt;/p&gt;
+&lt;h1 id="fallos-agosto-y-07-10-2026"&gt;Fallos (agosto y 07-10-2026)
+&lt;/h1&gt;&lt;h2 id="1-el-original-desapareció-sin-haber-desaparecido"&gt;1. &amp;ldquo;El original desapareció&amp;rdquo; sin haber desaparecido
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;proxmox_path_exists()&lt;/code&gt; hacía &lt;code&gt;ssh proxmox test -e &amp;lt;ruta&amp;gt;&lt;/code&gt; &lt;strong&gt;sin comillas&lt;/strong&gt;. Con espacios y paréntesis en el nombre, la shell remota rompía el comando y siempre devolvía &amp;ldquo;no existe&amp;rdquo;. Los jobs llevaban desde el 9 de agosto atascados.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-diff" data-lang="diff"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- remote_cmd = f&amp;#34;test -e {remote_path}&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ remote_cmd = f&amp;#34;test -e {shlex.quote(remote_path)}&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Despliegue:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;cd ~/Scripts/utilities/tdarr &amp;amp;&amp;amp; docker compose up -d --build &amp;amp;&amp;amp; docker logs tdarr-orchestrator --since 30s&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="2-disco-de-proxmox-lleno-tdarr-no-terminaba-nunca"&gt;2. Disco de Proxmox lleno (Tdarr no terminaba nunca)
+&lt;/h2&gt;&lt;p&gt;Tdarr empezaba a convertir pero no podía escribir la salida: &lt;code&gt;/mnt/pelis&lt;/code&gt; estaba al &lt;strong&gt;100 %&lt;/strong&gt;. Había 96 carpetas &lt;code&gt;tdarr-workDir2-*&lt;/code&gt; a medias. La hipótesis del horario del nodo a cero era falsa.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;code&gt;/mnt/pve/datos&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;Tamaño&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;dump/&lt;/code&gt; (backups vzdump)&lt;/td&gt;
+&lt;td&gt;273 GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;shared/pelis&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;458 GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;shared/syncthing&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;79 GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;images/&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;80 GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Qué se hizo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh proxmox &lt;span class="s1"&gt;&amp;#39;sudo pct exec 119 -- sh -c &amp;#34;rm -rf /mnt/pelis/transcoded/tdarr-workDir2-*&amp;#34;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh proxmox &lt;span class="s1"&gt;&amp;#39;sudo pvesh set /cluster/backup/backup-354b179c-9e17 --prune-backups keep-last=2&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;La retención de backups pasó de 3 a 2 copias (en &lt;code&gt;/etc/pve/jobs.cfg&lt;/code&gt;). &lt;code&gt;vzdump --prune-backups&lt;/code&gt; no sirve con el disco lleno, porque primero intenta crear un backup nuevo. Las copias del 23-08 se borraron a mano:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh proxmox &lt;span class="s1"&gt;&amp;#39;rm -f /mnt/pve/datos/dump/*2026_08_23*; df -h /mnt/pve/datos&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="3-recodificaba-otra-vez-lo-ya-convertido"&gt;3. Recodificaba otra vez lo ya convertido
+&lt;/h2&gt;&lt;p&gt;&lt;em&gt;La patrulla canina&lt;/em&gt; ya se había recodificado en agosto: entonces la biblioteca de Tdarr apuntaba directamente a &lt;code&gt;/mnt/NFS/Pelis&lt;/code&gt; con &lt;strong&gt;&amp;ldquo;borrar original al convertir&amp;rdquo;&lt;/strong&gt;. El resultado (~470 MB/episodio) acabó en &lt;code&gt;incoming_general&lt;/code&gt; para una &lt;strong&gt;segunda&lt;/strong&gt; pasada. El original en alta calidad se perdió.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Saqué la carpeta de la cola y la devolví a &lt;code&gt;/mnt/NFS/Pelis&lt;/code&gt; (49 GB, 104 episodios).&lt;/li&gt;
+&lt;li&gt;Marqué el job 5 como &lt;code&gt;copied_back&lt;/code&gt; con una nota para que no vuelva a la cola.&lt;/li&gt;
+&lt;li&gt;Hoy la biblioteca de Tdarr solo vigila &lt;code&gt;/mnt/pelis/incoming_general&lt;/code&gt;. Ninguna otra apunta a la biblioteca real.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Regla&lt;/strong&gt;: Tdarr nunca debe vigilar la biblioteca de verdad con &lt;em&gt;Delete source&lt;/em&gt; activado. Para ver si un archivo ya pasó por Tdarr, mira &lt;code&gt;lastTranscodeDate&lt;/code&gt; en &lt;code&gt;DB2/SQL/database.db&lt;/code&gt; o los &lt;code&gt;JobReports&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="4-tdarr-no-usaba-la-gpu-agosto"&gt;4. Tdarr no usaba la GPU (agosto)
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Nota: la sesión de agosto ya no se conserva; esto es lo que hay que revisar, no el cambio exacto que se hizo.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;El nodo con GPU es &lt;code&gt;live-lynx&lt;/code&gt;. Los plugins tienen que ser de NVENC/QSV (no &lt;code&gt;libx265&lt;/code&gt;) y el LXC necesita los dispositivos &lt;code&gt;/dev/dri&lt;/code&gt; o &lt;code&gt;/dev/nvidia*&lt;/code&gt; en su config. Para comprobarlo en el log del worker: &lt;code&gt;ffmpeg ... -c:v hevc_nvenc&lt;/code&gt; (o &lt;code&gt;hevc_qsv&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;cd ~/Scripts/utilities/tdarr &amp;amp;&amp;amp; docker compose down&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh proxmox &lt;span class="s1"&gt;&amp;#39;sudo pvesh set /cluster/backup/backup-354b179c-9e17 --prune-backups keep-last=3&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;La cola es una base SQLite: haz una copia de &lt;code&gt;state/tdarr_queue.db&lt;/code&gt; antes de tocar estados a mano.&lt;/p&gt;</description></item><item><title>Playlists de Mixxx en cajones y en Airsonic</title><link>https://volteret4.github.io/notas/p/mixxx-cajones-y-playlists-en-airsonic/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mixxx-cajones-y-playlists-en-airsonic/</guid><description>&lt;h1 id="contexto"&gt;Contexto
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;La música para pinchar está en &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, con un &lt;code&gt;.m3u&lt;/code&gt; por lista, que regenera &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt; cada vez que muevo una canción.&lt;/li&gt;
+&lt;li&gt;Syncthing clona esa carpeta en pepecono (&lt;code&gt;/mnt/NFS/moode/Mixxx&lt;/code&gt;), y Airsonic la tiene como carpeta de medios &lt;strong&gt;Mixxx&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="1-cajones-de-mixxx-desde-los-m3u-sync_cratespy"&gt;1. Cajones de Mixxx desde los &lt;code&gt;.m3u&lt;/code&gt; (&lt;code&gt;sync_crates.py&lt;/code&gt;)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/sync_crates.py&lt;/code&gt; deja un &lt;strong&gt;cajón&lt;/strong&gt; (crate) por cada &lt;code&gt;.m3u&lt;/code&gt; de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, con el mismo nombre y las mismas canciones. La primera vez creó 59.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cada cajón queda &lt;strong&gt;idéntico&lt;/strong&gt; a su &lt;code&gt;.m3u&lt;/code&gt;: añade lo que falta y quita lo que sobra. Si borras el &lt;code&gt;.m3u&lt;/code&gt;, borra el cajón.&lt;/li&gt;
+&lt;li&gt;No toca las playlists de Mixxx ni los cajones creados a mano.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Canciones movidas de carpeta&lt;/strong&gt;: las reconoce por nombre y tamaño y actualiza la ruta, así conservan cues, BPM y análisis. De 441 que faltaban recuperó 404.&lt;/li&gt;
+&lt;li&gt;Las canciones totalmente nuevas tienen que entrar antes en la biblioteca de Mixxx (en el escaneo al arrancar), así que entran en su cajón al cerrar Mixxx.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Solo escribe con Mixxx cerrado&lt;/strong&gt;, y antes guarda una copia de la base de datos en &lt;code&gt;~/.mixxx/backups_sync_crates/&lt;/code&gt; (las 5 últimas). Si algo falla a mitad, no aplica nada.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/sync_crates.py --dry-run
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="cuándo-se-ejecuta"&gt;Cuándo se ejecuta
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Cuándo&lt;/th&gt;
+&lt;th&gt;Cómo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Al mover una canción con &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;lo llama con &lt;code&gt;--quiet --notify&lt;/code&gt; después de regenerar los &lt;code&gt;.m3u&lt;/code&gt;. Si Mixxx está abierto, solo avisa&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Al abrir Mixxx desde el lanzador&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;mixxx-sync.sh&lt;/code&gt; sincroniza antes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Al cerrar Mixxx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;mixxx-sync.sh&lt;/code&gt; sincroniza después&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/mixxx-sync.sh&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;sync_crates&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;dirname &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;readlink -f &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$0&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;/sync_crates.py&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$sync_crates&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; --quiet --notify
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pasuspender -- mixxx &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; mixxx &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$sync_crates&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; --quiet
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/.local/share/applications/org.mixxx.Mixxx.desktop&lt;/code&gt; sobrescribe el lanzador del sistema para que &lt;code&gt;Exec&lt;/code&gt; use ese script.&lt;/p&gt;
+&lt;h1 id="2-playlists-de-mixxx-en-airsonic-mixxx_to_airsonicpy"&gt;2. Playlists de Mixxx en Airsonic (&lt;code&gt;mixxx_to_airsonic.py&lt;/code&gt;)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py&lt;/code&gt; copia las &lt;strong&gt;playlists con nombre&lt;/strong&gt; de Mixxx (no Auto DJ ni el historial) al usuario &lt;strong&gt;&lt;code&gt;mix&lt;/code&gt;&lt;/strong&gt; de Airsonic.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lee la base de datos de Mixxx en solo lectura, así que puede estar abierto.&lt;/li&gt;
+&lt;li&gt;Una canción en &lt;code&gt;/mnt/windows/Mix/X&lt;/code&gt; se busca en Airsonic como &lt;code&gt;Mixxx/X&lt;/code&gt;. Las que Airsonic aún no tiene salen al final como &amp;ldquo;falta&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;Cada playlist lleva en el comentario la marca &lt;code&gt;Mixxx: &amp;lt;nombre&amp;gt;&lt;/code&gt;. Así, al volver a ejecutarlo actualiza la misma playlist en el orden de Mixxx en lugar de duplicarla. Las playlists sin esa marca no se tocan.&lt;/li&gt;
+&lt;li&gt;Usa GET en la API de Subsonic, porque Airsonic-Advanced bloquea los POST por CSRF.&lt;/li&gt;
+&lt;li&gt;Airsonic-Advanced no devuelve la playlist en la respuesta de &lt;code&gt;createPlaylist&lt;/code&gt;, así que el script la busca después por nombre (la de id más alto).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Credenciales en &lt;code&gt;~/Scripts/Musica/playlists/airsonic/.env&lt;/code&gt;: &lt;code&gt;AIRSONIC_URL&lt;/code&gt;, &lt;code&gt;AIRSONIC_MIX_PASSWORD&lt;/code&gt; y, si el usuario no se llama &lt;code&gt;mix&lt;/code&gt;, &lt;code&gt;AIRSONIC_MIX_USER&lt;/code&gt;. El usuario necesita acceso a la carpeta de medios &lt;strong&gt;Mixxx&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py --dry-run
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py --scan
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Opción&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--dry-run&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;muestra los cambios sin escribir&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--scan&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;hace que Airsonic escanee antes la biblioteca (tarda más de 10 minutos, recorre toda la biblioteca)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--prune&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;borra de Airsonic las playlists que ya no existen en Mixxx&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--quiet&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;solo el resumen&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Errores corregidos al probarlo: &lt;code&gt;IndexError: pop from empty list&lt;/code&gt; con carpetas vacías en Airsonic, y la playlist &lt;code&gt;deep&lt;/code&gt;, que se creó sin la marca la primera vez.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Cajones&lt;/strong&gt;: con Mixxx cerrado, restaura la última copia.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ls -1t ~/.mixxx/backups_sync_crates/*.sqlite &lt;span class="p"&gt;|&lt;/span&gt; head -1&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; ~/.mixxx/mixxxdb.sqlite
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Lanzador&lt;/strong&gt;: borra &lt;code&gt;~/.local/share/applications/org.mixxx.Mixxx.desktop&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;mover_mix_playerctl.py&lt;/strong&gt;: quita la llamada a &lt;code&gt;sync_crates.py&lt;/code&gt; (hay una copia &lt;code&gt;.bak.&amp;lt;fecha&amp;gt;&lt;/code&gt; del original).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Airsonic&lt;/strong&gt;: borra las playlists cuyo comentario empieza por &lt;code&gt;Mixxx:&lt;/code&gt; desde la web, con el usuario &lt;code&gt;mix&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>SQLite database is locked con dos scripts a la vez</title><link>https://volteret4.github.io/notas/p/sqlite-database-is-locked/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/sqlite-database-is-locked/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/menus/dotfiles/&lt;/code&gt; tiene dos programas que usan la misma base de datos &lt;code&gt;dotfiles.db&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;dotfiles_indexer.py&lt;/code&gt;: indexa los archivos de &lt;code&gt;~/.local/share/chezmoi&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dotfiles_quick_editor.py&lt;/code&gt;: la interfaz PyQt6 que busca en la base de datos.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Si el editor estaba abierto, el indexador fallaba con:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sqlite3.OperationalError: database is locked
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;El indexador abre la base de datos en modo &lt;strong&gt;WAL&lt;/strong&gt;, que deja leer y escribir a la vez. El editor, al conectarse, la pasaba a &lt;code&gt;journal_mode = MEMORY&lt;/code&gt; con &lt;code&gt;synchronous = OFF&lt;/code&gt;. El modo de journal se guarda en el propio archivo, así que el editor quitaba el WAL y bloqueaba al indexador.&lt;/p&gt;
+&lt;p&gt;Además, ninguna conexión tenía &lt;code&gt;timeout&lt;/code&gt;. Por defecto SQLite espera solo 5 segundos.&lt;/p&gt;
+&lt;h1 id="cambios"&gt;Cambios
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;dotfiles_indexer.py&lt;/code&gt;, en &lt;code&gt;setup_database()&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-diff" data-lang="diff"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- self.conn = sqlite3.connect(self.db_path)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ self.conn = sqlite3.connect(self.db_path, timeout=30)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;dotfiles_quick_editor.py&lt;/code&gt;, en &lt;code&gt;DatabaseSearchThread.run()&lt;/code&gt; y en &lt;code&gt;setup_database()&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-diff" data-lang="diff"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- conn = sqlite3.connect(str(self.db_path))
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ conn = sqlite3.connect(str(self.db_path), timeout=30)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- self.conn = sqlite3.connect(str(self.db_path))
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ self.conn = sqlite3.connect(str(self.db_path), timeout=30)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- # Optimizaciones para lectura
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- self.conn.execute(&amp;#39;PRAGMA synchronous = OFF&amp;#39;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- self.conn.execute(&amp;#39;PRAGMA journal_mode = MEMORY&amp;#39;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ # Optimizaciones para lectura — mantener WAL para compatibilidad con el indexer
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ self.conn.execute(&amp;#39;PRAGMA synchronous = NORMAL&amp;#39;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ self.conn.execute(&amp;#39;PRAGMA journal_mode = WAL&amp;#39;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Regla general: si varios procesos usan la misma base de datos SQLite, &lt;strong&gt;todos&lt;/strong&gt; deben usar &lt;code&gt;WAL&lt;/code&gt; y un &lt;code&gt;timeout&lt;/code&gt; amplio.&lt;/p&gt;
+&lt;h1 id="comprobar"&gt;Comprobar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sqlite3 ~/Scripts/menus/dotfiles/dotfiles.db &lt;span class="s1"&gt;&amp;#39;PRAGMA journal_mode;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Debe responder &lt;code&gt;wal&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Los cambios no están en ningún commit de &lt;code&gt;~/Scripts&lt;/code&gt;, así que &lt;code&gt;git diff&lt;/code&gt; los muestra:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/Scripts diff -- menus/dotfiles/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para deshacerlos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/Scripts checkout -- menus/dotfiles/dotfiles_indexer.py menus/dotfiles/dotfiles_quick_editor.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

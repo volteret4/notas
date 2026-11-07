@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Google Api on memoria digital</title><link>https://volteret4.github.io/notas/tags/google-api/</link><description>Recent content in Google Api on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/google-api/index.xml" rel="self" type="application/rss+xml"/><item><title>Una playlist de YouTube por cada carpeta de Mixxx</title><link>https://volteret4.github.io/notas/p/playlists-de-youtube-desde-mixxx/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/playlists-de-youtube-desde-mixxx/</guid><description>&lt;h1 id="qué-hace"&gt;Qué hace
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Crea una playlist &lt;strong&gt;privada&lt;/strong&gt; en YouTube por cada &lt;code&gt;.m3u&lt;/code&gt; de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, llamada &lt;code&gt;Mix - &amp;lt;nombre&amp;gt;&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Sincroniza por diferencias: añade lo nuevo y quita lo que ya no está en el &lt;code&gt;.m3u&lt;/code&gt;. &lt;strong&gt;Solo quita vídeos que añadió él&lt;/strong&gt;; lo que metas a mano no lo toca.&lt;/li&gt;
+&lt;li&gt;Busca los vídeos con &lt;strong&gt;yt-dlp&lt;/strong&gt;, que no gasta cuota. La API de YouTube solo se usa para escribir: cada inserción cuesta 50 unidades de las 10.000 diarias, es decir, unas 200 canciones al día.&lt;/li&gt;
+&lt;li&gt;Con unas 1.900 canciones, la primera sincronización completa tarda &lt;strong&gt;unos 10 días&lt;/strong&gt;. Al acabarse la cuota guarda el estado y la siguiente ejecución sigue donde lo dejó. Mientras tanto, sigue buscando vídeos con yt-dlp para el listado.&lt;/li&gt;
+&lt;li&gt;Si YouTube da un 409 (pasa justo después de crear una playlist) o un 5xx, reintenta con espera creciente.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="archivos"&gt;Archivos
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Archivo&lt;/th&gt;
+&lt;th&gt;Qué es&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.config/yt_sync/client_secret.json&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;credencial OAuth del proyecto de Google Cloud (copiada de &lt;code&gt;~/Descargas&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.config/yt_sync/&lt;/code&gt; (token y &lt;code&gt;state.json&lt;/code&gt;)&lt;/td&gt;
+&lt;td&gt;autorización y qué vídeo corresponde a cada canción&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.config/yt_sync/Mix.md&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;listado en markdown&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;En el proyecto de Google Cloud tiene que estar activada &lt;strong&gt;YouTube Data API v3&lt;/strong&gt;, y tu cuenta tiene que estar como usuario de prueba de la pantalla de consentimiento. Si no, sale &lt;code&gt;403 API not enabled&lt;/code&gt; o &lt;code&gt;access_denied&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="uso"&gt;Uso
+&lt;/h1&gt;&lt;p&gt;La primera vez abre el navegador para autorizar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py --dry-run --only dub
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Opción&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--dry-run&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;muestra lo que haría, sin crear nada (si no ves la playlist, mira si lo lanzaste así)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--only &amp;lt;carpeta&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;solo esa playlist (no distingue mayúsculas)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--retry-missing&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;vuelve a buscar las canciones que no encontró&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--markdown&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;genera &lt;code&gt;Mix.md&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--publish&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;además actualiza el gist&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--no-sync&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;solo el listado, sin tocar YouTube&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Si una búsqueda trae un vídeo equivocado, se corrige a mano en &lt;code&gt;~/.config/yt_sync/state.json&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="el-listado-en-un-gist"&gt;El listado en un gist
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;Mix.md&lt;/code&gt; tiene la fecha, el total de canciones y cuántas tienen enlace, un índice, una cabecera &lt;code&gt;##&lt;/code&gt; por carpeta y &lt;code&gt;###&lt;/code&gt; por subgénero, cada una con su enlace &lt;strong&gt;▶ playlist&lt;/strong&gt;, y cada canción enlazada a su vídeo si se encontró. Se publica en un &lt;strong&gt;gist secreto&lt;/strong&gt; de &lt;code&gt;volteret4&lt;/code&gt; que mantiene siempre la misma URL. Con la API gratuita de pastebin, cada cambio crearía un enlace nuevo.&lt;/p&gt;
+&lt;h1 id="integración-con-el-mover"&gt;Integración con el mover
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;mover_mix_playerctl.py&lt;/code&gt; lanza la sincronización en segundo plano, con &lt;code&gt;--publish&lt;/code&gt;, solo para la carpeta de destino (y la de origen si mueves entre carpetas). Si aún no has autorizado, no abre el navegador: avisa con una notificación.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Borra las playlists &lt;code&gt;Mix - *&lt;/code&gt; desde YouTube Studio.&lt;/li&gt;
+&lt;li&gt;Quita la llamada a &lt;code&gt;yt_sync_mixxx.py&lt;/code&gt; en &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt; (la versión de antes es &lt;code&gt;mover_mix_playerctl.py.bak.20261016201948&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Borra el script y la configuración:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm -r ~/.config/yt_sync ~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Retira el acceso de la app en tu cuenta de Google (&lt;em&gt;Seguridad → Apps de terceros&lt;/em&gt;).&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

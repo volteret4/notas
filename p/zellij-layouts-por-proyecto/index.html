@@ -1,0 +1,188 @@
+<!doctype html><html lang=es-es dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Una plantilla kdl con el cwd como variable, un script que genera un layout por proyecto y un rofi que abre cualquiera en una pestaña nueva."><title>Layouts de zellij por proyecto desde una plantilla y rofi</title><link rel=canonical href=https://volteret4.github.io/notas/p/zellij-layouts-por-proyecto/><link rel=stylesheet href=/notas/scss/style.min.81579ea678e30582aa60028bfe3192821d6c0fee666ee279be318fb5b558916b.css><meta property='og:title' content="Layouts de zellij por proyecto desde una plantilla y rofi"><meta property='og:description' content="Una plantilla kdl con el cwd como variable, un script que genera un layout por proyecto y un rofi que abre cualquiera en una pestaña nueva."><meta property='og:url' content='https://volteret4.github.io/notas/p/zellij-layouts-por-proyecto/'><meta property='og:site_name' content='memoria digital'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='zellij'><meta property='article:tag' content='rofi'><meta property='article:tag' content='awesomewm'><meta property='article:tag' content='terminal'><meta property='article:published_time' content='2026-10-31T00:00:00+00:00'><meta property='article:modified_time' content='2026-10-31T00:00:00+00:00'><meta name=twitter:title content="Layouts de zellij por proyecto desde una plantilla y rofi"><meta name=twitter:description content="Una plantilla kdl con el cwd como variable, un script que genera un layout por proyecto y un rofi que abre cualquiera en una pestaña nueva."><link rel="shortcut icon" href=/notas/favicon.ico></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Ocultar menú">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/notas/><img src=/notas/img/avatar_hu_529179920f093e6a.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🐔</span></figure><div class=site-meta><h1 class=site-name><a href=/notas>memoria digital</a></h1><h2 class=site-description>Recopilatorio de notas informáticas.</h2></div></header><ol class=menu-social><li><a href=https://github.com/volteret4 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/notas/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/notas/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/notas/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/notas/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Modo oscuro</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Tabla de contenido</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#quitar-las-líneas-de-tip>Quitar las líneas de <em>Tip</em></a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/notas/categories/terminal/>Terminal</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/notas/p/zellij-layouts-por-proyecto/>Layouts de zellij por proyecto desde una plantilla y rofi</a></h2><h3 class=article-subtitle>Una plantilla kdl con el cwd como variable, un script que genera un layout por proyecto y un rofi que abre cualquiera en una pestaña nueva.</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2026-10-31T00:00:00Z>oct 31, 2026</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>Tiempo de lectura 3 minutos</time></div></footer></div></header><section class=article-content><h1 id=qué-hace>Qué hace</h1><p>Cada proyecto tiene un layout de zellij de una sola pestaña:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>┌──────────────┬──────────────────────┐
+</span></span><span class=line><span class=cl>│              │ yazi en el proyecto   │
+</span></span><span class=line><span class=cl>│   claude     ├──────────────────────┤
+</span></span><span class=line><span class=cl>│  --continue  │ ssh a pepecono, en la │
+</span></span><span class=line><span class=cl>│   (40 %)     │ misma ruta            │
+</span></span><span class=line><span class=cl>└──────────────┴──────────────────────┘
+</span></span></code></pre></td></tr></table></div></div><p>Con <code>Super+Shift+Z</code> se abre un rofi con todos los layouts y el elegido se abre como pestaña nueva en la sesión de zellij actual.</p><h1 id=archivos>Archivos</h1><div class=table-wrapper><table><thead><tr><th>Archivo</th><th>Qué es</th></tr></thead><tbody><tr><td><code>~/.config/zellij/templates/claude_proyecto.kdl</code></td><td>plantilla con <code>{{PROJECT_DIR}}</code> y <code>{{REMOTE_DIR}}</code></td></tr><tr><td><code>~/.config/zellij/templates/rutas_proyectos_claude.txt</code></td><td>una ruta de proyecto por línea</td></tr><tr><td><code>~/Scripts/menus/rofi/generar_layouts_claude.sh</code></td><td>genera un <code>.kdl</code> por ruta en <code>~/.config/zellij/layouts/claude/</code></td></tr><tr><td><code>~/Scripts/menus/rofi/zellij_claude_tab.sh</code></td><td>rofi que lista los layouts</td></tr><tr><td><code>~/.config/awesome/rc.lua</code></td><td>atajo <code>Super+Shift+Z</code></td></tr></tbody></table></div><h1 id=la-plantilla>La plantilla</h1><p><code>~/.config/zellij/templates/claude_proyecto.kdl</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kdl data-lang=kdl><span class=line><span class=cl><span class=nl>layout</span><span class=w> </span><span class=o>{</span><span class=nl>
+</span></span></span><span class=line><span class=cl><span class=nl>    cwd</span><span class=w> </span><span class=s>&#34;{{PROJECT_DIR}}&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nl>    pane</span><span class=w> </span><span class=na>size=</span><span class=m>1</span><span class=w> </span><span class=na>borderless=</span><span class=s>true</span><span class=w> </span><span class=o>{</span><span class=nl>
+</span></span></span><span class=line><span class=cl><span class=nl>        plugin</span><span class=w> </span><span class=na>location=</span><span class=s>&#34;zellij:tab-bar&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=o>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nl>    pane</span><span class=w> </span><span class=na>split_direction=</span><span class=s>&#34;vertical&#34;</span><span class=w> </span><span class=o>{</span><span class=nl>
+</span></span></span><span class=line><span class=cl><span class=nl>        pane</span><span class=w> </span><span class=na>size=</span><span class=s>&#34;40%&#34;</span><span class=w> </span><span class=o>{</span><span class=nl>
+</span></span></span><span class=line><span class=cl><span class=nl>            cwd</span><span class=w> </span><span class=s>&#34;{{PROJECT_DIR}}&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nl>            command</span><span class=w> </span><span class=s>&#34;/home/huan/.local/bin/claude&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nl>            args</span><span class=w> </span><span class=s>&#34;--continue&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=o>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nl>        pane</span><span class=w> </span><span class=na>split_direction=</span><span class=s>&#34;horizontal&#34;</span><span class=w> </span><span class=o>{</span><span class=nl>
+</span></span></span><span class=line><span class=cl><span class=nl>            pane</span><span class=w> </span><span class=o>{</span><span class=nl>
+</span></span></span><span class=line><span class=cl><span class=nl>                command</span><span class=w> </span><span class=s>&#34;yazi&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nl>                args</span><span class=w> </span><span class=s>&#34;{{PROJECT_DIR}}&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=o>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nl>            pane</span><span class=w> </span><span class=o>{</span><span class=nl>
+</span></span></span><span class=line><span class=cl><span class=nl>                command</span><span class=w> </span><span class=s>&#34;ssh&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nl>                args</span><span class=w> </span><span class=s>&#34;-t&#34;</span><span class=w> </span><span class=s>&#34;pepecono&#34;</span><span class=w> </span><span class=s>&#34;cd {{REMOTE_DIR}} &amp;&amp; exec $SHELL&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=o>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=o>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=o>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nl>    pane</span><span class=w> </span><span class=na>size=</span><span class=m>1</span><span class=w> </span><span class=na>borderless=</span><span class=s>true</span><span class=w> </span><span class=o>{</span><span class=nl>
+</span></span></span><span class=line><span class=cl><span class=nl>        plugin</span><span class=w> </span><span class=na>location=</span><span class=s>&#34;zellij:status-bar&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=o>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=o>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=quitar-las-líneas-de-tip>Quitar las líneas de <em>Tip</em></h2><p>Las líneas de consejos que no salen en el layout por defecto vienen del plugin <code>status-bar</code> cuando tiene <strong>dos líneas de alto</strong> (<code>size=2</code>), que es como lo trae el layout <code>default</code>. Con <code>size=1</code> solo muestra la barra de modos, sin tips.</p><h1 id=el-generador>El generador</h1><p><code>~/Scripts/menus/rofi/generar_layouts_claude.sh</code>. <code>REMOTE_DIR</code> es la misma ruta cambiando <code>/home/huan/</code> por <code>/home/pepe/</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>TEMPLATE</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$HOME</span><span class=s2>/.config/zellij/templates/claude_proyecto.kdl&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>RUTAS</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$HOME</span><span class=s2>/.config/zellij/templates/rutas_proyectos_claude.txt&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>DEST</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$HOME</span><span class=s2>/.config/zellij/layouts/claude&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>rm <span class=s2>&#34;</span><span class=nv>$DEST</span><span class=s2>&#34;</span>/*.kdl
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=nv>IFS</span><span class=o>=</span> <span class=nb>read</span> -r ruta <span class=o>||</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$ruta</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$ruta</span><span class=s2>&#34;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=k>continue</span>
+</span></span><span class=line><span class=cl>    <span class=nv>nombre</span><span class=o>=</span><span class=k>$(</span>basename <span class=s2>&#34;</span><span class=nv>$ruta</span><span class=s2>&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>destino</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$DEST</span><span class=s2>/</span><span class=nv>$nombre</span><span class=s2>.kdl&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;</span><span class=nv>$destino</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;Ya existe, omitiendo: </span><span class=nv>$destino</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>continue</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=nv>remote_dir</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>ruta</span><span class=p>/</span><span class=se>\/</span><span class=nv>home</span><span class=se>\/</span><span class=nv>huan</span><span class=se>\/</span><span class=p>/</span><span class=se>\/</span><span class=nv>home</span><span class=se>\/</span><span class=nv>pepe</span><span class=se>\/</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    sed -e <span class=s2>&#34;s|{{PROJECT_DIR}}|</span><span class=nv>$ruta</span><span class=s2>|g&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        -e <span class=s2>&#34;s|{{REMOTE_DIR}}|</span><span class=nv>$remote_dir</span><span class=s2>|g&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        <span class=s2>&#34;</span><span class=nv>$TEMPLATE</span><span class=s2>&#34;</span> &gt; <span class=s2>&#34;</span><span class=nv>$destino</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Creado: </span><span class=nv>$destino</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span> &lt; <span class=s2>&#34;</span><span class=nv>$RUTAS</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Para añadir un proyecto, añade su ruta al <code>.txt</code> y vuelve a lanzar el script:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$HOME</span><span class=s2>/gits/pollo/nuevo&#34;</span> &gt;&gt; ~/.config/zellij/templates/rutas_proyectos_claude.txt <span class=o>&amp;&amp;</span> bash ~/Scripts/menus/rofi/generar_layouts_claude.sh
+</span></span></code></pre></td></tr></table></div></div><p>Ojo: el script <strong>borra</strong> todos los <code>.kdl</code> de <code>layouts/claude/</code> antes de generarlos. No edites a mano los layouts de esa carpeta.</p><h1 id=el-rofi>El rofi</h1><p><code>~/Scripts/menus/rofi/zellij_claude_tab.sh</code> lista los <code>.kdl</code> de <code>~/.config/zellij/layouts/</code> (primer nivel) y de <code>layouts/claude/</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>LAYOUTS_ROOT</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$HOME</span><span class=s2>/.config/zellij/layouts&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>LAYOUTS_CLAUDE</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$HOME</span><span class=s2>/.config/zellij/layouts/claude&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>TEMPLATE</span><span class=o>=</span><span class=s2>&#34;claude_proyecto.kdl&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>declare</span> -A layout_paths
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=nv>IFS</span><span class=o>=</span> <span class=nb>read</span> -r f<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nv>nombre</span><span class=o>=</span><span class=k>$(</span>basename <span class=s2>&#34;</span><span class=nv>$f</span><span class=s2>&#34;</span> .kdl<span class=k>)</span>
+</span></span><span class=line><span class=cl>    layout_paths<span class=o>[</span><span class=nv>$nombre</span><span class=o>]=</span><span class=s2>&#34;</span><span class=nv>$f</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span> &lt; &lt;<span class=o>(</span>
+</span></span><span class=line><span class=cl>    find <span class=s2>&#34;</span><span class=nv>$LAYOUTS_ROOT</span><span class=s2>&#34;</span>  -maxdepth <span class=m>1</span> -name <span class=s2>&#34;*.kdl&#34;</span> ! -name <span class=s2>&#34;</span><span class=nv>$TEMPLATE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    find <span class=s2>&#34;</span><span class=nv>$LAYOUTS_CLAUDE</span><span class=s2>&#34;</span> -maxdepth <span class=m>1</span> -name <span class=s2>&#34;*.kdl&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>seleccion</span><span class=o>=</span><span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;%s\n&#39;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=p>!layout_paths[@]</span><span class=si>}</span><span class=s2>&#34;</span> <span class=p>|</span> sort <span class=se>\
+</span></span></span><span class=line><span class=cl>    <span class=p>|</span> rofi -dmenu -i -p <span class=s2>&#34;Zellij tab: &#34;</span> -theme-str <span class=s1>&#39;window {width: 600px;}&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$seleccion</span><span class=s2>&#34;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>exit</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>zellij action new-tab <span class=se>\
+</span></span></span><span class=line><span class=cl>    --name <span class=s2>&#34;</span><span class=nv>$seleccion</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>    --layout <span class=s2>&#34;</span><span class=si>${</span><span class=nv>layout_paths</span><span class=p>[</span><span class=nv>$seleccion</span><span class=p>]</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>En <code>~/.config/awesome/rc.lua</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=line><span class=cl>    <span class=n>awful.key</span><span class=p>({</span> <span class=n>modkey</span><span class=p>,</span> <span class=s2>&#34;Shift&#34;</span> <span class=p>},</span> <span class=s2>&#34;z&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=kr>function</span><span class=p>()</span> <span class=n>awful.spawn</span><span class=p>.</span><span class=n>with_shell</span><span class=p>(</span><span class=s2>&#34;bash $HOME/Scripts/menus/rofi/zellij_claude_tab.sh&#34;</span><span class=p>)</span> <span class=kr>end</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span> <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;Zellij: nueva tab proyecto Claude&#34;</span><span class=p>,</span> <span class=n>group</span> <span class=o>=</span> <span class=s2>&#34;APPS&#34;</span> <span class=p>}),</span>
+</span></span></code></pre></td></tr></table></div></div><p>Hay una variante para abrir claude dentro de una VM (<code>claude_vm_proyecto.kdl</code>, <code>generar_layouts_claude_vm.sh</code>, <code>zellij_claude_vm_tab.sh</code>); ver <a class=link href=../vm-para-claude-code>VM para Claude Code</a>.</p><h1 id=revertir>Revertir</h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>rm -r ~/.config/zellij/layouts/claude ~/.config/zellij/templates/claude_proyecto.kdl ~/.config/zellij/templates/rutas_proyectos_claude.txt ~/Scripts/menus/rofi/generar_layouts_claude.sh ~/Scripts/menus/rofi/zellij_claude_tab.sh
+</span></span></code></pre></td></tr></table></div></div><p>Y quita el bloque <code>awful.key({ modkey, "Shift" }, "z", ...)</code> de <code>rc.lua</code>.</p></section><footer class=article-footer><section class=article-tags><a href=/notas/tags/zellij/>Zellij</a>
+<a href=/notas/tags/rofi/>Rofi</a>
+<a href=/notas/tags/awesomewm/>Awesomewm</a>
+<a href=/notas/tags/terminal/>Terminal</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>Contenidos relacionados</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/notas/p/zellij-hover-amarillo/><div class=article-details><h2 class=article-title>Zellij 0.45 resalta en amarillo al pasar el ratón</h2></div></a></article><article><a href=/notas/p/atuin-ctrl-r-zellij/><div class=article-details><h2 class=article-title>Ctrl+R de atuin no funciona dentro de zellij</h2></div></a></article><article><a href=/notas/p/zsh-sin-oh-my-zsh/><div class=article-details><h2 class=article-title>Quitar oh-my-zsh y usar zsh puro</h2></div></a></article><article><a href=/notas/p/zsh-punto-punto-y-guion/><div class=article-details><h2 class=article-title>Recuperar .. y - en zsh sin oh-my-zsh</h2></div></a></article><article><a href=/notas/p/teclas-zsh-puro/><div class=article-details><h2 class=article-title>Teclas Supr, Inicio, Fin y borrar palabras en zsh puro</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 memoria digital</section><section class=powerby>Creado con <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Tema <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> diseñado por <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/notas/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Alias on memoria digital</title><link>https://volteret4.github.io/notas/tags/alias/</link><description>Recent content in Alias on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/alias/index.xml" rel="self" type="application/rss+xml"/><item><title>Quitar oh-my-zsh y usar zsh puro</title><link>https://volteret4.github.io/notas/p/zsh-sin-oh-my-zsh/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/zsh-sin-oh-my-zsh/</guid><description>&lt;h1 id="por-qué"&gt;Por qué
+&lt;/h1&gt;&lt;p&gt;El autocompletado con Tab fallaba dentro de oh-my-zsh, y el framework cargaba muchas cosas que no usaba. Lo que me interesaba de él se puede hacer con unas pocas líneas de zsh y dos plugins sueltos.&lt;/p&gt;
+&lt;h1 id="qué-queda-en-el-zshrc"&gt;Qué queda en el &lt;code&gt;.zshrc&lt;/code&gt;
+&lt;/h1&gt;&lt;p&gt;El archivo nuevo (&lt;code&gt;~/.zshrc&lt;/code&gt;) va por secciones:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Sección&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;th&gt;Sustituye a&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Historial&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;HISTFILE&lt;/code&gt; distinto por TTY dentro de tmux, &lt;code&gt;hist_ignore_dups share_history&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Opciones&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;setopt GLOB_DOTS&lt;/code&gt; y &lt;code&gt;WORDCHARS&lt;/code&gt; sin &lt;code&gt;/&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Completado&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;autoload -Uz compinit; compinit&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;completado de omz&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Colored man pages&lt;/td&gt;
+&lt;td&gt;variables &lt;code&gt;LESS_TERMCAP_*&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;plugin &lt;code&gt;colored-man-pages&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Command not found&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;source /usr/share/doc/pkgfile/command-not-found.zsh&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;plugin &lt;code&gt;command-not-found&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Copybuffer&lt;/td&gt;
+&lt;td&gt;función &lt;code&gt;_copybuffer&lt;/code&gt; con xclip en &lt;code&gt;Ctrl+O&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;plugin &lt;code&gt;copybuffer&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Dirhistory&lt;/td&gt;
+&lt;td&gt;funciones &lt;code&gt;_dh_*&lt;/code&gt; en &lt;code&gt;Alt+←→↑↓&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;plugin &lt;code&gt;dirhistory&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Teclas&lt;/td&gt;
+&lt;td&gt;Inicio, Fin, Supr y borrado por palabras&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;key-bindings&lt;/code&gt; de omz (ver &lt;a class="link" href="../teclas-zsh-puro" &gt;teclas en zsh puro&lt;/a&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Atuin&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;eval &amp;quot;$(atuin init --disable-up-arrow zsh)&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Zoxide&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;eval &amp;quot;$(zoxide init zsh)&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;plugin &lt;code&gt;z&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Prompt&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;eval &amp;quot;$(starship init zsh)&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;tema de omz&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Plugins externos&lt;/td&gt;
+&lt;td&gt;autosuggestions y syntax-highlighting, &lt;strong&gt;siempre al final&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;plugins de omz&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Los dos plugins externos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;zsh-syntax-highlighting&lt;/code&gt; sale del paquete de Arch y &lt;code&gt;zsh-autosuggestions&lt;/code&gt; es un clon de git en &lt;code&gt;~/.zsh/&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo pacman -S zsh zsh-completions zsh-syntax-highlighting pkgfile zoxide starship atuin xclip
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo pkgfile --update
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Al final descarté el plugin &lt;code&gt;copyfile&lt;/code&gt;. Los aliases siguen en &lt;code&gt;~/.zsh_aliases&lt;/code&gt;, que se carga con &lt;code&gt;source&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="sección-zinit-para-sistemas-nuevos"&gt;Sección zinit para sistemas nuevos
+&lt;/h1&gt;&lt;p&gt;Al principio del &lt;code&gt;.zshrc&lt;/code&gt; hay una sección comentada para hacer lo mismo con &lt;strong&gt;zinit&lt;/strong&gt;. Sirve en una máquina sin los paquetes instalados: se descomenta y se comentan las secciones &amp;ldquo;puras&amp;rdquo; equivalentes.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ZINIT_HOME=&amp;#34;${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# if [[ ! -d &amp;#34;$ZINIT_HOME&amp;#34; ]]; then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# mkdir -p &amp;#34;$(dirname $ZINIT_HOME)&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# git clone https://github.com/zdharma-continuum/zinit.git &amp;#34;$ZINIT_HOME&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# source &amp;#34;$ZINIT_HOME/zinit.zsh&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit light zsh-users/zsh-autosuggestions&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit light zsh-users/zsh-syntax-highlighting&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit snippet OMZ::plugins/dirhistory/dirhistory.plugin.zsh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit snippet OMZ::plugins/copybuffer/copybuffer.plugin.zsh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit snippet OMZ::plugins/command-not-found/command-not-found.plugin.zsh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="lo-que-no-se-ha-tocado"&gt;Lo que no se ha tocado
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;El paquete &lt;code&gt;oh-my-zsh-git&lt;/code&gt; &lt;strong&gt;sigue instalado&lt;/strong&gt; y la carpeta &lt;code&gt;~/.oh-my-zsh&lt;/code&gt; sigue ahí. El &lt;code&gt;.zshrc&lt;/code&gt; simplemente no los carga.&lt;/li&gt;
+&lt;li&gt;El paquete y la carpeta de oh-my-zsh siguen ahí porque pepecono, dietpi y doctrina todavía lo usan.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="chezmoi-31-10-2026"&gt;chezmoi (31-10-2026)
+&lt;/h1&gt;&lt;p&gt;El &lt;code&gt;.zshrc&lt;/code&gt; nuevo ya está en chezmoi (commit &lt;code&gt;94e48bb&lt;/code&gt; de &lt;code&gt;dot_chezmoi&lt;/code&gt;):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;templates/zshrc/arcolinux&lt;/code&gt; es ahora una copia exacta de &lt;code&gt;~/.zshrc&lt;/code&gt; (zsh puro).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dot_zshrc.tmpl&lt;/code&gt; empieza con un &lt;code&gt;if&lt;/code&gt;: en arcolinux escribe solo esa plantilla, &lt;strong&gt;sin&lt;/strong&gt; &lt;code&gt;templates/zshrc/comunes&lt;/code&gt;, que llevaba ajustes de oh-my-zsh. El resto de máquinas generan el mismo archivo que antes (comprobado con &lt;code&gt;chezmoi execute-template&lt;/code&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{{- if eq .chezmoi.hostname &amp;#34;arcolinux&amp;#34; -}}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{{ include &amp;#34;templates/zshrc/arcolinux&amp;#34; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{{- else -}}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# ~/.zshrc generado por chezmoi
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;... (el bloque de antes, sin la rama de arcolinux)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{{ end -}}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;chezmoi diff ~/.zshrc&lt;/code&gt; no muestra diferencias.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Volver a la versión de oh-my-zsh, recuperando de git la plantilla y el &lt;code&gt;.tmpl&lt;/code&gt; anteriores:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/.zshrc ~/.zshrc.puro &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; git -C ~/.local/share/chezmoi checkout 94e48bb~1 -- dot_zshrc.tmpl templates/zshrc/arcolinux &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; chezmoi apply ~/.zshrc &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;exec&lt;/span&gt; zsh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si cambias &lt;code&gt;~/.zshrc&lt;/code&gt; a mano, cópialo a &lt;code&gt;~/.local/share/chezmoi/templates/zshrc/arcolinux&lt;/code&gt;. Es una plantilla, así que &lt;code&gt;chezmoi re-add&lt;/code&gt; no la actualiza.&lt;/p&gt;
+&lt;p&gt;Si quieres desinstalar oh-my-zsh del todo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo pacman -Rns oh-my-zsh-git &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; rm -rf ~/.oh-my-zsh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Recuperar .. y - en zsh sin oh-my-zsh</title><link>https://volteret4.github.io/notas/p/zsh-punto-punto-y-guion/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/zsh-punto-punto-y-guion/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Con oh-my-zsh, escribir &lt;code&gt;..&lt;/code&gt; subía una carpeta y &lt;code&gt;-&lt;/code&gt; volvía a la anterior. Sin él:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ ..
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;zsh: permiso denegado: ..
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ -
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;zsh: command not found: -
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Venía de &lt;code&gt;lib/directories.zsh&lt;/code&gt; de oh-my-zsh, que define estos aliases y activa &lt;code&gt;auto_cd&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="la-solución"&gt;La solución
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/.zsh_aliases&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;alias&lt;/span&gt; ..&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;cd ..&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;alias&lt;/span&gt; ...&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;cd ../..&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;alias&lt;/span&gt; ....&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;cd ../../..&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;alias&lt;/span&gt; -- -&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;cd -&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El &lt;code&gt;--&lt;/code&gt; en el último hace falta porque si no, &lt;code&gt;alias&lt;/code&gt; interpreta &lt;code&gt;-&lt;/code&gt; como una opción.&lt;/p&gt;
+&lt;p&gt;Otra opción es &lt;code&gt;setopt auto_cd&lt;/code&gt;, que hace que escribir el nombre de una carpeta entre en ella. Así &lt;code&gt;..&lt;/code&gt; funciona, pero &lt;code&gt;-&lt;/code&gt; no, así que el alias hace falta igual.&lt;/p&gt;
+&lt;p&gt;Para navegar por el historial de carpetas también tienes &lt;strong&gt;Alt+←/→&lt;/strong&gt; (la función dirhistory del &lt;code&gt;.zshrc&lt;/code&gt;) y &lt;code&gt;z&lt;/code&gt; (zoxide).&lt;/p&gt;
+&lt;h1 id="ojo-con-chezmoi"&gt;Ojo con chezmoi
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/.zsh_aliases&lt;/code&gt; se genera desde &lt;code&gt;dot_zsh_aliases.tmpl&lt;/code&gt; (plantillas &lt;code&gt;templates/zsh_aliases/comunes&lt;/code&gt; y &lt;code&gt;arcolinux&lt;/code&gt;). Si cambias el archivo a mano, pasa el cambio también a la plantilla o se perderá con el siguiente &lt;code&gt;chezmoi apply&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Borra las cuatro líneas de &lt;code&gt;~/.zsh_aliases&lt;/code&gt; (y de la plantilla de chezmoi si las copiaste).&lt;/p&gt;</description></item><item><title>Usar Bat Para Los Menus De Ayuda De Otras Apps</title><link>https://volteret4.github.io/notas/p/usar-bat-para-los-menus-de-ayuda-de-otras-apps/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/usar-bat-para-los-menus-de-ayuda-de-otras-apps/</guid><description>&lt;p&gt;Añade esto a tu &lt;code&gt;.zshrc&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;alias&lt;/span&gt; -g -- -h&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-h 2&amp;gt;&amp;amp;1 | bat --language=help --style=plain&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;alias&lt;/span&gt; -g -- --help&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;--help 2&amp;gt;&amp;amp;1 | bat --language=help --style=plain&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

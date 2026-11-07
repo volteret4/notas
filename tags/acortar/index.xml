@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Acortar on memoria digital</title><link>https://volteret4.github.io/notas/tags/acortar/</link><description>Recent content in Acortar on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Wed, 09 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/acortar/index.xml" rel="self" type="application/rss+xml"/><item><title>Acortar Url</title><link>https://volteret4.github.io/notas/p/acortar-url/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/acortar-url/</guid><description>&lt;p&gt;Devuelve un link corto para compartir facilmente&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Desconozco la duración de dichos enlaces&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;curl https://is.gd/create.php\?format\=simple\&amp;amp;url\=google.com&lt;/code&gt;&lt;/p&gt;</description></item></channel></rss>

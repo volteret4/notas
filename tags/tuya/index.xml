@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tuya on memoria digital</title><link>https://volteret4.github.io/notas/tags/tuya/</link><description>Recent content in Tuya on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/tuya/index.xml" rel="self" type="application/rss+xml"/><item><title>Bombillas Tuya y aspirador Xiaomi atados a una cuenta antigua</title><link>https://volteret4.github.io/notas/p/tuya-y-xiaomi-en-home-assistant/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/tuya-y-xiaomi-en-home-assistant/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Tras reinstalar el móvil, la app de Tuya no reconocía mis bombillas ni el aspirador Xiaomi. Seguramente seguían vinculados a una cuenta antigua a la que ya no tengo acceso, así que Home Assistant (en otro servidor) tampoco podía usarlos.&lt;/p&gt;
+&lt;p&gt;Un dispositivo Tuya o Xiaomi solo puede estar en &lt;strong&gt;una cuenta a la vez&lt;/strong&gt;. Mientras siga en la vieja, la nueva no lo encuentra al buscar.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nota: de esta sesión (11-06-2026) solo queda la petición. La transcripción ya no existe, así que esta entrada recoge el procedimiento, no los comandos exactos de ese día.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="bombillas-tuya"&gt;Bombillas Tuya
+&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Reset de fábrica&lt;/strong&gt; de cada bombilla: encender y apagar 3 veces seguidas (encendido 1–2 s) hasta que parpadee rápido. Eso la saca de la cuenta vieja.&lt;/li&gt;
+&lt;li&gt;Emparejarla en &lt;strong&gt;Smart Life&lt;/strong&gt; (o Tuya Smart) con la cuenta nueva. La red tiene que ser de &lt;strong&gt;2,4 GHz&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;En Home Assistant: integración oficial &lt;strong&gt;Tuya&lt;/strong&gt; → &lt;em&gt;Añadir&lt;/em&gt; → escanear el &lt;strong&gt;QR&lt;/strong&gt; con la app Smart Life (&lt;em&gt;Yo → icono de escanear&lt;/em&gt;). Ya no hace falta crear un proyecto en la plataforma de desarrolladores de Tuya.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Si no quieres depender de la nube, la alternativa es &lt;strong&gt;LocalTuya&lt;/strong&gt; (HACS), que necesita el &lt;code&gt;local_key&lt;/code&gt; de cada dispositivo (se saca con &lt;code&gt;tinytuya wizard&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="aspirador-xiaomi"&gt;Aspirador Xiaomi
+&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Reset del wifi&lt;/strong&gt; del robot: mantener pulsados a la vez los botones indicados en el manual (normalmente &lt;em&gt;Inicio&lt;/em&gt; y &lt;em&gt;Base&lt;/em&gt;) hasta que avise por voz.&lt;/li&gt;
+&lt;li&gt;Añadirlo en &lt;strong&gt;Xiaomi Home&lt;/strong&gt; con la cuenta nueva y la &lt;strong&gt;región&lt;/strong&gt; correcta. La región tiene que coincidir con la de Home Assistant.&lt;/li&gt;
+&lt;li&gt;En Home Assistant: integración &lt;strong&gt;Xiaomi Home&lt;/strong&gt; (oficial) o &lt;strong&gt;Xiaomi Miot Auto&lt;/strong&gt; (HACS), con la cuenta y la región. Para el mapa, &lt;em&gt;Xiaomi Cloud Map Extractor&lt;/em&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Si Xiaomi dice que el dispositivo está &amp;ldquo;vinculado a otra cuenta&amp;rdquo;, hay que pedir la desvinculación al soporte de Xiaomi con una foto de la etiqueta y del ticket de compra.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Borra la integración en &lt;em&gt;Ajustes → Dispositivos y servicios&lt;/em&gt; y los dispositivos de las apps. No hay archivos que restaurar.&lt;/p&gt;</description></item></channel></rss>

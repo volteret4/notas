@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Fzf on memoria digital</title><link>https://volteret4.github.io/notas/tags/fzf/</link><description>Recent content in Fzf on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/fzf/index.xml" rel="self" type="application/rss+xml"/><item><title>hotkeyz, un buscador de todos mis atajos y aliases</title><link>https://volteret4.github.io/notas/p/hotkeyz-buscador-de-atajos/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/hotkeyz-buscador-de-atajos/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Con tantos atajos repartidos entre awesomewm, zellij, zsh y atuin, ya no me acordaba de la mitad. &lt;code&gt;hotkeyz&lt;/code&gt; los junta todos en un CSV y los muestra en un buscador.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Pieza&lt;/th&gt;
+&lt;th&gt;Dónde&lt;/th&gt;
+&lt;th&gt;Cómo se abre&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Generador del CSV&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/scripts/generar_hotkeys_csv.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;lo lanzan el rofi y &lt;code&gt;popo&lt;/code&gt; antes de mostrar la lista&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;CSV&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/.config/hotkeys/hotkeys.csv&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Rofi&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/scripts/ver_hotkeys.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Super+Shift+V&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Terminal (fzf)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/scripts/popo.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;popo&lt;/code&gt; o &lt;code&gt;popo &amp;lt;fuente&amp;gt;&lt;/code&gt; con Tab&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Web (Flask)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/app.py&lt;/code&gt; en &lt;code&gt;127.0.0.1:5857&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Super+Ctrl+Shift+V&lt;/code&gt; (&lt;code&gt;launch.sh --open&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Descripciones editadas en la web&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/.config/hotkeys/overrides.json&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 id="fuentes-que-lee"&gt;Fuentes que lee
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AwesomeWM&lt;/strong&gt;: &lt;code&gt;rc.lua&lt;/code&gt;, &lt;code&gt;keys_second_brain.lua&lt;/code&gt; y &lt;code&gt;keys_shazam.lua&lt;/code&gt;. Los keycodes &lt;code&gt;#N&lt;/code&gt; se traducen al nombre de la tecla según el teclado (&lt;code&gt;Super+#86&lt;/code&gt; → &lt;code&gt;Super+Num +&lt;/code&gt;, &lt;code&gt;#191&lt;/code&gt; → &lt;code&gt;F13&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Aliases de zsh&lt;/strong&gt;: &lt;code&gt;~/.zsh_aliases&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;bindkeys de zsh&lt;/strong&gt;: la sección &lt;code&gt;# --- TECLAS ---&lt;/code&gt; del &lt;code&gt;~/.zshrc&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Zellij&lt;/strong&gt;: &lt;code&gt;~/.config/zellij/config.kdl&lt;/code&gt;. La acción se guarda como comando &lt;code&gt;zellij action ...&lt;/code&gt; completo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scripts de atuin&lt;/strong&gt;: la salida de &lt;code&gt;atuin scripts list&lt;/code&gt;. Se lanzan con &lt;code&gt;atuin scripts run NOMBRE&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Formato del CSV:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;enabled,source,key,description,action
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;1,awesomewm/APPS,F12,dropdown tdrop xfce4,
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Al regenerarlo se conservan la columna &lt;code&gt;enabled&lt;/code&gt; y las descripciones que hayas cambiado en la web (&lt;code&gt;overrides.json&lt;/code&gt;). Los atajos repetidos con la misma fuente y tecla no se guardan en &lt;code&gt;overrides.json&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="atajos-en-awesome"&gt;Atajos en awesome
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/.config/awesome/rc.lua&lt;/code&gt;, grupo &amp;ldquo;Menú&amp;rdquo;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-lua" data-lang="lua"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;awful.key&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt; &lt;span class="n"&gt;modkey&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Shift&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;v&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kr"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;awful.spawn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;with_shell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;python3 $HOME/Scripts/menus/rofi/ver_hotkeys.py&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;end&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;buscar hotkeys/aliases&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Menú&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;}),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;awful.key&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt; &lt;span class="n"&gt;modkey&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Control&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Shift&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;v&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kr"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;awful.spawn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;with_shell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;$HOME/gits/pollo/hotkeyz/launch.sh --open&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;end&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;editar hotkeys (web)&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Menú&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;}),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/Scripts/menus/rofi/ver_hotkeys.py&lt;/code&gt; y &lt;code&gt;generar_hotkeys_csv.py&lt;/code&gt; son &lt;strong&gt;enlaces simbólicos&lt;/strong&gt; a los de &lt;code&gt;~/gits/pollo/hotkeyz/scripts/&lt;/code&gt;, para no tener dos copias.&lt;/p&gt;
+&lt;h1 id="popo-en-el-terminal"&gt;&lt;code&gt;popo&lt;/code&gt; en el terminal
+&lt;/h1&gt;&lt;p&gt;Al final del &lt;code&gt;~/.zshrc&lt;/code&gt;, con autocompletado por fuente:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;alias&lt;/span&gt; &lt;span class="nv"&gt;popo&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;python3 /home/huan/gits/pollo/hotkeyz/scripts/popo.py&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;_popo&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;local&lt;/span&gt; -a sources
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[[&lt;/span&gt; -f &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.config/hotkeys/hotkeys.csv&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;sources&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="p"&gt;(f)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;awk -F, &lt;span class="s1"&gt;&amp;#39;NR&amp;gt;1 &amp;amp;&amp;amp; $1==&amp;#34;1&amp;#34; {print $2}&amp;#39;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.config/hotkeys/hotkeys.csv&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sort -u&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; _arguments &lt;span class="s1"&gt;&amp;#39;1: :(${sources[@]})&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;compdef _popo popo
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Las acciones de zellij se ejecutan sin terminal, con un límite de 5 segundos, y si fallan muestran el error en vez de quedarse colgadas.&lt;/p&gt;
+&lt;h1 id="la-web"&gt;La web
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Editor del CSV&lt;/strong&gt;: activar o desactivar entradas, con &amp;ldquo;todos&amp;rdquo; y &amp;ldquo;ninguno&amp;rdquo; por sección, y editar descripciones.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cheatsheets&lt;/strong&gt;: se generan a partir del CSV y se exportan a PDF, PNG o ventana flotante. Además trae seis predefinidas en &lt;code&gt;data/cheatsheets/&lt;/code&gt; (emacs, vim, surfingkeys, zed, zellij y tmux).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Escucha &lt;strong&gt;solo en &lt;code&gt;127.0.0.1&lt;/code&gt;&lt;/strong&gt; y sin &lt;code&gt;debug&lt;/code&gt;. Al principio estaba en &lt;code&gt;0.0.0.0&lt;/code&gt; con &lt;code&gt;debug=True&lt;/code&gt;, que deja la consola de Werkzeug (capaz de ejecutar código) abierta a toda la red.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;launch.sh --open&lt;/code&gt; arranca el servidor en segundo plano si no está corriendo y abre el navegador.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Las copias de antes de los cambios del 23-10:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;~/gits/pollo/hotkeyz.bak.20261023040026/&lt;/code&gt; (proyecto entero)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;~/.config/hotkeys/hotkeys.csv.bak.20261023040026&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;~/.config/awesome/rc.lua.bak.20261023040026&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;~/Scripts/menus/rofi/ver_hotkeys.py.bak.20261023040026&lt;/code&gt; y &lt;code&gt;generar_hotkeys_csv.py.bak.20261023040026&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Para volver a la versión de junio:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm -r ~/gits/pollo/hotkeyz &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; cp -a ~/gits/pollo/hotkeyz.bak.20261023040026 ~/gits/pollo/hotkeyz
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para quitarlo del todo: borra &lt;code&gt;~/gits/pollo/hotkeyz&lt;/code&gt;, &lt;code&gt;~/.config/hotkeys&lt;/code&gt;, los dos enlaces de &lt;code&gt;~/Scripts/menus/rofi/&lt;/code&gt;, los dos &lt;code&gt;awful.key&lt;/code&gt; de &lt;code&gt;rc.lua&lt;/code&gt; y el bloque &lt;code&gt;POPO&lt;/code&gt; del &lt;code&gt;.zshrc&lt;/code&gt;.&lt;/p&gt;</description></item></channel></rss>
