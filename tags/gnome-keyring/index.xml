@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Gnome-Keyring on memoria digital</title><link>https://volteret4.github.io/notas/tags/gnome-keyring/</link><description>Recent content in Gnome-Keyring on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/gnome-keyring/index.xml" rel="self" type="application/rss+xml"/><item><title>Element desktop pide un keyring al arrancar</title><link>https://volteret4.github.io/notas/p/element-desktop-keyring/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/element-desktop-keyring/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Al abrir &lt;code&gt;element-desktop&lt;/code&gt; salía un diálogo diciendo que no encontraba un llavero, con dos opciones: &lt;em&gt;Cancelar&lt;/em&gt; o usar &lt;strong&gt;weak security encryption&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Hace tiempo intenté dejar gnome-keyring para usar KeePassXC como gestor de contraseñas, y Element se quedó sin un &lt;em&gt;Secret Service&lt;/em&gt; claro.&lt;/p&gt;
+&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;Element guarda su clave de cifrado local (la de la base de datos de mensajes y la de Seshat, el buscador) con &lt;code&gt;safeStorage&lt;/code&gt; de Electron. Electron busca un backend: &lt;code&gt;gnome_libsecret&lt;/code&gt;, &lt;code&gt;kwallet&lt;/code&gt; o &lt;code&gt;basic&lt;/code&gt;. Si no encuentra ninguno desbloqueado, ofrece &lt;code&gt;basic&lt;/code&gt;, que es la &lt;em&gt;weak encryption&lt;/em&gt;: una clave fija en el código.&lt;/p&gt;
+&lt;h1 id="la-solución"&gt;La solución
+&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;Que haya &lt;strong&gt;un solo&lt;/strong&gt; proveedor de &lt;code&gt;org.freedesktop.secrets&lt;/code&gt;. En mi caso es gnome-keyring. KeePassXC sigue siendo mi gestor de contraseñas, pero con la integración de Secret Service &lt;strong&gt;desactivada&lt;/strong&gt; para que no se peleen. Para comprobar quién da el servicio:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;busctl --user list &lt;span class="p"&gt;|&lt;/span&gt; grep org.freedesktop.secrets
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start="2"&gt;
+&lt;li&gt;Decirle a Element qué backend usar. En &lt;code&gt;~/.config/Element/electron-config.json&lt;/code&gt;:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;safeStorageBackend&amp;#34;&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;gnome_libsecret&amp;#34;&lt;/span&gt;&lt;span class="err"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;safeStorageBackendOverride&amp;#34;&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Se puede hacer lo mismo lanzándolo con:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;element-desktop --password-store&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;gnome-libsecret&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start="3"&gt;
+&lt;li&gt;Que el llavero esté desbloqueado al iniciar sesión. Con autologin, ver &lt;a class="link" href="../supersonic-pide-la-contrasena" &gt;Supersonic pide la contraseña cada vez&lt;/a&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Ese día también reinstalé el paquete (&lt;code&gt;pacman -S element-desktop&lt;/code&gt;, versión 1.12.23).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Quita las dos líneas &lt;code&gt;safeStorageBackend*&lt;/code&gt; de &lt;code&gt;electron-config.json&lt;/code&gt;. Ojo: si cambias de backend, Element no podrá descifrar lo guardado y te pedirá iniciar sesión otra vez y restaurar la clave de seguridad.&lt;/p&gt;</description></item><item><title>Supersonic pide la contraseña cada vez (keyring y autologin)</title><link>https://volteret4.github.io/notas/p/supersonic-pide-la-contrasena/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/supersonic-pide-la-contrasena/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Supersonic (cliente de Airsonic/Subsonic) pedía la contraseña del servidor &lt;strong&gt;cada vez&lt;/strong&gt; que lo abría. Si cerraba el diálogo, no conectaba. Parecía que pedía desbloquear gpg.&lt;/p&gt;
+&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;Supersonic no guarda la contraseña en &lt;code&gt;config.toml&lt;/code&gt;, sino en el &lt;strong&gt;Secret Service&lt;/strong&gt; (gnome-keyring), aunque tenga &lt;code&gt;EnablePasswordStorage = true&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Lo que había en &lt;code&gt;~/.local/share/keyrings/&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;El alias &lt;code&gt;default&lt;/code&gt; apuntaba al llavero &lt;strong&gt;&lt;code&gt;Default&lt;/code&gt;&lt;/strong&gt;, que estaba cifrado.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pam_gnome_keyring&lt;/code&gt; (en SDDM) solo desbloquea al entrar el llavero llamado &lt;strong&gt;&lt;code&gt;login&lt;/code&gt;&lt;/strong&gt;, y solo si su contraseña es la de tu usuario.&lt;/li&gt;
+&lt;li&gt;Además había un &lt;code&gt;login_1&lt;/code&gt; bloqueado que sobraba.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Uso autologin&lt;/strong&gt;: al no escribir contraseña al entrar, PAM no tiene con qué desbloquear ningún llavero cifrado.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Así que, tras cada reinicio, &lt;code&gt;Default&lt;/code&gt; arrancaba bloqueado. Supersonic no podía leer ni guardar y volvía a pedir la contraseña.&lt;/p&gt;
+&lt;p&gt;Para ver qué tiene guardado Supersonic:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;secret-tool search --all service supersonic 2&amp;gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; grep username
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="la-solución-opción-a-llavero-sin-contraseña"&gt;La solución (opción A: llavero sin contraseña)
+&lt;/h1&gt;&lt;p&gt;Con autologin es lo más práctico:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;seahorse
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;En Seahorse: clic derecho en el llavero &lt;code&gt;Default&lt;/code&gt; → &lt;em&gt;Cambiar contraseña&lt;/em&gt;, escribe la actual y deja la nueva &lt;strong&gt;en blanco&lt;/strong&gt;. Acepta el aviso de que se guardará sin cifrar.&lt;/p&gt;
+&lt;p&gt;Después, en Supersonic, conéctate una vez a cada servidor marcando la opción de guardar la contraseña.&lt;/p&gt;
+&lt;p&gt;Puedes comprobar que el llavero ha quedado sin cifrar: el archivo empieza por &lt;code&gt;[keyring]&lt;/code&gt; en texto plano.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;head -2 ~/.local/share/keyrings/Default.keyring
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Contras:&lt;/strong&gt; las contraseñas del llavero quedan en texto plano en &lt;code&gt;~/.local/share/keyrings/&lt;/code&gt; (solo tu usuario puede leerlas). Con autologin, quien entra en tu sesión ya tiene acceso a todo, así que en la práctica se pierde poca seguridad. Con el disco cifrado, aún menos.&lt;/p&gt;
+&lt;p&gt;La opción B es dejarlo cifrado y escribir la contraseña del llavero una vez por sesión, que es justo lo que quería evitar.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;En Seahorse, &lt;em&gt;Cambiar contraseña&lt;/em&gt; del llavero &lt;code&gt;Default&lt;/code&gt; y pon una contraseña. O, para que se desbloquee solo, quita el autologin y haz que el llavero &lt;code&gt;login&lt;/code&gt; tenga la misma contraseña que tu usuario y sea el predeterminado.&lt;/p&gt;</description></item></channel></rss>

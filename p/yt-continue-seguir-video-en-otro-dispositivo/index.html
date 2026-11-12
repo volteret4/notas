@@ -1,0 +1,380 @@
+<!doctype html><html lang=es-es dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Un servidor mínimo en casa que guarda la última URL de YouTube con su minuto, un botón de Tampermonkey para enviarla y clientes para Linux, Windows y Android."><title>yt-continue, seguir un vídeo de YouTube en otro dispositivo</title><link rel=canonical href=https://volteret4.github.io/notas/p/yt-continue-seguir-video-en-otro-dispositivo/><link rel=stylesheet href=/notas/scss/style.min.81579ea678e30582aa60028bfe3192821d6c0fee666ee279be318fb5b558916b.css><meta property='og:title' content="yt-continue, seguir un vídeo de YouTube en otro dispositivo"><meta property='og:description' content="Un servidor mínimo en casa que guarda la última URL de YouTube con su minuto, un botón de Tampermonkey para enviarla y clientes para Linux, Windows y Android."><meta property='og:url' content='https://volteret4.github.io/notas/p/yt-continue-seguir-video-en-otro-dispositivo/'><meta property='og:site_name' content='memoria digital'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='youtube'><meta property='article:tag' content='flask'><meta property='article:tag' content='docker'><meta property='article:tag' content='tampermonkey'><meta property='article:tag' content='tasker'><meta property='article:tag' content='powershell'><meta property='article:published_time' content='2026-10-31T00:00:00+00:00'><meta property='article:modified_time' content='2026-10-31T00:00:00+00:00'><meta name=twitter:title content="yt-continue, seguir un vídeo de YouTube en otro dispositivo"><meta name=twitter:description content="Un servidor mínimo en casa que guarda la última URL de YouTube con su minuto, un botón de Tampermonkey para enviarla y clientes para Linux, Windows y Android."><link rel="shortcut icon" href=/notas/favicon.ico></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Ocultar menú">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/notas/><img src=/notas/img/avatar_hu_529179920f093e6a.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🐔</span></figure><div class=site-meta><h1 class=site-name><a href=/notas>memoria digital</a></h1><h2 class=site-description>Recopilatorio de notas informáticas.</h2></div></header><ol class=menu-social><li><a href=https://github.com/volteret4 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/notas/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/notas/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/notas/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/notas/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Modo oscuro</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Tabla de contenido</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#los-bat-se-abrían-con-notepad>Los <code>.bat</code> se abrían con Notepad++</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/notas/categories/scripts/>Scripts</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/notas/p/yt-continue-seguir-video-en-otro-dispositivo/>yt-continue, seguir un vídeo de YouTube en otro dispositivo</a></h2><h3 class=article-subtitle>Un servidor mínimo en casa que guarda la última URL de YouTube con su minuto, un botón de Tampermonkey para enviarla y clientes para Linux, Windows y Android.</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2026-10-31T00:00:00Z>oct 31, 2026</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>Tiempo de lectura 6 minutos</time></div></footer></div></header><section class=article-content><h1 id=la-idea>La idea</h1><p>YouTube ya sabe generar un enlace con el minuto (<code>https://youtu.be/ID?t=123</code>). Solo falta un sitio donde dejarlo y de donde recogerlo. Ese sitio es un servicio Flask en pepecono que guarda <strong>una sola URL</strong>.</p><div class=table-wrapper><table><thead><tr><th>Pieza</th><th>Dónde</th></tr></thead><tbody><tr><td>Servidor</td><td><code>pepecono:~/contenedores/yt-continue/</code> (Docker, puerto <strong>5050</strong>)</td></tr><tr><td>Linux</td><td><code>~/.local/bin/yt-continue enviar|recibir</code></td></tr><tr><td>Firefox (Arch y Windows)</td><td>script de Tampermonkey con un botón &ldquo;Enviar video&rdquo;</td></tr><tr><td>Windows</td><td><code>C:\Users\hulio\yt-continue\</code> con <code>yt-continue.ps1</code>, <code>yt-enviar.bat</code> y <code>yt-recibir.bat</code></td></tr><tr><td>Android</td><td>perfil y tarea de Tasker con <em>HTTP Request</em></td></tr></tbody></table></div><p>API:</p><ul><li><code>POST /continue</code> con <code>{"url": "..."}</code> guarda la URL.</li><li><code>GET /continue</code> devuelve <code>{"url": "...", "updated_at": "..."}</code>.</li></ul><h1 id=servidor>Servidor</h1><p><code>docker-compose.yml</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>services</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>web</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>build</span><span class=p>:</span><span class=w> </span><span class=l>.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=s2>&#34;5050:5050&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>yt_continue_data:/data</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>restart</span><span class=p>:</span><span class=w> </span><span class=l>unless-stopped</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>yt_continue_data</span><span class=p>:</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p><code>Dockerfile</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-dockerfile data-lang=dockerfile><span class=line><span class=cl><span class=k>FROM</span><span class=w> </span><span class=s>python:3.12-slim</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=k>WORKDIR</span><span class=w> </span><span class=s>/app</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=k>RUN</span> pip install --no-cache-dir flask<span class=err>
+</span></span></span><span class=line><span class=cl><span class=k>COPY</span> app.py .<span class=err>
+</span></span></span><span class=line><span class=cl><span class=k>EXPOSE</span><span class=w> </span><span class=s>5050</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=k>CMD</span> <span class=p>[</span><span class=s2>&#34;python&#34;</span><span class=p>,</span> <span class=s2>&#34;app.py&#34;</span><span class=p>]</span><span class=err>
+</span></span></span></code></pre></td></tr></table></div></div><p><code>app.py</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>json</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>os</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>time</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>flask</span> <span class=kn>import</span> <span class=n>Flask</span><span class=p>,</span> <span class=n>jsonify</span><span class=p>,</span> <span class=n>request</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>app</span> <span class=o>=</span> <span class=n>Flask</span><span class=p>(</span><span class=vm>__name__</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>STATE_PATH</span> <span class=o>=</span> <span class=s2>&#34;/data/state.json&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>load_state</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=ow>not</span> <span class=n>os</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>exists</span><span class=p>(</span><span class=n>STATE_PATH</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=p>{</span><span class=s2>&#34;url&#34;</span><span class=p>:</span> <span class=kc>None</span><span class=p>,</span> <span class=s2>&#34;updated_at&#34;</span><span class=p>:</span> <span class=kc>None</span><span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=n>STATE_PATH</span><span class=p>,</span> <span class=n>encoding</span><span class=o>=</span><span class=s2>&#34;utf-8&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>f</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>json</span><span class=o>.</span><span class=n>load</span><span class=p>(</span><span class=n>f</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>save_state</span><span class=p>(</span><span class=n>url</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>state</span> <span class=o>=</span> <span class=p>{</span><span class=s2>&#34;url&#34;</span><span class=p>:</span> <span class=n>url</span><span class=p>,</span> <span class=s2>&#34;updated_at&#34;</span><span class=p>:</span> <span class=n>time</span><span class=o>.</span><span class=n>strftime</span><span class=p>(</span><span class=s2>&#34;%Y-%m-</span><span class=si>%d</span><span class=s2>T%H:%M:%S&#34;</span><span class=p>)}</span>
+</span></span><span class=line><span class=cl>    <span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=n>STATE_PATH</span><span class=p>,</span> <span class=s2>&#34;w&#34;</span><span class=p>,</span> <span class=n>encoding</span><span class=o>=</span><span class=s2>&#34;utf-8&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>f</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>json</span><span class=o>.</span><span class=n>dump</span><span class=p>(</span><span class=n>state</span><span class=p>,</span> <span class=n>f</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>state</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@app.route</span><span class=p>(</span><span class=s2>&#34;/continue&#34;</span><span class=p>,</span> <span class=n>methods</span><span class=o>=</span><span class=p>[</span><span class=s2>&#34;GET&#34;</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>get_continue</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>jsonify</span><span class=p>(</span><span class=n>load_state</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@app.route</span><span class=p>(</span><span class=s2>&#34;/continue&#34;</span><span class=p>,</span> <span class=n>methods</span><span class=o>=</span><span class=p>[</span><span class=s2>&#34;POST&#34;</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>post_continue</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>data</span> <span class=o>=</span> <span class=n>request</span><span class=o>.</span><span class=n>get_json</span><span class=p>(</span><span class=n>force</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span> <span class=n>silent</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span> <span class=ow>or</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>    <span class=n>url</span> <span class=o>=</span> <span class=n>data</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s2>&#34;url&#34;</span><span class=p>,</span> <span class=s2>&#34;&#34;</span><span class=p>)</span><span class=o>.</span><span class=n>strip</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=ow>not</span> <span class=n>url</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>jsonify</span><span class=p>({</span><span class=s2>&#34;error&#34;</span><span class=p>:</span> <span class=s2>&#34;missing url&#34;</span><span class=p>}),</span> <span class=mi>400</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>jsonify</span><span class=p>(</span><span class=n>save_state</span><span class=p>(</span><span class=n>url</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>app</span><span class=o>.</span><span class=n>run</span><span class=p>(</span><span class=n>host</span><span class=o>=</span><span class=s2>&#34;0.0.0.0&#34;</span><span class=p>,</span> <span class=n>port</span><span class=o>=</span><span class=mi>5050</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh pepecono <span class=s1>&#39;cd ~/contenedores/yt-continue &amp;&amp; docker compose up -d --build&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Prueba:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>curl -s -X POST http://192.168.1.133:5050/continue -H <span class=s2>&#34;Content-Type: application/json&#34;</span> -d <span class=s1>&#39;{&#34;url&#34;:&#34;https://youtu.be/dQw4w9WgXcQ?t=42&#34;}&#39;</span><span class=p>;</span> curl -s http://192.168.1.133:5050/continue
+</span></span></code></pre></td></tr></table></div></div><p>No tiene autenticación: solo es accesible desde la LAN.</p><h1 id=linux-localbinyt-continue>Linux: <code>~/.local/bin/yt-continue</code></h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>SERVER</span><span class=o>=</span><span class=s2>&#34;http://192.168.1.133:5050/continue&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>case</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span> in
+</span></span><span class=line><span class=cl>  enviar<span class=p>|</span>push<span class=p>|</span>send<span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>url</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>xclip -selection clipboard -o<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$url</span><span class=s2>&#34;</span> !<span class=o>=</span> *youtu* <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>      <span class=nb>echo</span> <span class=s2>&#34;El portapapeles no parece una URL de YouTube: </span><span class=nv>$url</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>      <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    curl -s -X POST <span class=s2>&#34;</span><span class=nv>$SERVER</span><span class=s2>&#34;</span> -H <span class=s2>&#34;Content-Type: application/json&#34;</span> -d <span class=s2>&#34;{\&#34;url\&#34;:\&#34;</span><span class=nv>$url</span><span class=s2>\&#34;}&#34;</span> &gt; /dev/null
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Enviado: </span><span class=nv>$url</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>;;</span>
+</span></span><span class=line><span class=cl>  recibir<span class=p>|</span>pull<span class=p>|</span>receive<span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>url</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>curl -s <span class=s2>&#34;</span><span class=nv>$SERVER</span><span class=s2>&#34;</span> <span class=p>|</span> python3 -c <span class=s1>&#39;import json,sys; print(json.load(sys.stdin)[&#34;url&#34;] or &#34;&#34;)&#39;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$url</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>      <span class=nb>echo</span> <span class=s2>&#34;No hay ningún vídeo guardado todavía.&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>      <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Abriendo: </span><span class=nv>$url</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    xdg-open <span class=s2>&#34;</span><span class=nv>$url</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>;;</span>
+</span></span><span class=line><span class=cl>  *<span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Uso: yt-continue enviar|recibir&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=p>;;</span>
+</span></span><span class=line><span class=cl><span class=k>esac</span>
+</span></span></code></pre></td></tr></table></div></div><p>En YouTube: clic derecho en el reproductor → <em>Copiar URL en el momento actual</em>, y luego <code>yt-continue enviar</code>. En el otro equipo, <code>yt-continue recibir</code>.</p><h1 id=firefox-botón-con-tampermonkey>Firefox: botón con Tampermonkey</h1><p>Añade un botón rojo flotante &ldquo;Enviar video&rdquo; en <code>youtube.com/watch*</code>. Construye <code>https://youtu.be/ID?t=SEGUNDOS</code> a partir del <code>currentTime</code> del <code>&lt;video></code>, así que no hace falta copiar nada. Se instala igual en Arch y en Windows: Tampermonkey → <em>Crear un nuevo script</em> → pegar → Ctrl+S.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=c1>// ==UserScript==
+</span></span></span><span class=line><span class=cl><span class=c1>// @name         YT Continue - Enviar video
+</span></span></span><span class=line><span class=cl><span class=c1>// @namespace    yt-continue
+</span></span></span><span class=line><span class=cl><span class=c1>// @version      1.0
+</span></span></span><span class=line><span class=cl><span class=c1>// @description  Boton flotante en YouTube que envia el video actual (con el minuto exacto) al servidor yt-continue de casa, para retomarlo en otro dispositivo.
+</span></span></span><span class=line><span class=cl><span class=c1>// @match        https://www.youtube.com/watch*
+</span></span></span><span class=line><span class=cl><span class=c1>// @grant        GM_xmlhttpRequest
+</span></span></span><span class=line><span class=cl><span class=c1>// @connect      192.168.1.133
+</span></span></span><span class=line><span class=cl><span class=c1>// ==/UserScript==
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>(</span><span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;use strict&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>SERVER</span> <span class=o>=</span> <span class=s2>&#34;http://192.168.1.133:5050/continue&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>function</span> <span class=nx>buildUrl</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>params</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>URLSearchParams</span><span class=p>(</span><span class=nb>window</span><span class=p>.</span><span class=nx>location</span><span class=p>.</span><span class=nx>search</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>videoId</span> <span class=o>=</span> <span class=nx>params</span><span class=p>.</span><span class=nx>get</span><span class=p>(</span><span class=s2>&#34;v&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>video</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>querySelector</span><span class=p>(</span><span class=s2>&#34;video&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>t</span> <span class=o>=</span> <span class=nx>video</span> <span class=o>?</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>floor</span><span class=p>(</span><span class=nx>video</span><span class=p>.</span><span class=nx>currentTime</span><span class=p>)</span> <span class=o>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=sb>`https://youtu.be/</span><span class=si>${</span><span class=nx>videoId</span><span class=si>}</span><span class=sb>?t=</span><span class=si>${</span><span class=nx>t</span><span class=si>}</span><span class=sb>`</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>function</span> <span class=nx>sendVideo</span><span class=p>(</span><span class=nx>btn</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>url</span> <span class=o>=</span> <span class=nx>buildUrl</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=nx>GM_xmlhttpRequest</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>            <span class=nx>method</span><span class=o>:</span> <span class=s2>&#34;POST&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>url</span><span class=o>:</span> <span class=nx>SERVER</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>headers</span><span class=o>:</span> <span class=p>{</span> <span class=s2>&#34;Content-Type&#34;</span><span class=o>:</span> <span class=s2>&#34;application/json&#34;</span> <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=nx>data</span><span class=o>:</span> <span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>({</span> <span class=nx>url</span> <span class=p>}),</span>
+</span></span><span class=line><span class=cl>            <span class=nx>onload</span><span class=o>:</span> <span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nx>btn</span><span class=p>.</span><span class=nx>textContent</span> <span class=o>=</span> <span class=s2>&#34;Enviado&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=nx>setTimeout</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>(</span><span class=nx>btn</span><span class=p>.</span><span class=nx>textContent</span> <span class=o>=</span> <span class=s2>&#34;Enviar video&#34;</span><span class=p>),</span> <span class=mi>2000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=nx>onerror</span><span class=o>:</span> <span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nx>btn</span><span class=p>.</span><span class=nx>textContent</span> <span class=o>=</span> <span class=s2>&#34;Error&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=nx>setTimeout</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>(</span><span class=nx>btn</span><span class=p>.</span><span class=nx>textContent</span> <span class=o>=</span> <span class=s2>&#34;Enviar video&#34;</span><span class=p>),</span> <span class=mi>2000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>        <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>function</span> <span class=nx>createButton</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nb>document</span><span class=p>.</span><span class=nx>getElementById</span><span class=p>(</span><span class=s2>&#34;yt-continue-btn&#34;</span><span class=p>))</span> <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>btn</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>createElement</span><span class=p>(</span><span class=s2>&#34;button&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>btn</span><span class=p>.</span><span class=nx>id</span> <span class=o>=</span> <span class=s2>&#34;yt-continue-btn&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=nx>btn</span><span class=p>.</span><span class=nx>textContent</span> <span class=o>=</span> <span class=s2>&#34;Enviar video&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>Object</span><span class=p>.</span><span class=nx>assign</span><span class=p>(</span><span class=nx>btn</span><span class=p>.</span><span class=nx>style</span><span class=p>,</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>position</span><span class=o>:</span> <span class=s2>&#34;fixed&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>bottom</span><span class=o>:</span> <span class=s2>&#34;20px&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>right</span><span class=o>:</span> <span class=s2>&#34;20px&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>zIndex</span><span class=o>:</span> <span class=s2>&#34;9999&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>padding</span><span class=o>:</span> <span class=s2>&#34;10px 16px&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>background</span><span class=o>:</span> <span class=s2>&#34;#cc0000&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>color</span><span class=o>:</span> <span class=s2>&#34;#fff&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>border</span><span class=o>:</span> <span class=s2>&#34;none&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>borderRadius</span><span class=o>:</span> <span class=s2>&#34;20px&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>fontSize</span><span class=o>:</span> <span class=s2>&#34;14px&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>fontWeight</span><span class=o>:</span> <span class=s2>&#34;bold&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>cursor</span><span class=o>:</span> <span class=s2>&#34;pointer&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>boxShadow</span><span class=o>:</span> <span class=s2>&#34;0 2px 8px rgba(0,0,0,0.3)&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=p>});</span>
+</span></span><span class=line><span class=cl>        <span class=nx>btn</span><span class=p>.</span><span class=nx>addEventListener</span><span class=p>(</span><span class=s2>&#34;click&#34;</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=nx>sendVideo</span><span class=p>(</span><span class=nx>btn</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>        <span class=nb>document</span><span class=p>.</span><span class=nx>body</span><span class=p>.</span><span class=nx>appendChild</span><span class=p>(</span><span class=nx>btn</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nx>createButton</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=k>new</span> <span class=nx>MutationObserver</span><span class=p>(</span><span class=nx>createButton</span><span class=p>).</span><span class=nx>observe</span><span class=p>(</span><span class=nb>document</span><span class=p>.</span><span class=nx>body</span><span class=p>,</span> <span class=p>{</span> <span class=nx>childList</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span> <span class=nx>subtree</span><span class=o>:</span> <span class=kc>true</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=nb>document</span><span class=p>.</span><span class=nx>addEventListener</span><span class=p>(</span><span class=s2>&#34;yt-navigate-finish&#34;</span><span class=p>,</span> <span class=nx>createButton</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>})();</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>@connect 192.168.1.133</code> es obligatorio para que <code>GM_xmlhttpRequest</code> pueda hablar con un servidor de otro dominio.</p><h1 id=windows>Windows</h1><p><code>C:\Users\hulio\yt-continue\yt-continue.ps1</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-powershell data-lang=powershell><span class=line><span class=cl><span class=k>param</span><span class=p>([</span><span class=nb>Parameter</span><span class=p>(</span><span class=na>Mandatory</span><span class=p>=</span><span class=vm>$true</span><span class=p>)][</span><span class=nb>ValidateSet</span><span class=p>(</span><span class=s2>&#34;enviar&#34;</span><span class=p>,</span><span class=s2>&#34;recibir&#34;</span><span class=p>)][</span><span class=no>string</span><span class=p>]</span><span class=nv>$Accion</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nv>$Server</span> <span class=p>=</span> <span class=s2>&#34;http://192.168.1.133:5050/continue&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=nv>$Accion</span> <span class=o>-eq</span> <span class=s2>&#34;enviar&#34;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$url</span> <span class=p>=</span> <span class=nb>Get-Clipboard</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nv>$url</span> <span class=o>-notmatch</span> <span class=s2>&#34;youtu&#34;</span><span class=p>)</span> <span class=p>{</span> <span class=nb>Write-Error</span> <span class=s2>&#34;El portapapeles no parece una URL de YouTube: </span><span class=nv>$url</span><span class=s2>&#34;</span><span class=p>;</span> <span class=n>exit</span> <span class=mf>1</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$body</span> <span class=p>=</span> <span class=vm>@</span><span class=p>{</span> <span class=n>url</span> <span class=p>=</span> <span class=nv>$url</span> <span class=p>}</span> <span class=p>|</span> <span class=nb>ConvertTo-Json</span>
+</span></span><span class=line><span class=cl>    <span class=nb>Invoke-RestMethod</span> <span class=n>-Uri</span> <span class=nv>$Server</span> <span class=n>-Method</span> <span class=n>Post</span> <span class=n>-Body</span> <span class=nv>$body</span> <span class=n>-ContentType</span> <span class=s2>&#34;application/json&#34;</span> <span class=p>|</span> <span class=nb>Out-Null</span>
+</span></span><span class=line><span class=cl>    <span class=nb>Write-Host</span> <span class=s2>&#34;Enviado: </span><span class=nv>$url</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$resp</span> <span class=p>=</span> <span class=nb>Invoke-RestMethod</span> <span class=n>-Uri</span> <span class=nv>$Server</span> <span class=n>-Method</span> <span class=n>Get</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>([</span><span class=no>string</span><span class=p>]::</span><span class=n>IsNullOrEmpty</span><span class=p>(</span><span class=nv>$resp</span><span class=p>.</span><span class=n>url</span><span class=p>))</span> <span class=p>{</span> <span class=nb>Write-Error</span> <span class=s2>&#34;No hay ningun video guardado todavia.&#34;</span><span class=p>;</span> <span class=n>exit</span> <span class=mf>1</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nb>Write-Host</span> <span class=s2>&#34;Abriendo: </span><span class=p>$(</span><span class=nv>$resp</span><span class=p>.</span><span class=n>url</span><span class=p>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>Start-Process</span> <span class=nv>$resp</span><span class=p>.</span><span class=py>url</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>yt-enviar.bat</code> (<code>yt-recibir.bat</code> es igual, con <code>-Accion recibir</code>):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bat data-lang=bat><span class=line><span class=cl><span class=p>@</span><span class=k>echo</span> off
+</span></span><span class=line><span class=cl>powershell -NoProfile -ExecutionPolicy Bypass -File <span class=s2>&#34;</span><span class=nv>%~dp0</span><span class=s2>yt-continue.ps1&#34;</span> -Accion enviar
+</span></span><span class=line><span class=cl>timeout /t 3 <span class=p>&gt;</span>nul
+</span></span></code></pre></td></tr></table></div></div><h2 id=los-bat-se-abrían-con-notepad>Los <code>.bat</code> se abrían con Notepad++</h2><p><code>.bat</code> apuntaba al ProgID <code>Notepad++_file</code> en lugar de al nativo <code>batfile</code>. No había <code>UserChoice</code> de por medio, así que bastó con:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bat data-lang=bat><span class=line><span class=cl><span class=k>assoc</span> .bat=batfile
+</span></span></code></pre></td></tr></table></div></div><p>Para comprobarlo, <code>assoc .bat</code> debe mostrar <code>.bat=batfile</code> y <code>ftype batfile</code>, <code>"%1" %*</code>. Para revertir: <code>assoc .bat=Notepad++_file</code>.</p><h1 id=android-tasker-sin-root>Android (Tasker, sin root)</h1><p><strong>Enviar</strong>: perfil <em>Evento → Sistema → Intent recibido</em> con acción <code>android.intent.action.SEND</code>. En YouTube: <em>Compartir</em> con la casilla <em>Empezar en…</em> marcada → Tasker. Tarea asociada:</p><ul><li><em>HTTP Request</em>: <code>POST</code> a <code>http://192.168.1.133:5050/continue</code>, cabecera <code>Content-Type: application/json</code>, cuerpo <code>{"url":"%estext"}</code>.</li></ul><p><strong>Recibir</strong>: tarea <code>YT Recibir</code> en un widget:</p><ol><li><em>HTTP Request</em>: <code>GET http://192.168.1.133:5050/continue</code> (el resultado queda en <code>%http_data</code>).</li><li><em>JSON Read</em> del campo <code>url</code> en <code>%video_url</code>.</li><li><em>Browse URL</em> <code>%video_url</code>, que abre la app de YouTube en ese minuto.</li></ol><h1 id=revertir>Revertir</h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh pepecono <span class=s1>&#39;cd ~/contenedores/yt-continue &amp;&amp; docker compose down -v &amp;&amp; cd .. &amp;&amp; rm -r yt-continue&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>rm ~/.local/bin/yt-continue
+</span></span></code></pre></td></tr></table></div></div><p>Además, borra el script de Tampermonkey en cada Firefox, la carpeta <code>C:\Users\hulio\yt-continue\</code> y el script del Escritorio de Windows, y el perfil y la tarea de Tasker.</p></section><footer class=article-footer><section class=article-tags><a href=/notas/tags/youtube/>Youtube</a>
+<a href=/notas/tags/flask/>Flask</a>
+<a href=/notas/tags/docker/>Docker</a>
+<a href=/notas/tags/tampermonkey/>Tampermonkey</a>
+<a href=/notas/tags/tasker/>Tasker</a>
+<a href=/notas/tags/powershell/>Powershell</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>Contenidos relacionados</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/notas/p/playlists-de-youtube-desde-mixxx/><div class=article-details><h2 class=article-title>Una playlist de YouTube por cada carpeta de Mixxx</h2></div></a></article><article><a href=/notas/p/ensayos-musicales-podcasts-a-base-de-datos/><div class=article-details><h2 class=article-title>ensayos-musicales, de podcasts a una base de datos de relaciones entre artistas</h2></div></a></article><article><a href=/notas/p/hotkeyz-buscador-de-atajos/><div class=article-details><h2 class=article-title>hotkeyz, un buscador de todos mis atajos y aliases</h2></div></a></article><article><a href=/notas/p/tareas-radicale-ejecutadas-por-claude/><div class=article-details><h2 class=article-title>Tareas de Radicale que ejecuta Claude con el cupo semanal que sobra</h2></div></a></article><article><a href=/notas/p/notificaciones-de-github-en-el-escritorio/><div class=article-details><h2 class=article-title>Avisos de GitHub en el escritorio con botones que funcionan</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 memoria digital</section><section class=powerby>Creado con <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Tema <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> diseñado por <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/notas/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Bindkey on memoria digital</title><link>https://volteret4.github.io/notas/tags/bindkey/</link><description>Recent content in Bindkey on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/bindkey/index.xml" rel="self" type="application/rss+xml"/><item><title>Ctrl+R de atuin no funciona dentro de zellij</title><link>https://volteret4.github.io/notas/p/atuin-ctrl-r-zellij/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/atuin-ctrl-r-zellij/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Un día después de actualizar &lt;strong&gt;atuin&lt;/strong&gt; y &lt;strong&gt;zellij&lt;/strong&gt;, &lt;code&gt;Ctrl+R&lt;/code&gt; dejó de abrir el historial de atuin. Pistas:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;atuin search -i&lt;/code&gt; funcionaba.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;bindkey &amp;quot;^R&amp;quot;&lt;/code&gt; mostraba &lt;code&gt;&amp;quot;^R&amp;quot; atuin-search&lt;/code&gt;, o sea que zsh tenía bien la tecla.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cat -v&lt;/code&gt; no mostraba &lt;strong&gt;nada&lt;/strong&gt; al pulsar &lt;code&gt;Ctrl+R&lt;/code&gt;: la tecla no llegaba a la shell.&lt;/li&gt;
+&lt;li&gt;Con otra letra (&lt;code&gt;bindkey '^Z' atuin-search&lt;/code&gt;) funcionaba.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="descartado"&gt;Descartado
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Downgrade de atuin&lt;/strong&gt; (18.19.0 → 18.17.1). No cambió nada, así que volví a la 18.19.0 enseguida. Hoy está en la 18.24.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;awesomewm&lt;/strong&gt;. No tenía ningún atajo con &lt;code&gt;Ctrl+R&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;En mi &lt;code&gt;config.kdl&lt;/code&gt; el modo Resize está en &lt;code&gt;Ctrl n&lt;/code&gt;, pero el bloque es &lt;code&gt;keybinds { ... }&lt;/code&gt; &lt;strong&gt;sin&lt;/strong&gt; &lt;code&gt;clear-defaults=true&lt;/code&gt;. Por eso zellij seguía aplicando sus atajos por defecto, y uno de ellos es &lt;code&gt;Ctrl r&lt;/code&gt; para Resize. Tras la actualización ese atajo volvió a tener prioridad y se comía la tecla.&lt;/p&gt;
+&lt;h1 id="la-solución"&gt;La solución
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/.config/zellij/config.kdl&lt;/code&gt;, al final de &lt;code&gt;keybinds { ... }&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-kdl" data-lang="kdl"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;// Resize mode was remapped to Ctrl n above, but the zellij default for
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;// Ctrl r (also Resize mode) stays active since clear-defaults isn&amp;#39;t set.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;// Unbind it so Ctrl+R reaches the shell (atuin history search) instead.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nl"&gt; shared_except&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;locked&amp;#34;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;{&lt;/span&gt;&lt;span class="nl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nl"&gt; unbind&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;Ctrl r&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Cierra &lt;strong&gt;todas&lt;/strong&gt; las sesiones de zellij para que aplique (&lt;code&gt;zellij kill-all-sessions&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;En el &lt;code&gt;.zshrc&lt;/code&gt;, atuin se carga sin la flecha arriba:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;eval&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;atuin init --disable-up-arrow zsh&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="diagnóstico-rápido-para-otras-teclas"&gt;Diagnóstico rápido para otras teclas
+&lt;/h1&gt;&lt;p&gt;Si &lt;code&gt;cat -v&lt;/code&gt; no muestra nada al pulsar una tecla, algo por encima de la shell (zellij, tmux, el terminal o el gestor de ventanas) se la está quedando. Prueba fuera de zellij para saber cuál.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cat -v
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="ojo-con-chezmoi"&gt;Ojo con chezmoi
+&lt;/h1&gt;&lt;p&gt;Hasta el 31-10 el &lt;code&gt;config.kdl&lt;/code&gt; que guardaba chezmoi no tenía este &lt;code&gt;unbind&lt;/code&gt; ni el atajo &lt;code&gt;Ctrl y&lt;/code&gt; de harpoon, y un &lt;code&gt;chezmoi apply&lt;/code&gt; deshacía el arreglo. Ya está guardado (commit &lt;code&gt;94e48bb&lt;/code&gt; de &lt;code&gt;dot_chezmoi&lt;/code&gt;):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chezmoi add ~/.config/zellij/config.kdl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Borra el bloque &lt;code&gt;shared_except &amp;quot;locked&amp;quot; { unbind &amp;quot;Ctrl r&amp;quot; }&lt;/code&gt;. Ojo: entonces &lt;code&gt;Ctrl+R&lt;/code&gt; vuelve a abrir el modo Resize.&lt;/p&gt;</description></item><item><title>Teclas Supr, Inicio, Fin y borrar palabras en zsh puro</title><link>https://volteret4.github.io/notas/p/teclas-zsh-puro/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/teclas-zsh-puro/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Tras quitar oh-my-zsh (ver &lt;a class="link" href="../zsh-sin-oh-my-zsh" &gt;zsh sin oh-my-zsh&lt;/a&gt;):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Supr&lt;/strong&gt; no borraba; solo funcionaba Retroceso.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ctrl+←/→&lt;/strong&gt; escribía &lt;code&gt;D&lt;/code&gt; o &lt;code&gt;C&lt;/code&gt; en lugar de moverse por palabras.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Inicio/Fin&lt;/strong&gt; no hacían nada.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;oh-my-zsh traía esos &lt;code&gt;bindkey&lt;/code&gt; en su &lt;code&gt;lib/key-bindings.zsh&lt;/code&gt;. Sin él, hay que ponerlos a mano en el &lt;code&gt;.zshrc&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="la-solución"&gt;La solución
+&lt;/h1&gt;&lt;p&gt;Cada terminal (alacritty, zellij, tmux, rxvt) manda una secuencia distinta para la misma tecla, así que se definen todas en los tres keymaps.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;span class="lnt"&gt;29
+&lt;/span&gt;&lt;span class="lnt"&gt;30
+&lt;/span&gt;&lt;span class="lnt"&gt;31
+&lt;/span&gt;&lt;span class="lnt"&gt;32
+&lt;/span&gt;&lt;span class="lnt"&gt;33
+&lt;/span&gt;&lt;span class="lnt"&gt;34
+&lt;/span&gt;&lt;span class="lnt"&gt;35
+&lt;/span&gt;&lt;span class="lnt"&gt;36
+&lt;/span&gt;&lt;span class="lnt"&gt;37
+&lt;/span&gt;&lt;span class="lnt"&gt;38
+&lt;/span&gt;&lt;span class="lnt"&gt;39
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;WORDCHARS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;*?_-.[]~=&amp;amp;;!#$%^(){}&amp;lt;&amp;gt;&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;# sin / → Alt+Backspace para en cada componente de ruta&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;function&lt;/span&gt; _backward_kill_full_word&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;WORDCHARS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;WORDCHARS&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; zle backward-kill-word
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;zle -N _backward_kill_full_word
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;function&lt;/span&gt; _kill_dir&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;WORDCHARS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;WORDCHARS&lt;/span&gt;&lt;span class="p"&gt;/&lt;/span&gt;&lt;span class="se"&gt;\/&lt;/span&gt;&lt;span class="p"&gt;/&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; zle kill-word
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;zle -N _kill_dir
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;function&lt;/span&gt; _kill_full_word&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;WORDCHARS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;WORDCHARS&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; zle kill-word
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;zle -N _kill_full_word
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; _keymap in emacs viins vicmd&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\e[H&amp;#34;&lt;/span&gt; beginning-of-line &lt;span class="c1"&gt;# Inicio&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\e[1~&amp;#34;&lt;/span&gt; beginning-of-line &lt;span class="c1"&gt;# Inicio (tmux/rxvt)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\eOH&amp;#34;&lt;/span&gt; beginning-of-line &lt;span class="c1"&gt;# Inicio (xterm alt)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\e[F&amp;#34;&lt;/span&gt; end-of-line &lt;span class="c1"&gt;# Fin&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\e[4~&amp;#34;&lt;/span&gt; end-of-line &lt;span class="c1"&gt;# Fin (tmux/rxvt)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\eOF&amp;#34;&lt;/span&gt; end-of-line &lt;span class="c1"&gt;# Fin (xterm alt)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\e[3~&amp;#34;&lt;/span&gt; delete-char &lt;span class="c1"&gt;# Supr&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;^H&amp;#34;&lt;/span&gt; _backward_kill_full_word &lt;span class="c1"&gt;# Ctrl+Backspace&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\e[3;5~&amp;#34;&lt;/span&gt; _kill_full_word &lt;span class="c1"&gt;# Ctrl+Supr&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\e[3;3~&amp;#34;&lt;/span&gt; _kill_dir &lt;span class="c1"&gt;# Alt+Supr&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\e[1;5C&amp;#34;&lt;/span&gt; forward-word &lt;span class="c1"&gt;# Ctrl+→&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\e[1;5D&amp;#34;&lt;/span&gt; backward-word &lt;span class="c1"&gt;# Ctrl+←&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\e[5C&amp;#34;&lt;/span&gt; forward-word &lt;span class="c1"&gt;# Ctrl+→ (rxvt/tmux)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\e[5D&amp;#34;&lt;/span&gt; backward-word &lt;span class="c1"&gt;# Ctrl+← (rxvt/tmux)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\eOc&amp;#34;&lt;/span&gt; forward-word &lt;span class="c1"&gt;# Ctrl+→ (xterm alt)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; bindkey -M &lt;span class="nv"&gt;$_keymap&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;\eOd&amp;#34;&lt;/span&gt; backward-word &lt;span class="c1"&gt;# Ctrl+← (xterm alt)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;unset&lt;/span&gt; _keymap
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El truco está en &lt;code&gt;WORDCHARS&lt;/code&gt;, los caracteres que zsh considera parte de una palabra:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Tecla&lt;/th&gt;
+&lt;th&gt;Borra&lt;/th&gt;
+&lt;th&gt;Ejemplo con &lt;code&gt;cd ~/gits/pollo/claude&lt;/code&gt; y el cursor al final&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Alt+Retroceso&lt;/td&gt;
+&lt;td&gt;hasta la &lt;code&gt;/&lt;/code&gt; anterior (zsh por defecto, porque &lt;code&gt;/&lt;/code&gt; no está en &lt;code&gt;WORDCHARS&lt;/code&gt;)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;cd ~/gits/pollo/&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Ctrl+Retroceso&lt;/td&gt;
+&lt;td&gt;la ruta entera (añade &lt;code&gt;/&lt;/code&gt; a &lt;code&gt;WORDCHARS&lt;/code&gt; solo en esa función)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;cd &lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Alt+Supr&lt;/td&gt;
+&lt;td&gt;hacia delante, hasta la siguiente &lt;code&gt;/&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Ctrl+Supr&lt;/td&gt;
+&lt;td&gt;hacia delante, la ruta entera&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 id="saber-qué-secuencia-manda-una-tecla"&gt;Saber qué secuencia manda una tecla
+&lt;/h1&gt;&lt;p&gt;Si alguna no va en otro terminal, ejecuta &lt;code&gt;cat -v&lt;/code&gt;, pulsa la tecla y verás la secuencia (&lt;code&gt;^[&lt;/code&gt; equivale a &lt;code&gt;\e&lt;/code&gt;). Luego añade una línea &lt;code&gt;bindkey&lt;/code&gt; con ella.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cat -v
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Borra la sección &lt;code&gt;# --- TECLAS ---&lt;/code&gt; y la línea &lt;code&gt;WORDCHARS=&lt;/code&gt; del &lt;code&gt;~/.zshrc&lt;/code&gt;, y abre una shell nueva con &lt;code&gt;exec zsh&lt;/code&gt;.&lt;/p&gt;</description></item></channel></rss>

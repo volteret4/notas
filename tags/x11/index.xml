@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>X11 on memoria digital</title><link>https://volteret4.github.io/notas/tags/x11/</link><description>Recent content in X11 on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/x11/index.xml" rel="self" type="application/rss+xml"/><item><title>Flameshot se cuelga sin error en awesomewm</title><link>https://volteret4.github.io/notas/p/flameshot-se-cuelga-en-awesomewm/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/flameshot-se-cuelga-en-awesomewm/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Flameshot dejó de funcionar. Incluso &lt;code&gt;flameshot full&lt;/code&gt; se quedaba colgado &lt;strong&gt;sin mostrar ningún error&lt;/strong&gt;. El daemon estaba registrado en D-Bus, pero la captura no terminaba nunca.&lt;/p&gt;
+&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;Desde la &lt;strong&gt;versión 14.0&lt;/strong&gt;, en X11 flameshot ya no captura la pantalla directamente: se la pide al servicio de capturas del escritorio, el portal &lt;code&gt;org.freedesktop.portal.Screenshot&lt;/code&gt;. En mi sistema el portal lo da &lt;code&gt;xdg-desktop-portal-gtk&lt;/code&gt;, y en awesome esa petición &lt;strong&gt;nunca recibe respuesta&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Con &lt;code&gt;gdb&lt;/code&gt; se veía el hilo principal esperando en un bucle de eventos anidado. El propio programa trae el mensaje &lt;code&gt;Screenshot portal timed out after 30 seconds&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;(La actualización de qt6-base a 6.12 del mismo mes era una pista falsa.)&lt;/p&gt;
+&lt;h1 id="el-arreglo"&gt;El arreglo
+&lt;/h1&gt;&lt;p&gt;En la sección &lt;code&gt;[General]&lt;/code&gt; de &lt;code&gt;~/.config/flameshot/flameshot.ini&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;useX11LegacyScreenshot&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Vuelve a usar la captura directa de X11. Es lo que recomienda flameshot para gestores de ventanas sin portal (i3, xmonad, awesome…). Avisa de que está &lt;em&gt;deprecated&lt;/em&gt; y podría desaparecer en versiones futuras.&lt;/p&gt;
+&lt;p&gt;Reinicia el daemon y prueba:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pkill flameshot&lt;span class="p"&gt;;&lt;/span&gt; flameshot &lt;span class="p"&gt;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;disown&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;flameshot full -p /tmp
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si algún día quitan la opción, la alternativa es tener un portal que funcione en awesome (&lt;code&gt;xdg-desktop-portal&lt;/code&gt; + &lt;code&gt;xdg-desktop-portal-gtk&lt;/code&gt;, con &lt;code&gt;XDG_CURRENT_DESKTOP&lt;/code&gt; y un &lt;code&gt;portals.conf&lt;/code&gt; que asigne &lt;code&gt;org.freedesktop.impl.portal.Screenshot&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Borra la línea &lt;code&gt;useX11LegacyScreenshot=true&lt;/code&gt; de &lt;code&gt;flameshot.ini&lt;/code&gt; (hay una copia de la configuración en &lt;code&gt;~/.config/flameshot/flameshot.ini.bak.20261023184500&lt;/code&gt;) y reinicia flameshot.&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Element on memoria digital</title><link>https://volteret4.github.io/notas/tags/element/</link><description>Recent content in Element on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/element/index.xml" rel="self" type="application/rss+xml"/><item><title>Element desktop pide un keyring al arrancar</title><link>https://volteret4.github.io/notas/p/element-desktop-keyring/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/element-desktop-keyring/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Al abrir &lt;code&gt;element-desktop&lt;/code&gt; salía un diálogo diciendo que no encontraba un llavero, con dos opciones: &lt;em&gt;Cancelar&lt;/em&gt; o usar &lt;strong&gt;weak security encryption&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Hace tiempo intenté dejar gnome-keyring para usar KeePassXC como gestor de contraseñas, y Element se quedó sin un &lt;em&gt;Secret Service&lt;/em&gt; claro.&lt;/p&gt;
+&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;Element guarda su clave de cifrado local (la de la base de datos de mensajes y la de Seshat, el buscador) con &lt;code&gt;safeStorage&lt;/code&gt; de Electron. Electron busca un backend: &lt;code&gt;gnome_libsecret&lt;/code&gt;, &lt;code&gt;kwallet&lt;/code&gt; o &lt;code&gt;basic&lt;/code&gt;. Si no encuentra ninguno desbloqueado, ofrece &lt;code&gt;basic&lt;/code&gt;, que es la &lt;em&gt;weak encryption&lt;/em&gt;: una clave fija en el código.&lt;/p&gt;
+&lt;h1 id="la-solución"&gt;La solución
+&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;Que haya &lt;strong&gt;un solo&lt;/strong&gt; proveedor de &lt;code&gt;org.freedesktop.secrets&lt;/code&gt;. En mi caso es gnome-keyring. KeePassXC sigue siendo mi gestor de contraseñas, pero con la integración de Secret Service &lt;strong&gt;desactivada&lt;/strong&gt; para que no se peleen. Para comprobar quién da el servicio:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;busctl --user list &lt;span class="p"&gt;|&lt;/span&gt; grep org.freedesktop.secrets
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start="2"&gt;
+&lt;li&gt;Decirle a Element qué backend usar. En &lt;code&gt;~/.config/Element/electron-config.json&lt;/code&gt;:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;safeStorageBackend&amp;#34;&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;gnome_libsecret&amp;#34;&lt;/span&gt;&lt;span class="err"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;safeStorageBackendOverride&amp;#34;&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Se puede hacer lo mismo lanzándolo con:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;element-desktop --password-store&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;gnome-libsecret&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start="3"&gt;
+&lt;li&gt;Que el llavero esté desbloqueado al iniciar sesión. Con autologin, ver &lt;a class="link" href="../supersonic-pide-la-contrasena" &gt;Supersonic pide la contraseña cada vez&lt;/a&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Ese día también reinstalé el paquete (&lt;code&gt;pacman -S element-desktop&lt;/code&gt;, versión 1.12.23).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Quita las dos líneas &lt;code&gt;safeStorageBackend*&lt;/code&gt; de &lt;code&gt;electron-config.json&lt;/code&gt;. Ojo: si cambias de backend, Element no podrá descifrar lo guardado y te pedirá iniciar sesión otra vez y restaurar la clave de seguridad.&lt;/p&gt;</description></item></channel></rss>

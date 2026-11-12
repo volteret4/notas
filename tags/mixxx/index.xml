@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mixxx on memoria digital</title><link>https://volteret4.github.io/notas/tags/mixxx/</link><description>Recent content in Mixxx on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/mixxx/index.xml" rel="self" type="application/rss+xml"/><item><title>Borrar de golpe las playlists temporales de Mixxx</title><link>https://volteret4.github.io/notas/p/mixxx-borrar-playlists/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mixxx-borrar-playlists/</guid><description>&lt;h1 id="para-qué"&gt;Para qué
+&lt;/h1&gt;&lt;p&gt;Uso las playlists de Mixxx para sesiones temporales y, una vez grabadas, sobran. Borrarlas una a una desde la interfaz es un rollo.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh&lt;/code&gt; muestra las listas con su número de canciones y pide confirmación:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Sin preguntar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh -y
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="qué-borra-y-qué-no"&gt;Qué borra y qué no
+&lt;/h1&gt;&lt;p&gt;En la tabla &lt;code&gt;Playlists&lt;/code&gt; de &lt;code&gt;~/.mixxx/mixxxdb.sqlite&lt;/code&gt;, la columna &lt;code&gt;hidden&lt;/code&gt; dice el tipo de lista: &lt;code&gt;0&lt;/code&gt; es una lista normal, &lt;code&gt;1&lt;/code&gt; es Auto DJ y &lt;code&gt;2&lt;/code&gt; es el historial de sesiones (las que tienen fecha). Solo se borran las que cumplen:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;hidden&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AND&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;locked&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;No toca&lt;/strong&gt; Auto DJ, el historial, las listas &lt;strong&gt;bloqueadas&lt;/strong&gt; con el candado de Mixxx ni los &lt;strong&gt;cajones&lt;/strong&gt; (crates). Para conservar alguna lista, bloquéala antes.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mixxx tiene que estar cerrado.&lt;/strong&gt; Si está abierto, el script se niega: Mixxx tiene la base de datos en memoria y pisaría los cambios al cerrar.&lt;/li&gt;
+&lt;li&gt;Antes de borrar hace una copia con &lt;code&gt;sqlite3 .backup&lt;/code&gt; en &lt;code&gt;~/.mixxx/backups_borrar_playlists/&lt;/code&gt; y guarda las 5 últimas.&lt;/li&gt;
+&lt;li&gt;Borra en una transacción: primero &lt;code&gt;PlaylistTracks&lt;/code&gt; y luego &lt;code&gt;Playlists&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="el-script"&gt;El script
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;DB&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.mixxx/mixxxdb.sqlite&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;BACKUP_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.mixxx/backups_borrar_playlists&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# hidden=0: listas normales (1 = Auto DJ, 2 = historial); locked=0: no bloqueadas&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;WHERE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;hidden = 0 AND locked = 0&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; pgrep -x mixxx &amp;gt; /dev/null&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Mixxx está abierto: ciérralo antes de borrar las listas.&amp;#34;&lt;/span&gt; &amp;gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;list&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;sqlite3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$DB&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;SELECT name || &amp;#39; (&amp;#39; || (SELECT count(*) FROM PlaylistTracks WHERE playlist_id = p.id) || &amp;#39;)&amp;#39; FROM Playlists p WHERE &lt;/span&gt;&lt;span class="nv"&gt;$WHERE&lt;/span&gt;&lt;span class="s2"&gt; ORDER BY position&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; -z &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$list&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;No hay listas de reproducción que borrar.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$list&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;count&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$list&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; wc -l&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$1&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; !&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;-y&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;read&lt;/span&gt; -rp &lt;span class="s2"&gt;&amp;#34;¿Borrar estas &lt;/span&gt;&lt;span class="nv"&gt;$count&lt;/span&gt;&lt;span class="s2"&gt; listas? [s/N] &amp;#34;&lt;/span&gt; answer
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="o"&gt;[[&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$answer&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;sS&lt;span class="o"&gt;]&lt;/span&gt;* &lt;span class="o"&gt;]]&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Cancelado.&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; 0&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;mkdir -p &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sqlite3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$DB&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;.backup &amp;#39;&lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;/mixxxdb.&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;date +%Y%m%d%H%M%S&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;.sqlite&amp;#39;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ls -1t &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;/mixxxdb.*.sqlite &lt;span class="p"&gt;|&lt;/span&gt; tail -n +6 &lt;span class="p"&gt;|&lt;/span&gt; xargs -r rm --
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sqlite3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$DB&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;BEGIN; DELETE FROM PlaylistTracks WHERE playlist_id IN (SELECT id FROM Playlists WHERE &lt;/span&gt;&lt;span class="nv"&gt;$WHERE&lt;/span&gt;&lt;span class="s2"&gt;); DELETE FROM Playlists WHERE &lt;/span&gt;&lt;span class="nv"&gt;$WHERE&lt;/span&gt;&lt;span class="s2"&gt;; COMMIT;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Borradas &lt;/span&gt;&lt;span class="nv"&gt;$count&lt;/span&gt;&lt;span class="s2"&gt; listas. Copia en &lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Un alias corto:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;alias mixxx-limpiar=&amp;#39;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh&amp;#39;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; ~/.zsh_aliases
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="recuperar-listas-borradas"&gt;Recuperar listas borradas
+&lt;/h1&gt;&lt;p&gt;Con Mixxx cerrado, copia la última copia de seguridad encima de la base de datos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ls -1t ~/.mixxx/backups_borrar_playlists/mixxxdb.*.sqlite &lt;span class="p"&gt;|&lt;/span&gt; head -1&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; ~/.mixxx/mixxxdb.sqlite
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Ojo: también pierdes cualquier otro cambio en la biblioteca (BPM, cues…) hecho después de esa copia.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm ~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>mover_mix_playerctl.py, el script que manda canciones a mis carpetas de DJ</title><link>https://volteret4.github.io/notas/p/mover-mix-playerctl/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mover-mix-playerctl/</guid><description>&lt;h1 id="qué-hace"&gt;Qué hace
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py&lt;/code&gt; coge la canción que suena (por playerctl, o desde DeaDBeeF o Airsonic) y la manda a una carpeta de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt; (exFAT, la de Mixxx). Luego:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;elige la carpeta en un menú, con subcarpetas de género (&lt;code&gt;TECHNO/techno_deep&lt;/code&gt;, &lt;code&gt;HOUSE/...&lt;/code&gt;) y atajos,&lt;/li&gt;
+&lt;li&gt;renombra el archivo a &lt;code&gt;Artista - Canción (año álbum) [sello]&lt;/code&gt; a partir de los tags,&lt;/li&gt;
+&lt;li&gt;pide un comentario opcional,&lt;/li&gt;
+&lt;li&gt;regenera los &lt;code&gt;.m3u&lt;/code&gt; de cada carpeta,&lt;/li&gt;
+&lt;li&gt;y lanza en segundo plano &lt;code&gt;sync_crates.py&lt;/code&gt; (cajones de Mixxx), &lt;code&gt;yt_sync_mixxx.py&lt;/code&gt; (playlists de YouTube) y &lt;code&gt;embeed_cover.py&lt;/code&gt; (carátula).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="cambios-por-orden"&gt;Cambios, por orden
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Fecha&lt;/th&gt;
+&lt;th&gt;Cambio&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;03 → 08&lt;/td&gt;
+&lt;td&gt;Credenciales de Airsonic en &lt;code&gt;.env&lt;/code&gt;, nombre de archivo a partir de la metadata, menú de carga y subcarpetas de género con atajos&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;05-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Mover en vez de copiar&lt;/strong&gt; cualquier canción cuya ruta empiece por &lt;code&gt;/mnt/windows/Mix/&lt;/code&gt; (antes solo dentro de TECHNO/HOUSE). No busca duplicados. Si eliges la carpeta en la que ya está, solo aplica el comentario&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;07-10&lt;/td&gt;
+&lt;td&gt;Llamada a &lt;code&gt;sync_crates.py&lt;/code&gt; tras regenerar los &lt;code&gt;.m3u&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;16-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Pistas dentro de un &lt;code&gt;.cue&lt;/code&gt;&lt;/strong&gt;: detecta el cue (incrustado como tag &lt;code&gt;CUESHEET&lt;/code&gt; o en un &lt;code&gt;.cue&lt;/code&gt; al lado), averigua la pista que suena por título, número o duración (si no, pregunta) y &lt;strong&gt;corta solo esa pista con ffmpeg&lt;/strong&gt; (FLAC/APE/WV/WAV → FLAC; MP3 sin recodificar). Corrige los tags y quita &lt;code&gt;CUESHEET&lt;/code&gt;, BPM y tonalidad del disco entero. Además, &lt;code&gt;unquote&lt;/code&gt; no estaba importado y la parte de playerctl siempre fallaba&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;16-10&lt;/td&gt;
+&lt;td&gt;Sincroniza la playlist de YouTube de la carpeta de destino y, al mover, también la de origen. Comentada la llamada a Spotify (su API ya no funciona sin pago)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;21-10&lt;/td&gt;
+&lt;td&gt;Fecha original vía MusicBrainz (script aparte, &lt;code&gt;fecha_original_mix.py&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;25-10&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;[Errno 1] Operación no permitida&lt;/code&gt; al copiar desde NFS: los permisos &lt;code&gt;rwxrwSr-x&lt;/code&gt; (setgid) no caben en exFAT. Nueva &lt;code&gt;copy_sin_permisos()&lt;/code&gt;, que copia contenido y fechas pero no permisos, usada en &lt;code&gt;copy_file&lt;/code&gt; y en &lt;code&gt;shutil.move(..., copy_function=copy_sin_permisos)&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;27-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;No renombraba al reclasificar&lt;/strong&gt; (movía con &lt;code&gt;rename=False&lt;/code&gt;) y no leía tags escritos como &lt;code&gt;Artist&lt;/code&gt;/&lt;code&gt;Title&lt;/code&gt;. Ahora lee los tags sin distinguir mayúsculas, usa el artista del álbum si falta el artista y, si aun así falta algo, deja el nombre original. &lt;code&gt;[no label]&lt;/code&gt; ya no se pone en el nombre&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="fecha_original_mixpy"&gt;&lt;code&gt;fecha_original_mix.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Para los remasters que confunden: pone en &lt;code&gt;DATE&lt;/code&gt; la fecha &lt;strong&gt;más antigua&lt;/strong&gt; entre la actual, &lt;code&gt;ORIGINALDATE&lt;/code&gt; (Picard) y el primer lanzamiento de la grabación en MusicBrainz. Nunca retrasa una fecha, y guarda la que había en &lt;code&gt;RELEASEDATE&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="renombrar_mixpy"&gt;&lt;code&gt;renombrar_mix.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Arregla los nombres que quedaron mal por el fallo del 27-10 (encontró unos 1611): espacios dobles, &lt;code&gt;- ()&lt;/code&gt; al final, sin artista o sin título, o que empiezan por número de pista.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py &lt;span class="p"&gt;|&lt;/span&gt; less
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py --apply
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Con Mixxx &lt;strong&gt;cerrado&lt;/strong&gt;. Antes de tocar nada copia la base de datos de Mixxx en &lt;code&gt;~/.mixxx/backups_renombrar/&lt;/code&gt; y actualiza las rutas para no perder cues ni análisis.&lt;/li&gt;
+&lt;li&gt;Si el nombre nuevo ya existe, se lo salta. Si Mixxx tiene una entrada fantasma con ese nombre, intercambia las rutas.&lt;/li&gt;
+&lt;li&gt;Apunta cada cambio en &lt;code&gt;~/.mixxx/backups_renombrar/renombrados.&amp;lt;fecha&amp;gt;.tsv&lt;/code&gt;, y &lt;code&gt;--deshacer&lt;/code&gt; lo revierte.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="embeed_coverpy"&gt;&lt;code&gt;embeed_cover.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Ignoraba el archivo que le pasaba el mover y recorría &lt;strong&gt;todo&lt;/strong&gt; Mix (unas 1100 canciones), consultando MusicBrainz cada vez. Ahora procesa solo lo que se le pasa; sin argumentos sigue recorriendo todo Mix.&lt;/p&gt;
+&lt;h1 id="copias-de-seguridad"&gt;Copias de seguridad
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/Scripts/Musica/MoverMusica/&lt;/code&gt;:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Copia&lt;/th&gt;
+&lt;th&gt;De antes de&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20260826210410&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;cambios de agosto&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261007183246&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;llamada a &lt;code&gt;sync_crates.py&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261016201948&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;soporte de cue&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261021220202&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;fecha original&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261027195025&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;arreglo del renombrado&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;fecha_original_mix.py.bak.2026102*&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;cada iteración de ese script&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/embeed_cover.py.bak.20261016203210&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;El arreglo de permisos del 25-10 se guardó en una copia temporal que ya no existe; está entre &lt;code&gt;.bak.20261021220202&lt;/code&gt; y &lt;code&gt;.bak.20261027195025&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Para volver a una versión concreta:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py.bak.20261016201948 ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para ver qué cambió entre dos copias:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;diff ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py.bak.20261027195025 ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para deshacer un renombrado masivo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py --deshacer ~/.mixxx/backups_renombrar/renombrados.20261027195611.tsv
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Playlists de Mixxx en cajones y en Airsonic</title><link>https://volteret4.github.io/notas/p/mixxx-cajones-y-playlists-en-airsonic/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mixxx-cajones-y-playlists-en-airsonic/</guid><description>&lt;h1 id="contexto"&gt;Contexto
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;La música para pinchar está en &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, con un &lt;code&gt;.m3u&lt;/code&gt; por lista, que regenera &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt; cada vez que muevo una canción.&lt;/li&gt;
+&lt;li&gt;Syncthing clona esa carpeta en pepecono (&lt;code&gt;/mnt/NFS/moode/Mixxx&lt;/code&gt;), y Airsonic la tiene como carpeta de medios &lt;strong&gt;Mixxx&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="1-cajones-de-mixxx-desde-los-m3u-sync_cratespy"&gt;1. Cajones de Mixxx desde los &lt;code&gt;.m3u&lt;/code&gt; (&lt;code&gt;sync_crates.py&lt;/code&gt;)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/sync_crates.py&lt;/code&gt; deja un &lt;strong&gt;cajón&lt;/strong&gt; (crate) por cada &lt;code&gt;.m3u&lt;/code&gt; de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, con el mismo nombre y las mismas canciones. La primera vez creó 59.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cada cajón queda &lt;strong&gt;idéntico&lt;/strong&gt; a su &lt;code&gt;.m3u&lt;/code&gt;: añade lo que falta y quita lo que sobra. Si borras el &lt;code&gt;.m3u&lt;/code&gt;, borra el cajón.&lt;/li&gt;
+&lt;li&gt;No toca las playlists de Mixxx ni los cajones creados a mano.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Canciones movidas de carpeta&lt;/strong&gt;: las reconoce por nombre y tamaño y actualiza la ruta, así conservan cues, BPM y análisis. De 441 que faltaban recuperó 404.&lt;/li&gt;
+&lt;li&gt;Las canciones totalmente nuevas tienen que entrar antes en la biblioteca de Mixxx (en el escaneo al arrancar), así que entran en su cajón al cerrar Mixxx.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Solo escribe con Mixxx cerrado&lt;/strong&gt;, y antes guarda una copia de la base de datos en &lt;code&gt;~/.mixxx/backups_sync_crates/&lt;/code&gt; (las 5 últimas). Si algo falla a mitad, no aplica nada.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/sync_crates.py --dry-run
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="cuándo-se-ejecuta"&gt;Cuándo se ejecuta
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Cuándo&lt;/th&gt;
+&lt;th&gt;Cómo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Al mover una canción con &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;lo llama con &lt;code&gt;--quiet --notify&lt;/code&gt; después de regenerar los &lt;code&gt;.m3u&lt;/code&gt;. Si Mixxx está abierto, solo avisa&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Al abrir Mixxx desde el lanzador&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;mixxx-sync.sh&lt;/code&gt; sincroniza antes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Al cerrar Mixxx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;mixxx-sync.sh&lt;/code&gt; sincroniza después&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/mixxx-sync.sh&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;sync_crates&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;dirname &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;readlink -f &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$0&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;/sync_crates.py&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$sync_crates&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; --quiet --notify
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pasuspender -- mixxx &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; mixxx &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$sync_crates&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; --quiet
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/.local/share/applications/org.mixxx.Mixxx.desktop&lt;/code&gt; sobrescribe el lanzador del sistema para que &lt;code&gt;Exec&lt;/code&gt; use ese script.&lt;/p&gt;
+&lt;h1 id="2-playlists-de-mixxx-en-airsonic-mixxx_to_airsonicpy"&gt;2. Playlists de Mixxx en Airsonic (&lt;code&gt;mixxx_to_airsonic.py&lt;/code&gt;)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py&lt;/code&gt; copia las &lt;strong&gt;playlists con nombre&lt;/strong&gt; de Mixxx (no Auto DJ ni el historial) al usuario &lt;strong&gt;&lt;code&gt;mix&lt;/code&gt;&lt;/strong&gt; de Airsonic.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lee la base de datos de Mixxx en solo lectura, así que puede estar abierto.&lt;/li&gt;
+&lt;li&gt;Una canción en &lt;code&gt;/mnt/windows/Mix/X&lt;/code&gt; se busca en Airsonic como &lt;code&gt;Mixxx/X&lt;/code&gt;. Las que Airsonic aún no tiene salen al final como &amp;ldquo;falta&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;Cada playlist lleva en el comentario la marca &lt;code&gt;Mixxx: &amp;lt;nombre&amp;gt;&lt;/code&gt;. Así, al volver a ejecutarlo actualiza la misma playlist en el orden de Mixxx en lugar de duplicarla. Las playlists sin esa marca no se tocan.&lt;/li&gt;
+&lt;li&gt;Usa GET en la API de Subsonic, porque Airsonic-Advanced bloquea los POST por CSRF.&lt;/li&gt;
+&lt;li&gt;Airsonic-Advanced no devuelve la playlist en la respuesta de &lt;code&gt;createPlaylist&lt;/code&gt;, así que el script la busca después por nombre (la de id más alto).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Credenciales en &lt;code&gt;~/Scripts/Musica/playlists/airsonic/.env&lt;/code&gt;: &lt;code&gt;AIRSONIC_URL&lt;/code&gt;, &lt;code&gt;AIRSONIC_MIX_PASSWORD&lt;/code&gt; y, si el usuario no se llama &lt;code&gt;mix&lt;/code&gt;, &lt;code&gt;AIRSONIC_MIX_USER&lt;/code&gt;. El usuario necesita acceso a la carpeta de medios &lt;strong&gt;Mixxx&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py --dry-run
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py --scan
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Opción&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--dry-run&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;muestra los cambios sin escribir&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--scan&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;hace que Airsonic escanee antes la biblioteca (tarda más de 10 minutos, recorre toda la biblioteca)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--prune&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;borra de Airsonic las playlists que ya no existen en Mixxx&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--quiet&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;solo el resumen&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Errores corregidos al probarlo: &lt;code&gt;IndexError: pop from empty list&lt;/code&gt; con carpetas vacías en Airsonic, y la playlist &lt;code&gt;deep&lt;/code&gt;, que se creó sin la marca la primera vez.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Cajones&lt;/strong&gt;: con Mixxx cerrado, restaura la última copia.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ls -1t ~/.mixxx/backups_sync_crates/*.sqlite &lt;span class="p"&gt;|&lt;/span&gt; head -1&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; ~/.mixxx/mixxxdb.sqlite
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Lanzador&lt;/strong&gt;: borra &lt;code&gt;~/.local/share/applications/org.mixxx.Mixxx.desktop&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;mover_mix_playerctl.py&lt;/strong&gt;: quita la llamada a &lt;code&gt;sync_crates.py&lt;/code&gt; (hay una copia &lt;code&gt;.bak.&amp;lt;fecha&amp;gt;&lt;/code&gt; del original).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Airsonic&lt;/strong&gt;: borra las playlists cuyo comentario empieza por &lt;code&gt;Mixxx:&lt;/code&gt; desde la web, con el usuario &lt;code&gt;mix&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Roland DJ-202 en Mixxx 2.5, botones y perillas de efectos</title><link>https://volteret4.github.io/notas/p/roland-dj-202-mixxx-2.5/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/roland-dj-202-mixxx-2.5/</guid><description>&lt;h1 id="el-error"&gt;El error
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Uncaught exception: file:///home/huan/.mixxx/controllers/Roland_DJ-202-scripts.js:651:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;TypeError: Property &amp;#39;flash&amp;#39; of object [object Object] is not a function
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Saltaba sobre todo al mantener pulsado un botón de efecto, que es lo que hace parpadear el LED.&lt;/p&gt;
+&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;Desde Mixxx &lt;strong&gt;2.4&lt;/strong&gt; (tengo la 2.5.6), &lt;code&gt;engine.beginTimer&lt;/code&gt; ya no ejecuta el callback con el &lt;code&gt;this&lt;/code&gt; del componente cuando se le pasa una &lt;code&gt;function() { ... }&lt;/code&gt;. Dentro del temporizador, &lt;code&gt;this&lt;/code&gt; dejaba de ser el botón y &lt;code&gt;this.flash&lt;/code&gt; no existía.&lt;/p&gt;
+&lt;h1 id="el-arreglo"&gt;El arreglo
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/.mixxx/controllers/Roland_DJ-202-scripts.js&lt;/code&gt;, las &lt;strong&gt;9&lt;/strong&gt; llamadas a &lt;code&gt;engine.beginTimer&lt;/code&gt; pasan de &lt;code&gt;function&lt;/code&gt; a &lt;strong&gt;función flecha&lt;/strong&gt;, que mantiene el &lt;code&gt;this&lt;/code&gt; de fuera:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-diff" data-lang="diff"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- this.timer = engine.beginTimer(250, function() {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ this.timer = engine.beginTimer(250, () =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; this.flash();
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Solo la línea 651 daba error, pero las otras tenían el mismo problema y fallaban sin avisar: pulsación larga en Sync, doble toque, cambio de deck, key +/−, etc.&lt;/p&gt;
+&lt;p&gt;Comprobación de sintaxis:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;node --check ~/.mixxx/controllers/Roland_DJ-202-scripts.js
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="las-perillas-de-efectos-no-hacían-nada"&gt;Las perillas de efectos no hacían nada
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/.mixxx/mixxx.log&lt;/code&gt; salía:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Script tried setting (, focused_effect) to NaN
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;La perilla solo controla el efecto &lt;strong&gt;seleccionado&lt;/strong&gt;, y para seleccionarlo hay que &lt;strong&gt;mantener pulsado&lt;/strong&gt; su botón. Esa pulsación larga estaba rota por el mismo fallo de &lt;code&gt;this&lt;/code&gt;, así que nunca había un efecto seleccionado.&lt;/p&gt;
+&lt;p&gt;Además del arreglo anterior, cambié el comportamiento:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Situación&lt;/th&gt;
+&lt;th&gt;Antes&lt;/th&gt;
+&lt;th&gt;Ahora&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Perilla sin efecto seleccionado&lt;/td&gt;
+&lt;td&gt;nada&lt;/td&gt;
+&lt;td&gt;mueve la perilla principal de la unidad (&lt;code&gt;super1&lt;/code&gt;), que actúa sobre los tres efectos&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Perilla con un efecto seleccionado&lt;/td&gt;
+&lt;td&gt;ese efecto&lt;/td&gt;
+&lt;td&gt;igual&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Shift + perilla&lt;/td&gt;
+&lt;td&gt;mezcla dry/wet&lt;/td&gt;
+&lt;td&gt;igual&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Puede que la perilla no responda hasta que pase por la posición que muestra Mixxx en pantalla. Es la &amp;ldquo;recogida suave&amp;rdquo; del script, para que el valor no pegue saltos.&lt;/p&gt;
+&lt;p&gt;Si sigue sin responder, mira si aparece algo nuevo en &lt;code&gt;~/.mixxx/mixxx.log&lt;/code&gt; al girarla. También puede que el DJ-202 mande la perilla por otro número MIDI distinto de &lt;code&gt;0xB8/0xB9 0x00/0x03&lt;/code&gt;; se comprueba con el asistente de aprendizaje MIDI de Mixxx.&lt;/p&gt;
+&lt;p&gt;Para aplicar los cambios: reinicia Mixxx o desactiva y vuelve a activar el controlador en &lt;em&gt;Preferencias → Controladores&lt;/em&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Copia&lt;/th&gt;
+&lt;th&gt;Estado&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;Roland_DJ-202-scripts.js.bak&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;antes de cambiar los temporizadores&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;Roland_DJ-202-scripts.js.bak2&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;antes de cambiar las perillas&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/.mixxx/controllers/Roland_DJ-202-scripts.js.bak ~/.mixxx/controllers/Roland_DJ-202-scripts.js
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El mapeo &lt;code&gt;Roland_DJ-202.midi.xml&lt;/code&gt; también está en chezmoi (&lt;code&gt;dot_mixxx/controllers/&lt;/code&gt;).&lt;/p&gt;</description></item><item><title>Syncthing para llevar la carpeta de Mixxx a pepecono y Airsonic</title><link>https://volteret4.github.io/notas/p/syncthing-carpeta-mixxx/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/syncthing-carpeta-mixxx/</guid><description>&lt;h1 id="esquema"&gt;Esquema
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;arcolinux /mnt/windows/Mix ──(sendonly)──▶ pepecono /mnt/NFS/moode/Mixxx → Airsonic (carpeta &amp;#34;Mixxx&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; → mixxx_info
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;arcolinux /mnt/windows/Mix_Playlists ◀─(sendreceive)─▶ pepecono repeat-one/services/mixxx_info/playlists
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Carpeta (id)&lt;/th&gt;
+&lt;th&gt;arcolinux&lt;/th&gt;
+&lt;th&gt;pepecono (contenedor)&lt;/th&gt;
+&lt;th&gt;Tipo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mjugz-pcrud&lt;/code&gt; &amp;ldquo;Mixxx&amp;rdquo;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/mnt/windows/Mix&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/data/Mixxx&lt;/code&gt; → &lt;code&gt;/mnt/NFS/moode/Mixxx&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;sendonly&lt;/strong&gt; aquí, &lt;strong&gt;receiveonly&lt;/strong&gt; allí&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mixxx-playlists&lt;/code&gt; &amp;ldquo;Mixxx Playlists&amp;rdquo;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/mnt/windows/Mix_Playlists&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/data/MixxxPlaylists&lt;/code&gt; → &lt;code&gt;~/contenedores/repeat-one/services/mixxx_info/playlists&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;sendreceive&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;sendonly&lt;/code&gt; / &lt;code&gt;receiveonly&lt;/code&gt;: este PC es la fuente. Si algo se toca en pepecono, Syncthing no lo devuelve: lo marca como &amp;ldquo;cambios locales&amp;rdquo; y se puede revertir desde la web.&lt;/p&gt;
+&lt;h1 id="pepecono-el-contenedor"&gt;pepecono: el contenedor
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/contenedores/herramientas/syncthing/docker-compose.yml&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;syncthing&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;lscr.io/linuxserver/syncthing:latest&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;container_name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;syncthing&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;hostname&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;pepecono&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;#optional&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PUID=1000&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PGID=1000&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;TZ=Europe/Madrid&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/herramientas/syncthing/config:/config&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/mnt/NFS/lidarr/torrents_backup/watch_torrents:/data/lidarr_torrents&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/mnt/NFS/Pelis/watch_folder:/data/pelis_torrents&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/mnt/NFS/moode/Mixxx:/data/Mixxx&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/repeat-one/services/mixxx_info/playlists:/data/MixxxPlaylists&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/repeat-one/data/mfuzz-db:/data/mfuzz-db&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;ports&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;8384&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;8384&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="l"&gt;/tcp&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="l"&gt;/udp&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;21027&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;21027&lt;/span&gt;&lt;span class="l"&gt;/udp&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;restart&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;unless-stopped&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los volúmenes de &lt;code&gt;Mixxx&lt;/code&gt; y &lt;code&gt;MixxxPlaylists&lt;/code&gt; son los nuevos (copia anterior: &lt;code&gt;docker-compose.yml.bak-claude&lt;/code&gt;). Una carpeta nueva solo se ve dentro del contenedor si está montada: añadir el volumen, recrear el contenedor y luego aceptar la carpeta en la web (&lt;code&gt;http://pepecono:8384&lt;/code&gt;) con la ruta &lt;strong&gt;del contenedor&lt;/strong&gt; (&lt;code&gt;/data/...&lt;/code&gt;).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;cd ~/contenedores/herramientas/syncthing &amp;amp;&amp;amp; docker compose up -d&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="arcolinux"&gt;arcolinux
+&lt;/h1&gt;&lt;p&gt;Syncthing corre como servicio de usuario. La configuración está en &lt;code&gt;~/.local/state/syncthing/config.xml&lt;/code&gt;. Dos cosas por ser &lt;code&gt;/mnt/windows&lt;/code&gt; un disco &lt;strong&gt;exFAT&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;exFAT no guarda permisos de Unix. Marca &lt;em&gt;Ignorar permisos&lt;/em&gt; en la carpeta, o cada &lt;code&gt;chmod&lt;/code&gt; provocará cambios fantasma.&lt;/li&gt;
+&lt;li&gt;Los nombres no distinguen mayúsculas: no tengas &lt;code&gt;Techno/&lt;/code&gt; y &lt;code&gt;techno/&lt;/code&gt; a la vez.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Ojo: el &lt;code&gt;~/.config/syncthing/config.xml&lt;/code&gt; que está en chezmoi es una copia antigua de este PC. &lt;strong&gt;No lo apliques en pepecono&lt;/strong&gt;, porque allí la configuración real es la del contenedor.&lt;/p&gt;
+&lt;h1 id="lo-que-lo-usa-en-pepecono"&gt;Lo que lo usa en pepecono
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Airsonic&lt;/strong&gt;: monta &lt;code&gt;/mnt/NFS/moode/Mixxx&lt;/code&gt; como &lt;code&gt;/Mixxx&lt;/code&gt; (carpeta de medios &amp;ldquo;Mixxx&amp;rdquo;). Ver &lt;a class="link" href="../mixxx-cajones-y-playlists-en-airsonic" &gt;playlists de Mixxx en Airsonic&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;mixxx_info&lt;/strong&gt; (repeat-one): lee las playlists de &lt;code&gt;services/mixxx_info/playlists&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Una canción recién movida tarda en estar disponible: primero la sincroniza Syncthing y luego hay que esperar al escaneo de Airsonic (&lt;code&gt;mixxx_to_airsonic.py --scan&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;En la web de Syncthing de los dos equipos: &lt;em&gt;Editar carpeta → Eliminar&lt;/em&gt;. Los archivos no se borran. Después quita los volúmenes &lt;code&gt;/data/Mixxx&lt;/code&gt; y &lt;code&gt;/data/MixxxPlaylists&lt;/code&gt; del compose y recrea el contenedor.&lt;/p&gt;</description></item><item><title>Una playlist de YouTube por cada carpeta de Mixxx</title><link>https://volteret4.github.io/notas/p/playlists-de-youtube-desde-mixxx/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/playlists-de-youtube-desde-mixxx/</guid><description>&lt;h1 id="qué-hace"&gt;Qué hace
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Crea una playlist &lt;strong&gt;privada&lt;/strong&gt; en YouTube por cada &lt;code&gt;.m3u&lt;/code&gt; de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, llamada &lt;code&gt;Mix - &amp;lt;nombre&amp;gt;&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Sincroniza por diferencias: añade lo nuevo y quita lo que ya no está en el &lt;code&gt;.m3u&lt;/code&gt;. &lt;strong&gt;Solo quita vídeos que añadió él&lt;/strong&gt;; lo que metas a mano no lo toca.&lt;/li&gt;
+&lt;li&gt;Busca los vídeos con &lt;strong&gt;yt-dlp&lt;/strong&gt;, que no gasta cuota. La API de YouTube solo se usa para escribir: cada inserción cuesta 50 unidades de las 10.000 diarias, es decir, unas 200 canciones al día.&lt;/li&gt;
+&lt;li&gt;Con unas 1.900 canciones, la primera sincronización completa tarda &lt;strong&gt;unos 10 días&lt;/strong&gt;. Al acabarse la cuota guarda el estado y la siguiente ejecución sigue donde lo dejó. Mientras tanto, sigue buscando vídeos con yt-dlp para el listado.&lt;/li&gt;
+&lt;li&gt;Si YouTube da un 409 (pasa justo después de crear una playlist) o un 5xx, reintenta con espera creciente.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="archivos"&gt;Archivos
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Archivo&lt;/th&gt;
+&lt;th&gt;Qué es&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.config/yt_sync/client_secret.json&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;credencial OAuth del proyecto de Google Cloud (copiada de &lt;code&gt;~/Descargas&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.config/yt_sync/&lt;/code&gt; (token y &lt;code&gt;state.json&lt;/code&gt;)&lt;/td&gt;
+&lt;td&gt;autorización y qué vídeo corresponde a cada canción&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.config/yt_sync/Mix.md&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;listado en markdown&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;En el proyecto de Google Cloud tiene que estar activada &lt;strong&gt;YouTube Data API v3&lt;/strong&gt;, y tu cuenta tiene que estar como usuario de prueba de la pantalla de consentimiento. Si no, sale &lt;code&gt;403 API not enabled&lt;/code&gt; o &lt;code&gt;access_denied&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="uso"&gt;Uso
+&lt;/h1&gt;&lt;p&gt;La primera vez abre el navegador para autorizar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py --dry-run --only dub
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Opción&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--dry-run&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;muestra lo que haría, sin crear nada (si no ves la playlist, mira si lo lanzaste así)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--only &amp;lt;carpeta&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;solo esa playlist (no distingue mayúsculas)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--retry-missing&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;vuelve a buscar las canciones que no encontró&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--markdown&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;genera &lt;code&gt;Mix.md&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--publish&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;además actualiza el gist&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--no-sync&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;solo el listado, sin tocar YouTube&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Si una búsqueda trae un vídeo equivocado, se corrige a mano en &lt;code&gt;~/.config/yt_sync/state.json&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="el-listado-en-un-gist"&gt;El listado en un gist
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;Mix.md&lt;/code&gt; tiene la fecha, el total de canciones y cuántas tienen enlace, un índice, una cabecera &lt;code&gt;##&lt;/code&gt; por carpeta y &lt;code&gt;###&lt;/code&gt; por subgénero, cada una con su enlace &lt;strong&gt;▶ playlist&lt;/strong&gt;, y cada canción enlazada a su vídeo si se encontró. Se publica en un &lt;strong&gt;gist secreto&lt;/strong&gt; de &lt;code&gt;volteret4&lt;/code&gt; que mantiene siempre la misma URL. Con la API gratuita de pastebin, cada cambio crearía un enlace nuevo.&lt;/p&gt;
+&lt;h1 id="integración-con-el-mover"&gt;Integración con el mover
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;mover_mix_playerctl.py&lt;/code&gt; lanza la sincronización en segundo plano, con &lt;code&gt;--publish&lt;/code&gt;, solo para la carpeta de destino (y la de origen si mueves entre carpetas). Si aún no has autorizado, no abre el navegador: avisa con una notificación.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Borra las playlists &lt;code&gt;Mix - *&lt;/code&gt; desde YouTube Studio.&lt;/li&gt;
+&lt;li&gt;Quita la llamada a &lt;code&gt;yt_sync_mixxx.py&lt;/code&gt; en &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt; (la versión de antes es &lt;code&gt;mover_mix_playerctl.py.bak.20261016201948&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Borra el script y la configuración:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm -r ~/.config/yt_sync ~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Retira el acceso de la app en tu cuenta de Google (&lt;em&gt;Seguridad → Apps de terceros&lt;/em&gt;).&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

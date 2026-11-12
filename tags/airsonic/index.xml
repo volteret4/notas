@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Airsonic on memoria digital</title><link>https://volteret4.github.io/notas/tags/airsonic/</link><description>Recent content in Airsonic on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/airsonic/index.xml" rel="self" type="application/rss+xml"/><item><title>mover_mix_playerctl.py, el script que manda canciones a mis carpetas de DJ</title><link>https://volteret4.github.io/notas/p/mover-mix-playerctl/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mover-mix-playerctl/</guid><description>&lt;h1 id="qué-hace"&gt;Qué hace
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py&lt;/code&gt; coge la canción que suena (por playerctl, o desde DeaDBeeF o Airsonic) y la manda a una carpeta de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt; (exFAT, la de Mixxx). Luego:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;elige la carpeta en un menú, con subcarpetas de género (&lt;code&gt;TECHNO/techno_deep&lt;/code&gt;, &lt;code&gt;HOUSE/...&lt;/code&gt;) y atajos,&lt;/li&gt;
+&lt;li&gt;renombra el archivo a &lt;code&gt;Artista - Canción (año álbum) [sello]&lt;/code&gt; a partir de los tags,&lt;/li&gt;
+&lt;li&gt;pide un comentario opcional,&lt;/li&gt;
+&lt;li&gt;regenera los &lt;code&gt;.m3u&lt;/code&gt; de cada carpeta,&lt;/li&gt;
+&lt;li&gt;y lanza en segundo plano &lt;code&gt;sync_crates.py&lt;/code&gt; (cajones de Mixxx), &lt;code&gt;yt_sync_mixxx.py&lt;/code&gt; (playlists de YouTube) y &lt;code&gt;embeed_cover.py&lt;/code&gt; (carátula).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="cambios-por-orden"&gt;Cambios, por orden
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Fecha&lt;/th&gt;
+&lt;th&gt;Cambio&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;03 → 08&lt;/td&gt;
+&lt;td&gt;Credenciales de Airsonic en &lt;code&gt;.env&lt;/code&gt;, nombre de archivo a partir de la metadata, menú de carga y subcarpetas de género con atajos&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;05-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Mover en vez de copiar&lt;/strong&gt; cualquier canción cuya ruta empiece por &lt;code&gt;/mnt/windows/Mix/&lt;/code&gt; (antes solo dentro de TECHNO/HOUSE). No busca duplicados. Si eliges la carpeta en la que ya está, solo aplica el comentario&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;07-10&lt;/td&gt;
+&lt;td&gt;Llamada a &lt;code&gt;sync_crates.py&lt;/code&gt; tras regenerar los &lt;code&gt;.m3u&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;16-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Pistas dentro de un &lt;code&gt;.cue&lt;/code&gt;&lt;/strong&gt;: detecta el cue (incrustado como tag &lt;code&gt;CUESHEET&lt;/code&gt; o en un &lt;code&gt;.cue&lt;/code&gt; al lado), averigua la pista que suena por título, número o duración (si no, pregunta) y &lt;strong&gt;corta solo esa pista con ffmpeg&lt;/strong&gt; (FLAC/APE/WV/WAV → FLAC; MP3 sin recodificar). Corrige los tags y quita &lt;code&gt;CUESHEET&lt;/code&gt;, BPM y tonalidad del disco entero. Además, &lt;code&gt;unquote&lt;/code&gt; no estaba importado y la parte de playerctl siempre fallaba&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;16-10&lt;/td&gt;
+&lt;td&gt;Sincroniza la playlist de YouTube de la carpeta de destino y, al mover, también la de origen. Comentada la llamada a Spotify (su API ya no funciona sin pago)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;21-10&lt;/td&gt;
+&lt;td&gt;Fecha original vía MusicBrainz (script aparte, &lt;code&gt;fecha_original_mix.py&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;25-10&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;[Errno 1] Operación no permitida&lt;/code&gt; al copiar desde NFS: los permisos &lt;code&gt;rwxrwSr-x&lt;/code&gt; (setgid) no caben en exFAT. Nueva &lt;code&gt;copy_sin_permisos()&lt;/code&gt;, que copia contenido y fechas pero no permisos, usada en &lt;code&gt;copy_file&lt;/code&gt; y en &lt;code&gt;shutil.move(..., copy_function=copy_sin_permisos)&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;27-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;No renombraba al reclasificar&lt;/strong&gt; (movía con &lt;code&gt;rename=False&lt;/code&gt;) y no leía tags escritos como &lt;code&gt;Artist&lt;/code&gt;/&lt;code&gt;Title&lt;/code&gt;. Ahora lee los tags sin distinguir mayúsculas, usa el artista del álbum si falta el artista y, si aun así falta algo, deja el nombre original. &lt;code&gt;[no label]&lt;/code&gt; ya no se pone en el nombre&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="fecha_original_mixpy"&gt;&lt;code&gt;fecha_original_mix.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Para los remasters que confunden: pone en &lt;code&gt;DATE&lt;/code&gt; la fecha &lt;strong&gt;más antigua&lt;/strong&gt; entre la actual, &lt;code&gt;ORIGINALDATE&lt;/code&gt; (Picard) y el primer lanzamiento de la grabación en MusicBrainz. Nunca retrasa una fecha, y guarda la que había en &lt;code&gt;RELEASEDATE&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="renombrar_mixpy"&gt;&lt;code&gt;renombrar_mix.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Arregla los nombres que quedaron mal por el fallo del 27-10 (encontró unos 1611): espacios dobles, &lt;code&gt;- ()&lt;/code&gt; al final, sin artista o sin título, o que empiezan por número de pista.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py &lt;span class="p"&gt;|&lt;/span&gt; less
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py --apply
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Con Mixxx &lt;strong&gt;cerrado&lt;/strong&gt;. Antes de tocar nada copia la base de datos de Mixxx en &lt;code&gt;~/.mixxx/backups_renombrar/&lt;/code&gt; y actualiza las rutas para no perder cues ni análisis.&lt;/li&gt;
+&lt;li&gt;Si el nombre nuevo ya existe, se lo salta. Si Mixxx tiene una entrada fantasma con ese nombre, intercambia las rutas.&lt;/li&gt;
+&lt;li&gt;Apunta cada cambio en &lt;code&gt;~/.mixxx/backups_renombrar/renombrados.&amp;lt;fecha&amp;gt;.tsv&lt;/code&gt;, y &lt;code&gt;--deshacer&lt;/code&gt; lo revierte.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="embeed_coverpy"&gt;&lt;code&gt;embeed_cover.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Ignoraba el archivo que le pasaba el mover y recorría &lt;strong&gt;todo&lt;/strong&gt; Mix (unas 1100 canciones), consultando MusicBrainz cada vez. Ahora procesa solo lo que se le pasa; sin argumentos sigue recorriendo todo Mix.&lt;/p&gt;
+&lt;h1 id="copias-de-seguridad"&gt;Copias de seguridad
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/Scripts/Musica/MoverMusica/&lt;/code&gt;:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Copia&lt;/th&gt;
+&lt;th&gt;De antes de&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20260826210410&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;cambios de agosto&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261007183246&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;llamada a &lt;code&gt;sync_crates.py&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261016201948&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;soporte de cue&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261021220202&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;fecha original&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261027195025&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;arreglo del renombrado&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;fecha_original_mix.py.bak.2026102*&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;cada iteración de ese script&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/embeed_cover.py.bak.20261016203210&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;El arreglo de permisos del 25-10 se guardó en una copia temporal que ya no existe; está entre &lt;code&gt;.bak.20261021220202&lt;/code&gt; y &lt;code&gt;.bak.20261027195025&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Para volver a una versión concreta:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py.bak.20261016201948 ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para ver qué cambió entre dos copias:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;diff ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py.bak.20261027195025 ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para deshacer un renombrado masivo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py --deshacer ~/.mixxx/backups_renombrar/renombrados.20261027195611.tsv
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Playlists de Mixxx en cajones y en Airsonic</title><link>https://volteret4.github.io/notas/p/mixxx-cajones-y-playlists-en-airsonic/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mixxx-cajones-y-playlists-en-airsonic/</guid><description>&lt;h1 id="contexto"&gt;Contexto
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;La música para pinchar está en &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, con un &lt;code&gt;.m3u&lt;/code&gt; por lista, que regenera &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt; cada vez que muevo una canción.&lt;/li&gt;
+&lt;li&gt;Syncthing clona esa carpeta en pepecono (&lt;code&gt;/mnt/NFS/moode/Mixxx&lt;/code&gt;), y Airsonic la tiene como carpeta de medios &lt;strong&gt;Mixxx&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="1-cajones-de-mixxx-desde-los-m3u-sync_cratespy"&gt;1. Cajones de Mixxx desde los &lt;code&gt;.m3u&lt;/code&gt; (&lt;code&gt;sync_crates.py&lt;/code&gt;)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/sync_crates.py&lt;/code&gt; deja un &lt;strong&gt;cajón&lt;/strong&gt; (crate) por cada &lt;code&gt;.m3u&lt;/code&gt; de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, con el mismo nombre y las mismas canciones. La primera vez creó 59.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cada cajón queda &lt;strong&gt;idéntico&lt;/strong&gt; a su &lt;code&gt;.m3u&lt;/code&gt;: añade lo que falta y quita lo que sobra. Si borras el &lt;code&gt;.m3u&lt;/code&gt;, borra el cajón.&lt;/li&gt;
+&lt;li&gt;No toca las playlists de Mixxx ni los cajones creados a mano.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Canciones movidas de carpeta&lt;/strong&gt;: las reconoce por nombre y tamaño y actualiza la ruta, así conservan cues, BPM y análisis. De 441 que faltaban recuperó 404.&lt;/li&gt;
+&lt;li&gt;Las canciones totalmente nuevas tienen que entrar antes en la biblioteca de Mixxx (en el escaneo al arrancar), así que entran en su cajón al cerrar Mixxx.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Solo escribe con Mixxx cerrado&lt;/strong&gt;, y antes guarda una copia de la base de datos en &lt;code&gt;~/.mixxx/backups_sync_crates/&lt;/code&gt; (las 5 últimas). Si algo falla a mitad, no aplica nada.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/sync_crates.py --dry-run
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="cuándo-se-ejecuta"&gt;Cuándo se ejecuta
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Cuándo&lt;/th&gt;
+&lt;th&gt;Cómo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Al mover una canción con &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;lo llama con &lt;code&gt;--quiet --notify&lt;/code&gt; después de regenerar los &lt;code&gt;.m3u&lt;/code&gt;. Si Mixxx está abierto, solo avisa&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Al abrir Mixxx desde el lanzador&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;mixxx-sync.sh&lt;/code&gt; sincroniza antes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Al cerrar Mixxx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;mixxx-sync.sh&lt;/code&gt; sincroniza después&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/mixxx-sync.sh&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;sync_crates&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;dirname &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;readlink -f &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$0&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;/sync_crates.py&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$sync_crates&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; --quiet --notify
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pasuspender -- mixxx &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; mixxx &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$sync_crates&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; --quiet
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/.local/share/applications/org.mixxx.Mixxx.desktop&lt;/code&gt; sobrescribe el lanzador del sistema para que &lt;code&gt;Exec&lt;/code&gt; use ese script.&lt;/p&gt;
+&lt;h1 id="2-playlists-de-mixxx-en-airsonic-mixxx_to_airsonicpy"&gt;2. Playlists de Mixxx en Airsonic (&lt;code&gt;mixxx_to_airsonic.py&lt;/code&gt;)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py&lt;/code&gt; copia las &lt;strong&gt;playlists con nombre&lt;/strong&gt; de Mixxx (no Auto DJ ni el historial) al usuario &lt;strong&gt;&lt;code&gt;mix&lt;/code&gt;&lt;/strong&gt; de Airsonic.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lee la base de datos de Mixxx en solo lectura, así que puede estar abierto.&lt;/li&gt;
+&lt;li&gt;Una canción en &lt;code&gt;/mnt/windows/Mix/X&lt;/code&gt; se busca en Airsonic como &lt;code&gt;Mixxx/X&lt;/code&gt;. Las que Airsonic aún no tiene salen al final como &amp;ldquo;falta&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;Cada playlist lleva en el comentario la marca &lt;code&gt;Mixxx: &amp;lt;nombre&amp;gt;&lt;/code&gt;. Así, al volver a ejecutarlo actualiza la misma playlist en el orden de Mixxx en lugar de duplicarla. Las playlists sin esa marca no se tocan.&lt;/li&gt;
+&lt;li&gt;Usa GET en la API de Subsonic, porque Airsonic-Advanced bloquea los POST por CSRF.&lt;/li&gt;
+&lt;li&gt;Airsonic-Advanced no devuelve la playlist en la respuesta de &lt;code&gt;createPlaylist&lt;/code&gt;, así que el script la busca después por nombre (la de id más alto).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Credenciales en &lt;code&gt;~/Scripts/Musica/playlists/airsonic/.env&lt;/code&gt;: &lt;code&gt;AIRSONIC_URL&lt;/code&gt;, &lt;code&gt;AIRSONIC_MIX_PASSWORD&lt;/code&gt; y, si el usuario no se llama &lt;code&gt;mix&lt;/code&gt;, &lt;code&gt;AIRSONIC_MIX_USER&lt;/code&gt;. El usuario necesita acceso a la carpeta de medios &lt;strong&gt;Mixxx&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py --dry-run
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py --scan
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Opción&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--dry-run&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;muestra los cambios sin escribir&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--scan&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;hace que Airsonic escanee antes la biblioteca (tarda más de 10 minutos, recorre toda la biblioteca)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--prune&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;borra de Airsonic las playlists que ya no existen en Mixxx&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--quiet&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;solo el resumen&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Errores corregidos al probarlo: &lt;code&gt;IndexError: pop from empty list&lt;/code&gt; con carpetas vacías en Airsonic, y la playlist &lt;code&gt;deep&lt;/code&gt;, que se creó sin la marca la primera vez.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Cajones&lt;/strong&gt;: con Mixxx cerrado, restaura la última copia.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ls -1t ~/.mixxx/backups_sync_crates/*.sqlite &lt;span class="p"&gt;|&lt;/span&gt; head -1&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; ~/.mixxx/mixxxdb.sqlite
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Lanzador&lt;/strong&gt;: borra &lt;code&gt;~/.local/share/applications/org.mixxx.Mixxx.desktop&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;mover_mix_playerctl.py&lt;/strong&gt;: quita la llamada a &lt;code&gt;sync_crates.py&lt;/code&gt; (hay una copia &lt;code&gt;.bak.&amp;lt;fecha&amp;gt;&lt;/code&gt; del original).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Airsonic&lt;/strong&gt;: borra las playlists cuyo comentario empieza por &lt;code&gt;Mixxx:&lt;/code&gt; desde la web, con el usuario &lt;code&gt;mix&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Sacar el audio de Airsonic en Docker por el PipeWire del host</title><link>https://volteret4.github.io/notas/p/airsonic-docker-audio-pipewire/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/airsonic-docker-audio-pipewire/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;El &lt;strong&gt;modo jukebox&lt;/strong&gt; de Airsonic reproduce la música en el propio servidor. En pepecono, Airsonic-Advanced corre en Docker (&lt;code&gt;lscr.io/linuxserver/airsonic-advanced&lt;/code&gt;), y dentro del contenedor no hay ninguna tarjeta de sonido. El host usa &lt;strong&gt;PipeWire&lt;/strong&gt;, no ALSA directo.&lt;/p&gt;
+&lt;p&gt;No hace falta recompilar Airsonic. Java usa ALSA, y ALSA puede mandar a un servidor pulse (el &lt;code&gt;pipewire-pulse&lt;/code&gt; del host) a través del plugin &lt;code&gt;alsa-plugins-pulse&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="cambios"&gt;Cambios
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/contenedores/airsonic/docker-compose.yml&lt;/code&gt; (en pepecono), lo añadido:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PULSE_SERVER=unix:/run/user/1000/pulse/native&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/run/user/1000/pulse/native:/run/user/1000/pulse/native&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/airsonic/config/.asoundrc:/etc/asound.conf&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/airsonic/config/custom-cont-init.d:/custom-cont-init.d&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;El socket pulse del host&lt;/strong&gt; (&lt;code&gt;/run/user/1000/pulse/native&lt;/code&gt;, del usuario &lt;code&gt;pepe&lt;/code&gt;, UID 1000) se monta en el contenedor, y &lt;code&gt;PULSE_SERVER&lt;/code&gt; apunta a él. Como el contenedor corre con &lt;code&gt;PUID=1000&lt;/code&gt;, tiene permiso.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;ALSA → pulse.&lt;/strong&gt; &lt;code&gt;config/.asoundrc&lt;/code&gt;, montado como &lt;code&gt;/etc/asound.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pcm.!default {
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; type pulse
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ctl.!default {
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; type pulse
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start="3"&gt;
+&lt;li&gt;&lt;strong&gt;El plugin.&lt;/strong&gt; La imagen de linuxserver es Alpine: no tiene &lt;code&gt;apt-get&lt;/code&gt; (&lt;code&gt;exec: &amp;quot;apt-get&amp;quot;: executable file not found&lt;/code&gt;) y se pierde lo que instales a mano al recrear el contenedor. Las imágenes de linuxserver ejecutan al arrancar lo que haya en &lt;code&gt;/custom-cont-init.d&lt;/code&gt;, así que va en &lt;code&gt;config/custom-cont-init.d/install-alsa-pulse.sh&lt;/code&gt;:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;apk add --no-cache alsa-plugins-pulse
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;cd ~/contenedores/airsonic &amp;amp;&amp;amp; docker compose up -d --force-recreate&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="comprobar"&gt;Comprobar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;docker exec airsonic-advanced ls -la /run/user/1000/pulse/native &amp;amp;&amp;amp; docker exec airsonic-advanced find /usr -name &amp;#34;libasound_module_pcm_pulse.so&amp;#34;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;En Airsonic: &lt;em&gt;Ajustes → Reproductores&lt;/em&gt; → un reproductor de tipo &lt;strong&gt;Jukebox&lt;/strong&gt;. Reproduce algo y mira en pepecono que aparece como cliente:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;pactl list short sink-inputs&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Con los túneles PipeWire, ese audio se puede mandar a otro equipo de la casa.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Quita del &lt;code&gt;docker-compose.yml&lt;/code&gt; la variable &lt;code&gt;PULSE_SERVER&lt;/code&gt; y los tres volúmenes (socket, &lt;code&gt;.asoundrc&lt;/code&gt; y &lt;code&gt;custom-cont-init.d&lt;/code&gt;), y recrea el contenedor.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;cd ~/contenedores/airsonic &amp;amp;&amp;amp; docker compose up -d --force-recreate&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Supersonic pide la contraseña cada vez (keyring y autologin)</title><link>https://volteret4.github.io/notas/p/supersonic-pide-la-contrasena/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/supersonic-pide-la-contrasena/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Supersonic (cliente de Airsonic/Subsonic) pedía la contraseña del servidor &lt;strong&gt;cada vez&lt;/strong&gt; que lo abría. Si cerraba el diálogo, no conectaba. Parecía que pedía desbloquear gpg.&lt;/p&gt;
+&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;Supersonic no guarda la contraseña en &lt;code&gt;config.toml&lt;/code&gt;, sino en el &lt;strong&gt;Secret Service&lt;/strong&gt; (gnome-keyring), aunque tenga &lt;code&gt;EnablePasswordStorage = true&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Lo que había en &lt;code&gt;~/.local/share/keyrings/&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;El alias &lt;code&gt;default&lt;/code&gt; apuntaba al llavero &lt;strong&gt;&lt;code&gt;Default&lt;/code&gt;&lt;/strong&gt;, que estaba cifrado.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pam_gnome_keyring&lt;/code&gt; (en SDDM) solo desbloquea al entrar el llavero llamado &lt;strong&gt;&lt;code&gt;login&lt;/code&gt;&lt;/strong&gt;, y solo si su contraseña es la de tu usuario.&lt;/li&gt;
+&lt;li&gt;Además había un &lt;code&gt;login_1&lt;/code&gt; bloqueado que sobraba.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Uso autologin&lt;/strong&gt;: al no escribir contraseña al entrar, PAM no tiene con qué desbloquear ningún llavero cifrado.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Así que, tras cada reinicio, &lt;code&gt;Default&lt;/code&gt; arrancaba bloqueado. Supersonic no podía leer ni guardar y volvía a pedir la contraseña.&lt;/p&gt;
+&lt;p&gt;Para ver qué tiene guardado Supersonic:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;secret-tool search --all service supersonic 2&amp;gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; grep username
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="la-solución-opción-a-llavero-sin-contraseña"&gt;La solución (opción A: llavero sin contraseña)
+&lt;/h1&gt;&lt;p&gt;Con autologin es lo más práctico:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;seahorse
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;En Seahorse: clic derecho en el llavero &lt;code&gt;Default&lt;/code&gt; → &lt;em&gt;Cambiar contraseña&lt;/em&gt;, escribe la actual y deja la nueva &lt;strong&gt;en blanco&lt;/strong&gt;. Acepta el aviso de que se guardará sin cifrar.&lt;/p&gt;
+&lt;p&gt;Después, en Supersonic, conéctate una vez a cada servidor marcando la opción de guardar la contraseña.&lt;/p&gt;
+&lt;p&gt;Puedes comprobar que el llavero ha quedado sin cifrar: el archivo empieza por &lt;code&gt;[keyring]&lt;/code&gt; en texto plano.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;head -2 ~/.local/share/keyrings/Default.keyring
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Contras:&lt;/strong&gt; las contraseñas del llavero quedan en texto plano en &lt;code&gt;~/.local/share/keyrings/&lt;/code&gt; (solo tu usuario puede leerlas). Con autologin, quien entra en tu sesión ya tiene acceso a todo, así que en la práctica se pierde poca seguridad. Con el disco cifrado, aún menos.&lt;/p&gt;
+&lt;p&gt;La opción B es dejarlo cifrado y escribir la contraseña del llavero una vez por sesión, que es justo lo que quería evitar.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;En Seahorse, &lt;em&gt;Cambiar contraseña&lt;/em&gt; del llavero &lt;code&gt;Default&lt;/code&gt; y pon una contraseña. O, para que se desbloquee solo, quita el autologin y haz que el llavero &lt;code&gt;login&lt;/code&gt; tenga la misma contraseña que tu usuario y sea el predeterminado.&lt;/p&gt;</description></item><item><title>Syncthing para llevar la carpeta de Mixxx a pepecono y Airsonic</title><link>https://volteret4.github.io/notas/p/syncthing-carpeta-mixxx/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/syncthing-carpeta-mixxx/</guid><description>&lt;h1 id="esquema"&gt;Esquema
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;arcolinux /mnt/windows/Mix ──(sendonly)──▶ pepecono /mnt/NFS/moode/Mixxx → Airsonic (carpeta &amp;#34;Mixxx&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; → mixxx_info
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;arcolinux /mnt/windows/Mix_Playlists ◀─(sendreceive)─▶ pepecono repeat-one/services/mixxx_info/playlists
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Carpeta (id)&lt;/th&gt;
+&lt;th&gt;arcolinux&lt;/th&gt;
+&lt;th&gt;pepecono (contenedor)&lt;/th&gt;
+&lt;th&gt;Tipo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mjugz-pcrud&lt;/code&gt; &amp;ldquo;Mixxx&amp;rdquo;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/mnt/windows/Mix&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/data/Mixxx&lt;/code&gt; → &lt;code&gt;/mnt/NFS/moode/Mixxx&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;sendonly&lt;/strong&gt; aquí, &lt;strong&gt;receiveonly&lt;/strong&gt; allí&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mixxx-playlists&lt;/code&gt; &amp;ldquo;Mixxx Playlists&amp;rdquo;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/mnt/windows/Mix_Playlists&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/data/MixxxPlaylists&lt;/code&gt; → &lt;code&gt;~/contenedores/repeat-one/services/mixxx_info/playlists&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;sendreceive&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;sendonly&lt;/code&gt; / &lt;code&gt;receiveonly&lt;/code&gt;: este PC es la fuente. Si algo se toca en pepecono, Syncthing no lo devuelve: lo marca como &amp;ldquo;cambios locales&amp;rdquo; y se puede revertir desde la web.&lt;/p&gt;
+&lt;h1 id="pepecono-el-contenedor"&gt;pepecono: el contenedor
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/contenedores/herramientas/syncthing/docker-compose.yml&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;syncthing&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;lscr.io/linuxserver/syncthing:latest&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;container_name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;syncthing&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;hostname&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;pepecono&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;#optional&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PUID=1000&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PGID=1000&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;TZ=Europe/Madrid&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/herramientas/syncthing/config:/config&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/mnt/NFS/lidarr/torrents_backup/watch_torrents:/data/lidarr_torrents&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/mnt/NFS/Pelis/watch_folder:/data/pelis_torrents&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/mnt/NFS/moode/Mixxx:/data/Mixxx&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/repeat-one/services/mixxx_info/playlists:/data/MixxxPlaylists&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/repeat-one/data/mfuzz-db:/data/mfuzz-db&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;ports&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;8384&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;8384&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="l"&gt;/tcp&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="l"&gt;/udp&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;21027&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;21027&lt;/span&gt;&lt;span class="l"&gt;/udp&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;restart&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;unless-stopped&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los volúmenes de &lt;code&gt;Mixxx&lt;/code&gt; y &lt;code&gt;MixxxPlaylists&lt;/code&gt; son los nuevos (copia anterior: &lt;code&gt;docker-compose.yml.bak-claude&lt;/code&gt;). Una carpeta nueva solo se ve dentro del contenedor si está montada: añadir el volumen, recrear el contenedor y luego aceptar la carpeta en la web (&lt;code&gt;http://pepecono:8384&lt;/code&gt;) con la ruta &lt;strong&gt;del contenedor&lt;/strong&gt; (&lt;code&gt;/data/...&lt;/code&gt;).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;cd ~/contenedores/herramientas/syncthing &amp;amp;&amp;amp; docker compose up -d&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="arcolinux"&gt;arcolinux
+&lt;/h1&gt;&lt;p&gt;Syncthing corre como servicio de usuario. La configuración está en &lt;code&gt;~/.local/state/syncthing/config.xml&lt;/code&gt;. Dos cosas por ser &lt;code&gt;/mnt/windows&lt;/code&gt; un disco &lt;strong&gt;exFAT&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;exFAT no guarda permisos de Unix. Marca &lt;em&gt;Ignorar permisos&lt;/em&gt; en la carpeta, o cada &lt;code&gt;chmod&lt;/code&gt; provocará cambios fantasma.&lt;/li&gt;
+&lt;li&gt;Los nombres no distinguen mayúsculas: no tengas &lt;code&gt;Techno/&lt;/code&gt; y &lt;code&gt;techno/&lt;/code&gt; a la vez.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Ojo: el &lt;code&gt;~/.config/syncthing/config.xml&lt;/code&gt; que está en chezmoi es una copia antigua de este PC. &lt;strong&gt;No lo apliques en pepecono&lt;/strong&gt;, porque allí la configuración real es la del contenedor.&lt;/p&gt;
+&lt;h1 id="lo-que-lo-usa-en-pepecono"&gt;Lo que lo usa en pepecono
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Airsonic&lt;/strong&gt;: monta &lt;code&gt;/mnt/NFS/moode/Mixxx&lt;/code&gt; como &lt;code&gt;/Mixxx&lt;/code&gt; (carpeta de medios &amp;ldquo;Mixxx&amp;rdquo;). Ver &lt;a class="link" href="../mixxx-cajones-y-playlists-en-airsonic" &gt;playlists de Mixxx en Airsonic&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;mixxx_info&lt;/strong&gt; (repeat-one): lee las playlists de &lt;code&gt;services/mixxx_info/playlists&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Una canción recién movida tarda en estar disponible: primero la sincroniza Syncthing y luego hay que esperar al escaneo de Airsonic (&lt;code&gt;mixxx_to_airsonic.py --scan&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;En la web de Syncthing de los dos equipos: &lt;em&gt;Editar carpeta → Eliminar&lt;/em&gt;. Los archivos no se borran. Después quita los volúmenes &lt;code&gt;/data/Mixxx&lt;/code&gt; y &lt;code&gt;/data/MixxxPlaylists&lt;/code&gt; del compose y recrea el contenedor.&lt;/p&gt;</description></item></channel></rss>

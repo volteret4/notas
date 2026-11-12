@@ -1,0 +1,1351 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python on memoria digital</title><link>https://volteret4.github.io/notas/tags/python/</link><description>Recent content in Python on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>Detector de presencia por Bluetooth con aviso a Home Assistant</title><link>https://volteret4.github.io/notas/p/presencia-bluetooth-home-assistant/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/presencia-bluetooth-home-assistant/</guid><description>&lt;h1 id="cómo-funciona"&gt;Cómo funciona
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/gits/pollo/mando_bluetooth/rpi/presence.py&lt;/code&gt; (en la misma Raspberry que hace de &lt;a class="link" href="../raspberry-teclado-bluetooth-tv" &gt;teclado Bluetooth&lt;/a&gt;):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cada &lt;code&gt;scan_interval&lt;/code&gt; segundos hace &lt;code&gt;l2ping -c 1 -t 5 &amp;lt;MAC&amp;gt;&lt;/code&gt; a cada dispositivo de la lista. &lt;strong&gt;No hace falta que esté emparejado&lt;/strong&gt; ni visible: basta con que tenga el Bluetooth encendido.&lt;/li&gt;
+&lt;li&gt;Lo marca &lt;strong&gt;ausente&lt;/strong&gt; tras &lt;code&gt;absent_threshold&lt;/code&gt; fallos seguidos, para no dar falsos &amp;ldquo;se ha ido&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;En cada cambio ejecuta &lt;code&gt;on_arrive&lt;/code&gt; u &lt;code&gt;on_leave&lt;/code&gt; (comandos de shell, opcionales) y avisa a Home Assistant.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="configuración"&gt;Configuración
+&lt;/h1&gt;&lt;p&gt;Copia &lt;code&gt;rpi/presence_config.json.example&lt;/code&gt; a &lt;code&gt;rpi/presence_config.json&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;devices&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;AA:BB:CC:DD:EE:FF&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;name&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Mi movil&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;on_arrive&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;on_leave&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;scan_interval&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;absent_threshold&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;home_assistant&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;url&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;http://192.168.1.X:8123&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;token&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;TU_TOKEN_DE_LARGA_DURACION&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;notify_service&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;notify.mobile_app_tu_movil&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El token es un &lt;em&gt;token de acceso de larga duración&lt;/em&gt; (Home Assistant → tu perfil → &lt;em&gt;Seguridad&lt;/em&gt;). &lt;code&gt;presence_config.json&lt;/code&gt; está en &lt;code&gt;.gitignore&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="qué-crea-en-home-assistant"&gt;Qué crea en Home Assistant
+&lt;/h1&gt;&lt;p&gt;Con la API REST (&lt;code&gt;POST /api/states/&amp;lt;entity&amp;gt;&lt;/code&gt;) crea o actualiza &lt;strong&gt;un &lt;code&gt;binary_sensor&lt;/code&gt; por dispositivo&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;binary_sensor.bt_presence_mi_movil on / off
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; friendly_name: BT Mi movil
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; device_class: presence
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; mac: AA:BB:CC:DD:EE:FF
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; source: mando_bluetooth
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si hay &lt;code&gt;notify_service&lt;/code&gt;, además llama a &lt;code&gt;POST /api/services/notify/&amp;lt;servicio&amp;gt;&lt;/code&gt; con el mensaje de llegada o salida.&lt;/p&gt;
+&lt;p&gt;Ojo: las entidades creadas por &lt;code&gt;/api/states&lt;/code&gt; &lt;strong&gt;no sobreviven a un reinicio&lt;/strong&gt; de Home Assistant hasta el siguiente cambio de estado. Si las usas en automatizaciones, el script las vuelve a publicar en el siguiente ciclo.&lt;/p&gt;
+&lt;h1 id="consultarlo-desde-fuera"&gt;Consultarlo desde fuera
+&lt;/h1&gt;&lt;p&gt;El servidor HID (&lt;code&gt;bt_hid_server.py&lt;/code&gt;) carga el detector y acepta en el puerto 5555:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;presence&amp;#34;} -&amp;gt; estado de todos (JSON)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;presence&amp;#34;, &amp;#34;mac&amp;#34;: &amp;#34;AA:BB:...&amp;#34;} -&amp;gt; presence:AA:BB:...:present|absent
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm ~/gits/pollo/mando_bluetooth/rpi/presence.py ~/gits/pollo/mando_bluetooth/rpi/presence_config.json
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Quita del servidor la importación de &lt;code&gt;PresenceDetector&lt;/code&gt;, borra en Home Assistant las entidades &lt;code&gt;binary_sensor.bt_presence_*&lt;/code&gt; (&lt;em&gt;Herramientas para desarrolladores → Estados&lt;/em&gt;) y revoca el token.&lt;/p&gt;
+&lt;p&gt;Los cambios no están commiteados en el repo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/gits/pollo/mando_bluetooth status --short
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Dictar preguntas a Claude con nerd-dictation y la cuenta Pro</title><link>https://volteret4.github.io/notas/p/dictado-por-voz-a-claude/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/dictado-por-voz-a-claude/</guid><description>&lt;h1 id="qué-hace"&gt;Qué hace
+&lt;/h1&gt;&lt;p&gt;Pulsas una tecla, hablas, la vuelves a pulsar y la pregunta va a Claude. La respuesta aparece formateada en la misma ventana.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Primera pulsación&lt;/strong&gt;: se abre una ventana flotante y centrada y empieza el dictado. El texto aparece en vivo en la caja de abajo, y puedes corregirlo con el teclado antes de enviarlo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Segunda pulsación&lt;/strong&gt;: para el dictado y envía la consulta. La respuesta se va mostrando arriba mientras se genera.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Siguientes pulsaciones&lt;/strong&gt;: otra pregunta en la misma conversación.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Atajo en la ventana&lt;/th&gt;
+&lt;th&gt;Acción&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Ctrl+Enter&lt;/td&gt;
+&lt;td&gt;enviar&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Ctrl+D&lt;/td&gt;
+&lt;td&gt;empezar o parar el dictado&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Ctrl+N&lt;/td&gt;
+&lt;td&gt;conversación nueva&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Esc&lt;/td&gt;
+&lt;td&gt;cerrar&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 id="archivos"&gt;Archivos
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Archivo&lt;/th&gt;
+&lt;th&gt;Qué es&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/Scripts/utilities/aliases/claude-dictado.sh&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;lanzador: abre la ventana o, si ya está abierta, le manda &lt;code&gt;SIGUSR1&lt;/code&gt; para alternar dictar/enviar&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/Scripts/utilities/aliases/claude_dictado.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;la ventana (Tkinter)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.config/awesome/rc.lua&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;atajo y regla de ventana flotante&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;/tmp/claude-dictado.pid&lt;/code&gt; y &lt;code&gt;/tmp/claude-dictado.log&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;PID de la ventana y errores de nerd-dictation&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Lanzador:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;PIDFILE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;/tmp/claude-dictado.pid&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; -f &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$PIDFILE&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;kill&lt;/span&gt; -0 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;cat &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$PIDFILE&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; 2&amp;gt;/dev/null&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;kill&lt;/span&gt; -USR1 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;cat &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$PIDFILE&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;exec&lt;/span&gt; python3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;dirname &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;readlink -f &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$0&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;/claude_dictado.py&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="dictado"&gt;Dictado
+&lt;/h1&gt;&lt;p&gt;nerd-dictation se lanza con &lt;strong&gt;su propia cookie&lt;/strong&gt;, para no chocar con el dictado normal (&lt;code&gt;nerd-dictation.sh&lt;/code&gt;), y escribe a &lt;strong&gt;stdout&lt;/strong&gt; en lugar de teclear con xdotool. Así el texto va a la ventana y no a la aplicación que tenga el foco:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;cmd&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;VENV_PYTHON&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;NERD_DICTATION&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;begin&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;--cookie&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;COOKIE&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;--vosk-model-dir&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;VOSK_MODEL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;--simulate-input-tool&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;STDOUT&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;--full-sentence&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;--numbers-as-digits&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;--numbers-min-value&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;10&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si pulsas el atajo mientras el modelo todavía carga, la cookie aún no existe y &lt;code&gt;end&lt;/code&gt; no haría nada. La ventana espera a que aparezca antes de pararlo.&lt;/p&gt;
+&lt;p&gt;El modelo por defecto es &lt;code&gt;~/.config/nerd-dictation/model&lt;/code&gt; (el pequeño de español). Para probar el grande:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;unzip ~/gits/nerd-dictation/vosk-model-es-0.42.zip -d ~/.config/nerd-dictation/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;CLAUDE_DICTADO_MODEL&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;~/.config/nerd-dictation/vosk-model-es-0.42 ~/Scripts/utilities/aliases/claude-dictado.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="claude-con-la-cuenta-pro-sin-api"&gt;Claude con la cuenta Pro, sin API
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;cmd&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;CLAUDE&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;-p&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;prompt&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;--output-format&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;stream-json&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;--verbose&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;--include-partial-messages&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;--no-session-persistence&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;--append-system-prompt&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;SYSTEM_PROMPT&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;--allowedTools&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;WebSearch&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;WebFetch&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Antes de lanzarlo se quitan del entorno &lt;code&gt;ANTHROPIC_API_KEY&lt;/code&gt;, &lt;code&gt;ANTHROPIC_AUTH_TOKEN&lt;/code&gt;, &lt;code&gt;CLAUDE_CODE_USE_BEDROCK&lt;/code&gt; y &lt;code&gt;CLAUDE_CODE_USE_VERTEX&lt;/code&gt;. Así siempre usa la sesión de claude.ai y nunca cobra por la API. Cuenta para el límite de uso del plan.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--allowedTools WebSearch WebFetch&lt;/code&gt;: puede buscar en la web, pero no tocar archivos ni ejecutar comandos.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--no-session-persistence&lt;/code&gt;: no guarda nada en disco. El contexto se mantiene &lt;strong&gt;solo en memoria&lt;/strong&gt;: en cada pregunta se reenvía la conversación anterior. Al cerrar la ventana o pulsar Ctrl+N, se pierde.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;stream-json&lt;/code&gt; con &lt;code&gt;--include-partial-messages&lt;/code&gt; permite ir pintando la respuesta según llega.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="fallo-no-respondía"&gt;Fallo: no respondía
+&lt;/h2&gt;&lt;p&gt;awesome lanza los programas &lt;strong&gt;sin &lt;code&gt;~/.local/bin&lt;/code&gt; en el &lt;code&gt;PATH&lt;/code&gt;&lt;/strong&gt;, y &lt;code&gt;claude&lt;/code&gt; está ahí. Por eso se usa &lt;code&gt;shutil.which(&amp;quot;claude&amp;quot;) or ~/.local/bin/claude&lt;/code&gt;, y si &lt;code&gt;claude&lt;/code&gt; no arranca, el error se muestra en rojo en la conversación.&lt;/p&gt;
+&lt;h2 id="markdown"&gt;Markdown
+&lt;/h2&gt;&lt;p&gt;La respuesta se muestra en un panel de solo lectura, con un pequeño renderizador propio: títulos, negrita, cursiva, código en línea y en bloque, listas anidadas, citas, separadores, enlaces que se pueden pulsar y tablas en monoespaciada.&lt;/p&gt;
+&lt;h1 id="atajo-en-awesome"&gt;Atajo en awesome
+&lt;/h1&gt;&lt;p&gt;Primero estaba en &lt;code&gt;Mod+Shift+#194&lt;/code&gt;. Ahora va en la &lt;strong&gt;tecla cuadrado&lt;/strong&gt; (keycode 193), sin modificador:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-lua" data-lang="lua"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;awful.key&lt;/span&gt;&lt;span class="p"&gt;({},&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;#193&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kr"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;awful.spawn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;with_shell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;${HOME}/Scripts/utilities/aliases/claude-dictado.sh &amp;amp;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;end&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Tecla cuadrado: dictar consulta a Claude (ventana flotante)&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;APPS&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;}),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Regla de ventana:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-lua" data-lang="lua"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;rule&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;ClaudeDictado&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;properties&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;floating&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;ontop&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;sticky&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;focus&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;placement&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;awful.placement&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;centered&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm ~/Scripts/utilities/aliases/claude-dictado.sh ~/Scripts/utilities/aliases/claude_dictado.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Quita del &lt;code&gt;rc.lua&lt;/code&gt; el &lt;code&gt;awful.key({}, &amp;quot;#193&amp;quot;, ...)&lt;/code&gt; y la regla &lt;code&gt;ClaudeDictado&lt;/code&gt;. Hay copias en &lt;code&gt;~/.config/awesome/rc.lua.bak.20261007*&lt;/code&gt;. La única carpeta que deja Claude Code es &lt;code&gt;~/.claude/projects/-home-huan--cache-claude-dictado/&lt;/code&gt;, y se puede borrar.&lt;/p&gt;</description></item><item><title>hotkeyz, un buscador de todos mis atajos y aliases</title><link>https://volteret4.github.io/notas/p/hotkeyz-buscador-de-atajos/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/hotkeyz-buscador-de-atajos/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Con tantos atajos repartidos entre awesomewm, zellij, zsh y atuin, ya no me acordaba de la mitad. &lt;code&gt;hotkeyz&lt;/code&gt; los junta todos en un CSV y los muestra en un buscador.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Pieza&lt;/th&gt;
+&lt;th&gt;Dónde&lt;/th&gt;
+&lt;th&gt;Cómo se abre&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Generador del CSV&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/scripts/generar_hotkeys_csv.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;lo lanzan el rofi y &lt;code&gt;popo&lt;/code&gt; antes de mostrar la lista&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;CSV&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/.config/hotkeys/hotkeys.csv&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Rofi&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/scripts/ver_hotkeys.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Super+Shift+V&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Terminal (fzf)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/scripts/popo.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;popo&lt;/code&gt; o &lt;code&gt;popo &amp;lt;fuente&amp;gt;&lt;/code&gt; con Tab&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Web (Flask)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/app.py&lt;/code&gt; en &lt;code&gt;127.0.0.1:5857&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Super+Ctrl+Shift+V&lt;/code&gt; (&lt;code&gt;launch.sh --open&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Descripciones editadas en la web&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/.config/hotkeys/overrides.json&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 id="fuentes-que-lee"&gt;Fuentes que lee
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AwesomeWM&lt;/strong&gt;: &lt;code&gt;rc.lua&lt;/code&gt;, &lt;code&gt;keys_second_brain.lua&lt;/code&gt; y &lt;code&gt;keys_shazam.lua&lt;/code&gt;. Los keycodes &lt;code&gt;#N&lt;/code&gt; se traducen al nombre de la tecla según el teclado (&lt;code&gt;Super+#86&lt;/code&gt; → &lt;code&gt;Super+Num +&lt;/code&gt;, &lt;code&gt;#191&lt;/code&gt; → &lt;code&gt;F13&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Aliases de zsh&lt;/strong&gt;: &lt;code&gt;~/.zsh_aliases&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;bindkeys de zsh&lt;/strong&gt;: la sección &lt;code&gt;# --- TECLAS ---&lt;/code&gt; del &lt;code&gt;~/.zshrc&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Zellij&lt;/strong&gt;: &lt;code&gt;~/.config/zellij/config.kdl&lt;/code&gt;. La acción se guarda como comando &lt;code&gt;zellij action ...&lt;/code&gt; completo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scripts de atuin&lt;/strong&gt;: la salida de &lt;code&gt;atuin scripts list&lt;/code&gt;. Se lanzan con &lt;code&gt;atuin scripts run NOMBRE&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Formato del CSV:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;enabled,source,key,description,action
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;1,awesomewm/APPS,F12,dropdown tdrop xfce4,
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Al regenerarlo se conservan la columna &lt;code&gt;enabled&lt;/code&gt; y las descripciones que hayas cambiado en la web (&lt;code&gt;overrides.json&lt;/code&gt;). Los atajos repetidos con la misma fuente y tecla no se guardan en &lt;code&gt;overrides.json&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="atajos-en-awesome"&gt;Atajos en awesome
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/.config/awesome/rc.lua&lt;/code&gt;, grupo &amp;ldquo;Menú&amp;rdquo;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-lua" data-lang="lua"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;awful.key&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt; &lt;span class="n"&gt;modkey&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Shift&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;v&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kr"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;awful.spawn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;with_shell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;python3 $HOME/Scripts/menus/rofi/ver_hotkeys.py&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;end&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;buscar hotkeys/aliases&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Menú&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;}),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;awful.key&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt; &lt;span class="n"&gt;modkey&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Control&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Shift&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;v&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kr"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;awful.spawn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;with_shell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;$HOME/gits/pollo/hotkeyz/launch.sh --open&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;end&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;editar hotkeys (web)&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Menú&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;}),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/Scripts/menus/rofi/ver_hotkeys.py&lt;/code&gt; y &lt;code&gt;generar_hotkeys_csv.py&lt;/code&gt; son &lt;strong&gt;enlaces simbólicos&lt;/strong&gt; a los de &lt;code&gt;~/gits/pollo/hotkeyz/scripts/&lt;/code&gt;, para no tener dos copias.&lt;/p&gt;
+&lt;h1 id="popo-en-el-terminal"&gt;&lt;code&gt;popo&lt;/code&gt; en el terminal
+&lt;/h1&gt;&lt;p&gt;Al final del &lt;code&gt;~/.zshrc&lt;/code&gt;, con autocompletado por fuente:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;alias&lt;/span&gt; &lt;span class="nv"&gt;popo&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;python3 /home/huan/gits/pollo/hotkeyz/scripts/popo.py&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;_popo&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;local&lt;/span&gt; -a sources
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[[&lt;/span&gt; -f &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.config/hotkeys/hotkeys.csv&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;sources&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="p"&gt;(f)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;awk -F, &lt;span class="s1"&gt;&amp;#39;NR&amp;gt;1 &amp;amp;&amp;amp; $1==&amp;#34;1&amp;#34; {print $2}&amp;#39;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.config/hotkeys/hotkeys.csv&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sort -u&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; _arguments &lt;span class="s1"&gt;&amp;#39;1: :(${sources[@]})&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;compdef _popo popo
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Las acciones de zellij se ejecutan sin terminal, con un límite de 5 segundos, y si fallan muestran el error en vez de quedarse colgadas.&lt;/p&gt;
+&lt;h1 id="la-web"&gt;La web
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Editor del CSV&lt;/strong&gt;: activar o desactivar entradas, con &amp;ldquo;todos&amp;rdquo; y &amp;ldquo;ninguno&amp;rdquo; por sección, y editar descripciones.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cheatsheets&lt;/strong&gt;: se generan a partir del CSV y se exportan a PDF, PNG o ventana flotante. Además trae seis predefinidas en &lt;code&gt;data/cheatsheets/&lt;/code&gt; (emacs, vim, surfingkeys, zed, zellij y tmux).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Escucha &lt;strong&gt;solo en &lt;code&gt;127.0.0.1&lt;/code&gt;&lt;/strong&gt; y sin &lt;code&gt;debug&lt;/code&gt;. Al principio estaba en &lt;code&gt;0.0.0.0&lt;/code&gt; con &lt;code&gt;debug=True&lt;/code&gt;, que deja la consola de Werkzeug (capaz de ejecutar código) abierta a toda la red.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;launch.sh --open&lt;/code&gt; arranca el servidor en segundo plano si no está corriendo y abre el navegador.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Las copias de antes de los cambios del 23-10:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;~/gits/pollo/hotkeyz.bak.20261023040026/&lt;/code&gt; (proyecto entero)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;~/.config/hotkeys/hotkeys.csv.bak.20261023040026&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;~/.config/awesome/rc.lua.bak.20261023040026&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;~/Scripts/menus/rofi/ver_hotkeys.py.bak.20261023040026&lt;/code&gt; y &lt;code&gt;generar_hotkeys_csv.py.bak.20261023040026&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Para volver a la versión de junio:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm -r ~/gits/pollo/hotkeyz &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; cp -a ~/gits/pollo/hotkeyz.bak.20261023040026 ~/gits/pollo/hotkeyz
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para quitarlo del todo: borra &lt;code&gt;~/gits/pollo/hotkeyz&lt;/code&gt;, &lt;code&gt;~/.config/hotkeys&lt;/code&gt;, los dos enlaces de &lt;code&gt;~/Scripts/menus/rofi/&lt;/code&gt;, los dos &lt;code&gt;awful.key&lt;/code&gt; de &lt;code&gt;rc.lua&lt;/code&gt; y el bloque &lt;code&gt;POPO&lt;/code&gt; del &lt;code&gt;.zshrc&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>mover_mix_playerctl.py, el script que manda canciones a mis carpetas de DJ</title><link>https://volteret4.github.io/notas/p/mover-mix-playerctl/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mover-mix-playerctl/</guid><description>&lt;h1 id="qué-hace"&gt;Qué hace
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py&lt;/code&gt; coge la canción que suena (por playerctl, o desde DeaDBeeF o Airsonic) y la manda a una carpeta de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt; (exFAT, la de Mixxx). Luego:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;elige la carpeta en un menú, con subcarpetas de género (&lt;code&gt;TECHNO/techno_deep&lt;/code&gt;, &lt;code&gt;HOUSE/...&lt;/code&gt;) y atajos,&lt;/li&gt;
+&lt;li&gt;renombra el archivo a &lt;code&gt;Artista - Canción (año álbum) [sello]&lt;/code&gt; a partir de los tags,&lt;/li&gt;
+&lt;li&gt;pide un comentario opcional,&lt;/li&gt;
+&lt;li&gt;regenera los &lt;code&gt;.m3u&lt;/code&gt; de cada carpeta,&lt;/li&gt;
+&lt;li&gt;y lanza en segundo plano &lt;code&gt;sync_crates.py&lt;/code&gt; (cajones de Mixxx), &lt;code&gt;yt_sync_mixxx.py&lt;/code&gt; (playlists de YouTube) y &lt;code&gt;embeed_cover.py&lt;/code&gt; (carátula).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="cambios-por-orden"&gt;Cambios, por orden
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Fecha&lt;/th&gt;
+&lt;th&gt;Cambio&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;03 → 08&lt;/td&gt;
+&lt;td&gt;Credenciales de Airsonic en &lt;code&gt;.env&lt;/code&gt;, nombre de archivo a partir de la metadata, menú de carga y subcarpetas de género con atajos&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;05-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Mover en vez de copiar&lt;/strong&gt; cualquier canción cuya ruta empiece por &lt;code&gt;/mnt/windows/Mix/&lt;/code&gt; (antes solo dentro de TECHNO/HOUSE). No busca duplicados. Si eliges la carpeta en la que ya está, solo aplica el comentario&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;07-10&lt;/td&gt;
+&lt;td&gt;Llamada a &lt;code&gt;sync_crates.py&lt;/code&gt; tras regenerar los &lt;code&gt;.m3u&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;16-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Pistas dentro de un &lt;code&gt;.cue&lt;/code&gt;&lt;/strong&gt;: detecta el cue (incrustado como tag &lt;code&gt;CUESHEET&lt;/code&gt; o en un &lt;code&gt;.cue&lt;/code&gt; al lado), averigua la pista que suena por título, número o duración (si no, pregunta) y &lt;strong&gt;corta solo esa pista con ffmpeg&lt;/strong&gt; (FLAC/APE/WV/WAV → FLAC; MP3 sin recodificar). Corrige los tags y quita &lt;code&gt;CUESHEET&lt;/code&gt;, BPM y tonalidad del disco entero. Además, &lt;code&gt;unquote&lt;/code&gt; no estaba importado y la parte de playerctl siempre fallaba&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;16-10&lt;/td&gt;
+&lt;td&gt;Sincroniza la playlist de YouTube de la carpeta de destino y, al mover, también la de origen. Comentada la llamada a Spotify (su API ya no funciona sin pago)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;21-10&lt;/td&gt;
+&lt;td&gt;Fecha original vía MusicBrainz (script aparte, &lt;code&gt;fecha_original_mix.py&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;25-10&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;[Errno 1] Operación no permitida&lt;/code&gt; al copiar desde NFS: los permisos &lt;code&gt;rwxrwSr-x&lt;/code&gt; (setgid) no caben en exFAT. Nueva &lt;code&gt;copy_sin_permisos()&lt;/code&gt;, que copia contenido y fechas pero no permisos, usada en &lt;code&gt;copy_file&lt;/code&gt; y en &lt;code&gt;shutil.move(..., copy_function=copy_sin_permisos)&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;27-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;No renombraba al reclasificar&lt;/strong&gt; (movía con &lt;code&gt;rename=False&lt;/code&gt;) y no leía tags escritos como &lt;code&gt;Artist&lt;/code&gt;/&lt;code&gt;Title&lt;/code&gt;. Ahora lee los tags sin distinguir mayúsculas, usa el artista del álbum si falta el artista y, si aun así falta algo, deja el nombre original. &lt;code&gt;[no label]&lt;/code&gt; ya no se pone en el nombre&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="fecha_original_mixpy"&gt;&lt;code&gt;fecha_original_mix.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Para los remasters que confunden: pone en &lt;code&gt;DATE&lt;/code&gt; la fecha &lt;strong&gt;más antigua&lt;/strong&gt; entre la actual, &lt;code&gt;ORIGINALDATE&lt;/code&gt; (Picard) y el primer lanzamiento de la grabación en MusicBrainz. Nunca retrasa una fecha, y guarda la que había en &lt;code&gt;RELEASEDATE&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="renombrar_mixpy"&gt;&lt;code&gt;renombrar_mix.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Arregla los nombres que quedaron mal por el fallo del 27-10 (encontró unos 1611): espacios dobles, &lt;code&gt;- ()&lt;/code&gt; al final, sin artista o sin título, o que empiezan por número de pista.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py &lt;span class="p"&gt;|&lt;/span&gt; less
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py --apply
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Con Mixxx &lt;strong&gt;cerrado&lt;/strong&gt;. Antes de tocar nada copia la base de datos de Mixxx en &lt;code&gt;~/.mixxx/backups_renombrar/&lt;/code&gt; y actualiza las rutas para no perder cues ni análisis.&lt;/li&gt;
+&lt;li&gt;Si el nombre nuevo ya existe, se lo salta. Si Mixxx tiene una entrada fantasma con ese nombre, intercambia las rutas.&lt;/li&gt;
+&lt;li&gt;Apunta cada cambio en &lt;code&gt;~/.mixxx/backups_renombrar/renombrados.&amp;lt;fecha&amp;gt;.tsv&lt;/code&gt;, y &lt;code&gt;--deshacer&lt;/code&gt; lo revierte.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="embeed_coverpy"&gt;&lt;code&gt;embeed_cover.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Ignoraba el archivo que le pasaba el mover y recorría &lt;strong&gt;todo&lt;/strong&gt; Mix (unas 1100 canciones), consultando MusicBrainz cada vez. Ahora procesa solo lo que se le pasa; sin argumentos sigue recorriendo todo Mix.&lt;/p&gt;
+&lt;h1 id="copias-de-seguridad"&gt;Copias de seguridad
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/Scripts/Musica/MoverMusica/&lt;/code&gt;:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Copia&lt;/th&gt;
+&lt;th&gt;De antes de&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20260826210410&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;cambios de agosto&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261007183246&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;llamada a &lt;code&gt;sync_crates.py&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261016201948&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;soporte de cue&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261021220202&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;fecha original&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261027195025&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;arreglo del renombrado&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;fecha_original_mix.py.bak.2026102*&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;cada iteración de ese script&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/embeed_cover.py.bak.20261016203210&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;El arreglo de permisos del 25-10 se guardó en una copia temporal que ya no existe; está entre &lt;code&gt;.bak.20261021220202&lt;/code&gt; y &lt;code&gt;.bak.20261027195025&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Para volver a una versión concreta:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py.bak.20261016201948 ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para ver qué cambió entre dos copias:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;diff ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py.bak.20261027195025 ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para deshacer un renombrado masivo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py --deshacer ~/.mixxx/backups_renombrar/renombrados.20261027195611.tsv
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Odesli con API key y una tabla markdown de enlaces</title><link>https://volteret4.github.io/notas/p/odesli-api-key-y-tabla-markdown/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/odesli-api-key-y-tabla-markdown/</guid><description>&lt;h1 id="odeslipy-con-api-key"&gt;odesli.py con API key
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/utilities/open_search_links/music_player/odesli.py&lt;/code&gt; coge el álbum que suena (DeaDBeeF o Airsonic) y copia su enlace de song.link/album.link. Va en la &lt;strong&gt;tecla círculo&lt;/strong&gt; (keycode 191) en awesome.&lt;/p&gt;
+&lt;p&gt;Sin clave, la API de Odesli limita mucho las peticiones. Ahora lee &lt;code&gt;ODESLI_API_KEY&lt;/code&gt; del &lt;code&gt;.env&lt;/code&gt; de la misma carpeta y la añade como parámetro &lt;code&gt;key&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;load_dotenv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dotenv_path&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;/home/huan/Scripts/utilities/open_search_links/music_player/.env&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="o"&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;odesli_api_key&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getenv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ODESLI_API_KEY&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;params&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;url&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;platform_url&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;odesli_api_key&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;params&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;key&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;odesli_api_key&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;response&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;api_endpoint&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;params&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;params&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;timeout&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;En &lt;code&gt;.env&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ODESLI_API_KEY=tu_clave
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;La clave se pide al equipo de Odesli (&lt;a class="link" href="mailto:developers@song.link" &gt;developers@song.link&lt;/a&gt;). Sin ella, el script sigue funcionando igual.&lt;/p&gt;
+&lt;h1 id="odesli_tablepy"&gt;odesli_table.py
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/utilities/open_search_links/music_player/odesli_table.py&lt;/code&gt; compone una tabla markdown con los últimos álbumes que he buscado:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Artista&lt;/th&gt;
+&lt;th&gt;Álbum&lt;/th&gt;
+&lt;th&gt;Enlaces&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Daft Punk&lt;/td&gt;
+&lt;td&gt;Discovery&lt;/td&gt;
+&lt;td&gt;&lt;a class="link" href="%e2%80%a6" &gt;YT Music&lt;/a&gt; · &lt;a class="link" href="%e2%80%a6" &gt;YouTube&lt;/a&gt; · &lt;a class="link" href="%e2%80%a6" &gt;Spotify&lt;/a&gt; · …&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;Lee los últimos elementos del historial de &lt;strong&gt;CopyQ&lt;/strong&gt; (30 por defecto, &lt;code&gt;--scan N&lt;/code&gt; para cambiarlo) y se queda con los que tienen el formato que deja &lt;code&gt;odesli.py&lt;/code&gt; (&lt;code&gt;*artista* - álbum: url&lt;/code&gt;), sin duplicados.&lt;/li&gt;
+&lt;li&gt;Por cada uno vuelve a consultar Odesli con su propia URL (&lt;code&gt;song.link&lt;/code&gt;/&lt;code&gt;album.link&lt;/code&gt; sirven como entrada) para sacar &lt;code&gt;linksByPlatform&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Enlaces por prioridad: YT Music, YouTube, Spotify, Apple Music, Deezer, Tidal, SoundCloud y Amazon Music. Si Odesli no devuelve ninguno (pasa con lo que solo está en Bandcamp, que Odesli no admite), pone el enlace general.&lt;/li&gt;
+&lt;li&gt;Copia la tabla con &lt;code&gt;copyq add&lt;/code&gt; y avisa con una notificación.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/utilities/open_search_links/music_player/odesli_table.py --scan &lt;span class="m"&gt;50&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Ojo: CopyQ tiene un límite de elementos, y cada &lt;code&gt;copyq add&lt;/code&gt; puede echar del historial los más antiguos.&lt;/p&gt;
+&lt;p&gt;Para leer el historial de CopyQ desde un script, el separador y la lectura tienen que ir en la &lt;strong&gt;misma&lt;/strong&gt; llamada:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;copyq separator &lt;span class="s1"&gt;&amp;#39;\n---\n&amp;#39;&lt;/span&gt; &lt;span class="nb"&gt;read&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;odesli.py&lt;/code&gt; está en el repo de &lt;code&gt;~/Scripts&lt;/code&gt; sin commitear:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/Scripts diff -- utilities/open_search_links/music_player/odesli.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/Scripts checkout -- utilities/open_search_links/music_player/odesli.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Y para quitar el script de la tabla:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm ~/Scripts/utilities/open_search_links/music_player/odesli_table.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Playlists de Mixxx en cajones y en Airsonic</title><link>https://volteret4.github.io/notas/p/mixxx-cajones-y-playlists-en-airsonic/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mixxx-cajones-y-playlists-en-airsonic/</guid><description>&lt;h1 id="contexto"&gt;Contexto
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;La música para pinchar está en &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, con un &lt;code&gt;.m3u&lt;/code&gt; por lista, que regenera &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt; cada vez que muevo una canción.&lt;/li&gt;
+&lt;li&gt;Syncthing clona esa carpeta en pepecono (&lt;code&gt;/mnt/NFS/moode/Mixxx&lt;/code&gt;), y Airsonic la tiene como carpeta de medios &lt;strong&gt;Mixxx&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="1-cajones-de-mixxx-desde-los-m3u-sync_cratespy"&gt;1. Cajones de Mixxx desde los &lt;code&gt;.m3u&lt;/code&gt; (&lt;code&gt;sync_crates.py&lt;/code&gt;)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/sync_crates.py&lt;/code&gt; deja un &lt;strong&gt;cajón&lt;/strong&gt; (crate) por cada &lt;code&gt;.m3u&lt;/code&gt; de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, con el mismo nombre y las mismas canciones. La primera vez creó 59.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cada cajón queda &lt;strong&gt;idéntico&lt;/strong&gt; a su &lt;code&gt;.m3u&lt;/code&gt;: añade lo que falta y quita lo que sobra. Si borras el &lt;code&gt;.m3u&lt;/code&gt;, borra el cajón.&lt;/li&gt;
+&lt;li&gt;No toca las playlists de Mixxx ni los cajones creados a mano.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Canciones movidas de carpeta&lt;/strong&gt;: las reconoce por nombre y tamaño y actualiza la ruta, así conservan cues, BPM y análisis. De 441 que faltaban recuperó 404.&lt;/li&gt;
+&lt;li&gt;Las canciones totalmente nuevas tienen que entrar antes en la biblioteca de Mixxx (en el escaneo al arrancar), así que entran en su cajón al cerrar Mixxx.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Solo escribe con Mixxx cerrado&lt;/strong&gt;, y antes guarda una copia de la base de datos en &lt;code&gt;~/.mixxx/backups_sync_crates/&lt;/code&gt; (las 5 últimas). Si algo falla a mitad, no aplica nada.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/sync_crates.py --dry-run
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="cuándo-se-ejecuta"&gt;Cuándo se ejecuta
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Cuándo&lt;/th&gt;
+&lt;th&gt;Cómo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Al mover una canción con &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;lo llama con &lt;code&gt;--quiet --notify&lt;/code&gt; después de regenerar los &lt;code&gt;.m3u&lt;/code&gt;. Si Mixxx está abierto, solo avisa&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Al abrir Mixxx desde el lanzador&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;mixxx-sync.sh&lt;/code&gt; sincroniza antes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Al cerrar Mixxx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;mixxx-sync.sh&lt;/code&gt; sincroniza después&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/mixxx-sync.sh&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;sync_crates&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;dirname &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;readlink -f &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$0&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;/sync_crates.py&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$sync_crates&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; --quiet --notify
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pasuspender -- mixxx &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; mixxx &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$sync_crates&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; --quiet
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/.local/share/applications/org.mixxx.Mixxx.desktop&lt;/code&gt; sobrescribe el lanzador del sistema para que &lt;code&gt;Exec&lt;/code&gt; use ese script.&lt;/p&gt;
+&lt;h1 id="2-playlists-de-mixxx-en-airsonic-mixxx_to_airsonicpy"&gt;2. Playlists de Mixxx en Airsonic (&lt;code&gt;mixxx_to_airsonic.py&lt;/code&gt;)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py&lt;/code&gt; copia las &lt;strong&gt;playlists con nombre&lt;/strong&gt; de Mixxx (no Auto DJ ni el historial) al usuario &lt;strong&gt;&lt;code&gt;mix&lt;/code&gt;&lt;/strong&gt; de Airsonic.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lee la base de datos de Mixxx en solo lectura, así que puede estar abierto.&lt;/li&gt;
+&lt;li&gt;Una canción en &lt;code&gt;/mnt/windows/Mix/X&lt;/code&gt; se busca en Airsonic como &lt;code&gt;Mixxx/X&lt;/code&gt;. Las que Airsonic aún no tiene salen al final como &amp;ldquo;falta&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;Cada playlist lleva en el comentario la marca &lt;code&gt;Mixxx: &amp;lt;nombre&amp;gt;&lt;/code&gt;. Así, al volver a ejecutarlo actualiza la misma playlist en el orden de Mixxx en lugar de duplicarla. Las playlists sin esa marca no se tocan.&lt;/li&gt;
+&lt;li&gt;Usa GET en la API de Subsonic, porque Airsonic-Advanced bloquea los POST por CSRF.&lt;/li&gt;
+&lt;li&gt;Airsonic-Advanced no devuelve la playlist en la respuesta de &lt;code&gt;createPlaylist&lt;/code&gt;, así que el script la busca después por nombre (la de id más alto).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Credenciales en &lt;code&gt;~/Scripts/Musica/playlists/airsonic/.env&lt;/code&gt;: &lt;code&gt;AIRSONIC_URL&lt;/code&gt;, &lt;code&gt;AIRSONIC_MIX_PASSWORD&lt;/code&gt; y, si el usuario no se llama &lt;code&gt;mix&lt;/code&gt;, &lt;code&gt;AIRSONIC_MIX_USER&lt;/code&gt;. El usuario necesita acceso a la carpeta de medios &lt;strong&gt;Mixxx&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py --dry-run
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py --scan
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Opción&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--dry-run&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;muestra los cambios sin escribir&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--scan&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;hace que Airsonic escanee antes la biblioteca (tarda más de 10 minutos, recorre toda la biblioteca)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--prune&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;borra de Airsonic las playlists que ya no existen en Mixxx&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--quiet&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;solo el resumen&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Errores corregidos al probarlo: &lt;code&gt;IndexError: pop from empty list&lt;/code&gt; con carpetas vacías en Airsonic, y la playlist &lt;code&gt;deep&lt;/code&gt;, que se creó sin la marca la primera vez.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Cajones&lt;/strong&gt;: con Mixxx cerrado, restaura la última copia.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ls -1t ~/.mixxx/backups_sync_crates/*.sqlite &lt;span class="p"&gt;|&lt;/span&gt; head -1&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; ~/.mixxx/mixxxdb.sqlite
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Lanzador&lt;/strong&gt;: borra &lt;code&gt;~/.local/share/applications/org.mixxx.Mixxx.desktop&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;mover_mix_playerctl.py&lt;/strong&gt;: quita la llamada a &lt;code&gt;sync_crates.py&lt;/code&gt; (hay una copia &lt;code&gt;.bak.&amp;lt;fecha&amp;gt;&lt;/code&gt; del original).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Airsonic&lt;/strong&gt;: borra las playlists cuyo comentario empieza por &lt;code&gt;Mixxx:&lt;/code&gt; desde la web, con el usuario &lt;code&gt;mix&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>sobrinos, tarjetas NFC para poner música y películas en Kodi</title><link>https://volteret4.github.io/notas/p/sobrinos-tarjetas-nfc-kodi/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/sobrinos-tarjetas-nfc-kodi/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Repo: &lt;code&gt;~/gits/pollo/sobrinos&lt;/code&gt; (&lt;code&gt;git@github.com:volteret4/sobrinos.git&lt;/code&gt;). Documentación detallada en &lt;code&gt;instalacion.md&lt;/code&gt; y &lt;code&gt;uso.md&lt;/code&gt; del propio repo.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Lector&lt;/strong&gt;: ACR122U en una Raspberry Pi (usuario &lt;code&gt;mito&lt;/code&gt;), con &lt;code&gt;pcscd&lt;/code&gt;. Tarjetas MIFARE Classic y, para las nuevas, &lt;strong&gt;NTAG213/215&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reproductor&lt;/strong&gt;: Kodi, por JSON-RPC (&lt;code&gt;http://IP_KODI:8080/jsonrpc&lt;/code&gt;, con usuario y contraseña del control remoto).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Contenido&lt;/strong&gt;: el programa indexa películas, series, álbumes y artistas, y al asociar una tarjeta pregunta primero la categoría y luego el elemento.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Portadas&lt;/strong&gt;: tarjetas de 52×82 mm, delante y detrás, con un único QR a la web del álbum en GitHub Pages. Las de &lt;strong&gt;artista&lt;/strong&gt; llevan su foto delante (Last.fm, Wikipedia o MusicBrainz; si no la encuentra, pide una ruta) y detrás un collage de sus discos. Las de &lt;strong&gt;cine&lt;/strong&gt; salen de TMDB.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Impresión&lt;/strong&gt;: &lt;code&gt;imprimir_tarjetas.py&lt;/code&gt; las junta en A4 (9 por página), con modo dúplex y marcas de corte.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Android como lector&lt;/strong&gt; (tarjetas NTAG): una página Flask servida por nginx en &lt;code&gt;raspberrypi.local&lt;/code&gt;, en el mismo proceso que lee las tarjetas.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Secretos&lt;/strong&gt;: &lt;code&gt;secrets.enc.yaml&lt;/code&gt; cifrado con sops + age.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="instalación-resumen"&gt;Instalación (resumen)
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt-get install -y libacsccid1 pcscd pcsc-tools nginx avahi-daemon fonts-dejavu-core &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; --now pcscd.socket avahi-daemon
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Desactivar los módulos NFC del kernel, que se pelean con &lt;code&gt;pcscd&lt;/code&gt;, en &lt;code&gt;/etc/modprobe.d/blacklist.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;install nfc /bin/false
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;install pn533 /bin/false
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo usermod -aG plugdev &lt;span class="nv"&gt;$USER&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 -m venv ~/Scripts/python_venv &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; ~/Scripts/python_venv/bin/pip install -r requirements.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;sops para arm64 (&lt;code&gt;.deb&lt;/code&gt; de github.com/getsops/sops) y la clave age copiada de la máquina principal a &lt;code&gt;~/.config/sops/age/keys.txt&lt;/code&gt;. Luego:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sops edit secrets.enc.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="uso"&gt;Uso
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Script&lt;/th&gt;
+&lt;th&gt;Para qué&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;orquestar.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;flujo completo: portada → asociar tarjeta → actualizar web&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;nfc/nfc_detect_uid.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;leer el UID de una tarjeta&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;nfc/nfc_config_gen.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;asociar UID ↔ contenido&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;nfc/nfc_reaccionar.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;el monitor que reproduce al leer&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;nfc/nfc_generar_portada.py&lt;/code&gt;, &lt;code&gt;nfc_generar_portada_artista.py&lt;/code&gt;, &lt;code&gt;nfc_tarjetas_cine.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;portadas&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;nfc/imprimir_tarjetas.py --entrada docs/portadas/musica&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;A4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;album_web_generator.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;web del álbum (GitHub Pages, carpeta &lt;code&gt;docs/&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Servicio en la Raspberry, &lt;code&gt;/etc/systemd/system/sobrinos.service&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Unit]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Description&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Sobrinos NFC Monitor&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;After&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;network.target&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Service]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;User&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;mito&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;WorkingDirectory&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/home/mito/gits/pollo/sobrinos&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;ExecStart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/home/mito/Scripts/python_venv/bin/python nfc/nfc_reaccionar.py&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Restart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;on-failure&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;RestartSec&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Install]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;WantedBy&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;multi-user.target&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Errores que salieron: con &lt;code&gt;sudo&lt;/code&gt; no se usaba el venv del usuario (por eso el servicio usa la ruta absoluta del intérprete), el bucle de &amp;ldquo;No smart card inserted&amp;rdquo; llenaba el log (silenciado), y la información de los discos se guardaba en la carpeta de la música (ahora va dentro del proyecto).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl disable --now sobrinos &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo rm /etc/systemd/system/sobrinos.service /etc/nginx/sites-enabled/sobrinos
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Quita las dos líneas de &lt;code&gt;blacklist.conf&lt;/code&gt; si quieres volver a usar los módulos NFC del kernel.&lt;/p&gt;</description></item><item><title>SQLite database is locked con dos scripts a la vez</title><link>https://volteret4.github.io/notas/p/sqlite-database-is-locked/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/sqlite-database-is-locked/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/menus/dotfiles/&lt;/code&gt; tiene dos programas que usan la misma base de datos &lt;code&gt;dotfiles.db&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;dotfiles_indexer.py&lt;/code&gt;: indexa los archivos de &lt;code&gt;~/.local/share/chezmoi&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dotfiles_quick_editor.py&lt;/code&gt;: la interfaz PyQt6 que busca en la base de datos.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Si el editor estaba abierto, el indexador fallaba con:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sqlite3.OperationalError: database is locked
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;El indexador abre la base de datos en modo &lt;strong&gt;WAL&lt;/strong&gt;, que deja leer y escribir a la vez. El editor, al conectarse, la pasaba a &lt;code&gt;journal_mode = MEMORY&lt;/code&gt; con &lt;code&gt;synchronous = OFF&lt;/code&gt;. El modo de journal se guarda en el propio archivo, así que el editor quitaba el WAL y bloqueaba al indexador.&lt;/p&gt;
+&lt;p&gt;Además, ninguna conexión tenía &lt;code&gt;timeout&lt;/code&gt;. Por defecto SQLite espera solo 5 segundos.&lt;/p&gt;
+&lt;h1 id="cambios"&gt;Cambios
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;dotfiles_indexer.py&lt;/code&gt;, en &lt;code&gt;setup_database()&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-diff" data-lang="diff"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- self.conn = sqlite3.connect(self.db_path)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ self.conn = sqlite3.connect(self.db_path, timeout=30)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;dotfiles_quick_editor.py&lt;/code&gt;, en &lt;code&gt;DatabaseSearchThread.run()&lt;/code&gt; y en &lt;code&gt;setup_database()&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-diff" data-lang="diff"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- conn = sqlite3.connect(str(self.db_path))
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ conn = sqlite3.connect(str(self.db_path), timeout=30)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- self.conn = sqlite3.connect(str(self.db_path))
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ self.conn = sqlite3.connect(str(self.db_path), timeout=30)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- # Optimizaciones para lectura
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- self.conn.execute(&amp;#39;PRAGMA synchronous = OFF&amp;#39;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- self.conn.execute(&amp;#39;PRAGMA journal_mode = MEMORY&amp;#39;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ # Optimizaciones para lectura — mantener WAL para compatibilidad con el indexer
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ self.conn.execute(&amp;#39;PRAGMA synchronous = NORMAL&amp;#39;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ self.conn.execute(&amp;#39;PRAGMA journal_mode = WAL&amp;#39;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Regla general: si varios procesos usan la misma base de datos SQLite, &lt;strong&gt;todos&lt;/strong&gt; deben usar &lt;code&gt;WAL&lt;/code&gt; y un &lt;code&gt;timeout&lt;/code&gt; amplio.&lt;/p&gt;
+&lt;h1 id="comprobar"&gt;Comprobar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sqlite3 ~/Scripts/menus/dotfiles/dotfiles.db &lt;span class="s1"&gt;&amp;#39;PRAGMA journal_mode;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Debe responder &lt;code&gt;wal&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Los cambios no están en ningún commit de &lt;code&gt;~/Scripts&lt;/code&gt;, así que &lt;code&gt;git diff&lt;/code&gt; los muestra:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/Scripts diff -- menus/dotfiles/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para deshacerlos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/Scripts checkout -- menus/dotfiles/dotfiles_indexer.py menus/dotfiles/dotfiles_quick_editor.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Una playlist de YouTube por cada carpeta de Mixxx</title><link>https://volteret4.github.io/notas/p/playlists-de-youtube-desde-mixxx/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/playlists-de-youtube-desde-mixxx/</guid><description>&lt;h1 id="qué-hace"&gt;Qué hace
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Crea una playlist &lt;strong&gt;privada&lt;/strong&gt; en YouTube por cada &lt;code&gt;.m3u&lt;/code&gt; de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, llamada &lt;code&gt;Mix - &amp;lt;nombre&amp;gt;&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Sincroniza por diferencias: añade lo nuevo y quita lo que ya no está en el &lt;code&gt;.m3u&lt;/code&gt;. &lt;strong&gt;Solo quita vídeos que añadió él&lt;/strong&gt;; lo que metas a mano no lo toca.&lt;/li&gt;
+&lt;li&gt;Busca los vídeos con &lt;strong&gt;yt-dlp&lt;/strong&gt;, que no gasta cuota. La API de YouTube solo se usa para escribir: cada inserción cuesta 50 unidades de las 10.000 diarias, es decir, unas 200 canciones al día.&lt;/li&gt;
+&lt;li&gt;Con unas 1.900 canciones, la primera sincronización completa tarda &lt;strong&gt;unos 10 días&lt;/strong&gt;. Al acabarse la cuota guarda el estado y la siguiente ejecución sigue donde lo dejó. Mientras tanto, sigue buscando vídeos con yt-dlp para el listado.&lt;/li&gt;
+&lt;li&gt;Si YouTube da un 409 (pasa justo después de crear una playlist) o un 5xx, reintenta con espera creciente.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="archivos"&gt;Archivos
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Archivo&lt;/th&gt;
+&lt;th&gt;Qué es&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.config/yt_sync/client_secret.json&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;credencial OAuth del proyecto de Google Cloud (copiada de &lt;code&gt;~/Descargas&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.config/yt_sync/&lt;/code&gt; (token y &lt;code&gt;state.json&lt;/code&gt;)&lt;/td&gt;
+&lt;td&gt;autorización y qué vídeo corresponde a cada canción&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.config/yt_sync/Mix.md&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;listado en markdown&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;En el proyecto de Google Cloud tiene que estar activada &lt;strong&gt;YouTube Data API v3&lt;/strong&gt;, y tu cuenta tiene que estar como usuario de prueba de la pantalla de consentimiento. Si no, sale &lt;code&gt;403 API not enabled&lt;/code&gt; o &lt;code&gt;access_denied&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="uso"&gt;Uso
+&lt;/h1&gt;&lt;p&gt;La primera vez abre el navegador para autorizar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py --dry-run --only dub
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Opción&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--dry-run&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;muestra lo que haría, sin crear nada (si no ves la playlist, mira si lo lanzaste así)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--only &amp;lt;carpeta&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;solo esa playlist (no distingue mayúsculas)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--retry-missing&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;vuelve a buscar las canciones que no encontró&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--markdown&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;genera &lt;code&gt;Mix.md&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--publish&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;además actualiza el gist&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--no-sync&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;solo el listado, sin tocar YouTube&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Si una búsqueda trae un vídeo equivocado, se corrige a mano en &lt;code&gt;~/.config/yt_sync/state.json&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="el-listado-en-un-gist"&gt;El listado en un gist
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;Mix.md&lt;/code&gt; tiene la fecha, el total de canciones y cuántas tienen enlace, un índice, una cabecera &lt;code&gt;##&lt;/code&gt; por carpeta y &lt;code&gt;###&lt;/code&gt; por subgénero, cada una con su enlace &lt;strong&gt;▶ playlist&lt;/strong&gt;, y cada canción enlazada a su vídeo si se encontró. Se publica en un &lt;strong&gt;gist secreto&lt;/strong&gt; de &lt;code&gt;volteret4&lt;/code&gt; que mantiene siempre la misma URL. Con la API gratuita de pastebin, cada cambio crearía un enlace nuevo.&lt;/p&gt;
+&lt;h1 id="integración-con-el-mover"&gt;Integración con el mover
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;mover_mix_playerctl.py&lt;/code&gt; lanza la sincronización en segundo plano, con &lt;code&gt;--publish&lt;/code&gt;, solo para la carpeta de destino (y la de origen si mueves entre carpetas). Si aún no has autorizado, no abre el navegador: avisa con una notificación.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Borra las playlists &lt;code&gt;Mix - *&lt;/code&gt; desde YouTube Studio.&lt;/li&gt;
+&lt;li&gt;Quita la llamada a &lt;code&gt;yt_sync_mixxx.py&lt;/code&gt; en &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt; (la versión de antes es &lt;code&gt;mover_mix_playerctl.py.bak.20261016201948&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Borra el script y la configuración:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm -r ~/.config/yt_sync ~/Scripts/Musica/playlists/youtube/yt_sync_mixxx.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Retira el acceso de la app en tu cuenta de Google (&lt;em&gt;Seguridad → Apps de terceros&lt;/em&gt;).&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Una Raspberry Pi como teclado Bluetooth para una TV Hisense (VIDAA)</title><link>https://volteret4.github.io/notas/p/raspberry-teclado-bluetooth-tv/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/raspberry-teclado-bluetooth-tv/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/gits/pollo/mando_bluetooth&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;rpi/&lt;/code&gt;&lt;/strong&gt;: en la Raspberry Pi 4 (&lt;code&gt;chino&lt;/code&gt;). Se presenta a la TV como un teclado Bluetooth y escucha órdenes por &lt;strong&gt;TCP en el puerto 5555&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;beelink/client.py&lt;/code&gt;&lt;/strong&gt;: en el mini PC (Beelink). Manda las teclas a la Raspberry: &lt;code&gt;python3 client.py &amp;lt;ip-rpi&amp;gt;&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Protocolo (JSON, uno por línea):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;key&amp;#34;, &amp;#34;key&amp;#34;: &amp;#34;UP&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;media&amp;#34;, &amp;#34;key&amp;#34;: &amp;#34;VOLUP&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;combo&amp;#34;, &amp;#34;mod&amp;#34;: &amp;#34;LCTRL&amp;#34;, &amp;#34;key&amp;#34;: &amp;#34;C&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;type&amp;#34;, &amp;#34;text&amp;#34;: &amp;#34;hola&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;pin&amp;#34;, &amp;#34;code&amp;#34;: &amp;#34;123456&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;consumer&amp;#34;, &amp;#34;usage&amp;#34;: 96}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="preparar-la-raspberry-rpisetupsh"&gt;Preparar la Raspberry (&lt;code&gt;rpi/setup.sh&lt;/code&gt;)
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo bash rpi/setup.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol&gt;
+&lt;li&gt;Instala &lt;code&gt;python3-dbus python3-gi bluez bluez-tools&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Crea un drop-in de systemd para &lt;code&gt;bluetoothd&lt;/code&gt;. No se toca la unidad de la distro:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# /etc/systemd/system/bluetooth.service.d/hid.conf&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Service]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;ExecStart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;ExecStart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/usr/libexec/bluetooth/bluetoothd --compat --noplugin=input&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--noplugin=input&lt;/code&gt;: si no, el plugin &lt;em&gt;input&lt;/em&gt; de BlueZ se queda los PSM HID 0x11 y 0x13 y el servidor no puede abrirlos (&lt;code&gt;Cannot bind L2CAP PSM&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--compat&lt;/code&gt;: habilita el socket SDP antiguo para &lt;code&gt;sdptool&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;&lt;code&gt;rfkill unblock bluetooth&lt;/code&gt; (venía bloqueado). En &lt;code&gt;/boot/config.txt&lt;/code&gt; no puede haber &lt;code&gt;dtoverlay=disable-bt&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Clase de dispositivo &lt;strong&gt;teclado&lt;/strong&gt; (&lt;code&gt;0x000540&lt;/code&gt;), visible y nombre &lt;code&gt;RPi-BT-Keyboard&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id="lo-que-falló-por-el-camino"&gt;Lo que falló por el camino
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Problema&lt;/th&gt;
+&lt;th&gt;Causa y solución&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;sdptool browse local&lt;/code&gt; vacío tras &lt;code&gt;sdptool add HID&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;sdptool&lt;/code&gt; no sirve para HID en BlueZ 5. El registro SDP se hace por D-Bus con &lt;code&gt;ProfileManager1&lt;/code&gt; (&lt;code&gt;pairing_agent.register_hid_sdp()&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;La clase del dispositivo volvía a la de antes&lt;/td&gt;
+&lt;td&gt;BlueZ pisa la de &lt;code&gt;hciconfig class&lt;/code&gt;. Hay que usar &lt;code&gt;btmgmt --index 0 class 5 64&lt;/code&gt; (periférico + teclado)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;La TV muestra un &lt;strong&gt;código de 6 dígitos&lt;/strong&gt; y falla la conexión&lt;/td&gt;
+&lt;td&gt;La TV muestra el código y la Raspberry tiene que &lt;strong&gt;teclearlo&lt;/strong&gt;. El agente de emparejamiento (&lt;code&gt;pairing_agent.py&lt;/code&gt;, &lt;code&gt;KeyboardDisplay&lt;/code&gt;) espera a que llegue el PIN con &lt;code&gt;{&amp;quot;action&amp;quot;:&amp;quot;pin&amp;quot;,&amp;quot;code&amp;quot;:&amp;quot;...&amp;quot;}&lt;/code&gt; en lugar de aceptar solo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Tres emparejamientos repetidos&lt;/td&gt;
+&lt;td&gt;por borrar y volver a emparejar. Limpia con &lt;code&gt;bluetoothctl remove &amp;lt;MAC&amp;gt;&lt;/code&gt; en los dos lados&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;El móvil lo veía y la TV no&lt;/td&gt;
+&lt;td&gt;condición de carrera: los sockets L2CAP tienen que estar abiertos &lt;strong&gt;antes&lt;/strong&gt; de ponerse visible (&lt;code&gt;prepare_l2cap_servers()&lt;/code&gt; va antes de &lt;code&gt;piscan&lt;/code&gt;). &lt;code&gt;--no-sdp&lt;/code&gt; solo sirve para probar el descubrimiento&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Diagnóstico útil:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo btmon
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl cat bluetooth &lt;span class="p"&gt;|&lt;/span&gt; grep ExecStart
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;hciconfig hci0 -a
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="arrancar"&gt;Arrancar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo python3 rpi/bt_hid_server.py --host 0.0.0.0 --port &lt;span class="m"&gt;5555&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;En la TV: &lt;em&gt;Configuración → Conexiones → Bluetooth&lt;/em&gt; → buscar → &lt;code&gt;RPi-BT-Keyboard&lt;/code&gt; → teclear el código que muestra con &lt;code&gt;{&amp;quot;action&amp;quot;:&amp;quot;pin&amp;quot;,...}&lt;/code&gt; desde el cliente.&lt;/p&gt;
+&lt;h1 id="teclas-especiales-de-la-tv"&gt;Teclas especiales de la TV
+&lt;/h1&gt;&lt;p&gt;El descriptor HID tiene un tercer informe (&lt;em&gt;Report ID 3&lt;/em&gt;) de &lt;strong&gt;Consumer Control&lt;/strong&gt; con un código libre, para probar teclas propias de cada tele sin tocar el descriptor. En &lt;code&gt;rpi/hid.py&lt;/code&gt; están los candidatos que probé para la Hisense:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Alias&lt;/th&gt;
+&lt;th&gt;Código&lt;/th&gt;
+&lt;th&gt;Para&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;INPUT&lt;/code&gt;, &lt;code&gt;INPUT2&lt;/code&gt;, &lt;code&gt;INPUT3&lt;/code&gt;, &lt;code&gt;INPUT4&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;0x0060, 0x0086, 0x00A0, 0x0183&lt;/td&gt;
+&lt;td&gt;menú de fuentes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;YOUTUBE&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;0x0196 (AL Internet Browser)&lt;/td&gt;
+&lt;td&gt;abrir YouTube&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;APPS&lt;/code&gt;, &lt;code&gt;SMART&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;0x023C, 0x0223&lt;/td&gt;
+&lt;td&gt;lanzador&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;CH_UP&lt;/code&gt;, &lt;code&gt;CH_DOWN&lt;/code&gt;, &lt;code&gt;POWER&lt;/code&gt;, &lt;code&gt;SLEEP&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;0x009C, 0x009D, 0x0030, 0x0032&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;El &amp;ldquo;favorito&amp;rdquo; que lleva a HDMI3 es la misma idea: probar códigos hasta dar con el que usa VIDAA.&lt;/p&gt;
+&lt;h1 id="revertir-en-la-raspberry"&gt;Revertir (en la Raspberry)
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo rm /etc/systemd/system/bluetooth.service.d/hid.conf &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo systemctl daemon-reload &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo systemctl restart bluetooth
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;bluetoothctl remove &amp;lt;MAC-de-la-TV&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Y en la TV, olvida el dispositivo &lt;code&gt;RPi-BT-Keyboard&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>Hash Una Contraseña</title><link>https://volteret4.github.io/notas/p/hash-una-contrase%C3%B1a/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/hash-una-contrase%C3%B1a/</guid><description>&lt;p&gt;El &lt;code&gt;PASSWORD_HASH&lt;/code&gt; lo puedes generar con:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;hashlib&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;hashlib&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;md5&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;TU_CONTRASEÑA&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hexdigest&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;O pasándole un argumento&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;hashlib&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;sys&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;hashlib&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;md5&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hexdigest&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Atuin on memoria digital</title><link>https://volteret4.github.io/notas/tags/atuin/</link><description>Recent content in Atuin on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/atuin/index.xml" rel="self" type="application/rss+xml"/><item><title>Ctrl+R de atuin no funciona dentro de zellij</title><link>https://volteret4.github.io/notas/p/atuin-ctrl-r-zellij/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/atuin-ctrl-r-zellij/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Un día después de actualizar &lt;strong&gt;atuin&lt;/strong&gt; y &lt;strong&gt;zellij&lt;/strong&gt;, &lt;code&gt;Ctrl+R&lt;/code&gt; dejó de abrir el historial de atuin. Pistas:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;atuin search -i&lt;/code&gt; funcionaba.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;bindkey &amp;quot;^R&amp;quot;&lt;/code&gt; mostraba &lt;code&gt;&amp;quot;^R&amp;quot; atuin-search&lt;/code&gt;, o sea que zsh tenía bien la tecla.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cat -v&lt;/code&gt; no mostraba &lt;strong&gt;nada&lt;/strong&gt; al pulsar &lt;code&gt;Ctrl+R&lt;/code&gt;: la tecla no llegaba a la shell.&lt;/li&gt;
+&lt;li&gt;Con otra letra (&lt;code&gt;bindkey '^Z' atuin-search&lt;/code&gt;) funcionaba.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="descartado"&gt;Descartado
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Downgrade de atuin&lt;/strong&gt; (18.19.0 → 18.17.1). No cambió nada, así que volví a la 18.19.0 enseguida. Hoy está en la 18.24.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;awesomewm&lt;/strong&gt;. No tenía ningún atajo con &lt;code&gt;Ctrl+R&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;En mi &lt;code&gt;config.kdl&lt;/code&gt; el modo Resize está en &lt;code&gt;Ctrl n&lt;/code&gt;, pero el bloque es &lt;code&gt;keybinds { ... }&lt;/code&gt; &lt;strong&gt;sin&lt;/strong&gt; &lt;code&gt;clear-defaults=true&lt;/code&gt;. Por eso zellij seguía aplicando sus atajos por defecto, y uno de ellos es &lt;code&gt;Ctrl r&lt;/code&gt; para Resize. Tras la actualización ese atajo volvió a tener prioridad y se comía la tecla.&lt;/p&gt;
+&lt;h1 id="la-solución"&gt;La solución
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/.config/zellij/config.kdl&lt;/code&gt;, al final de &lt;code&gt;keybinds { ... }&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-kdl" data-lang="kdl"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;// Resize mode was remapped to Ctrl n above, but the zellij default for
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;// Ctrl r (also Resize mode) stays active since clear-defaults isn&amp;#39;t set.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;// Unbind it so Ctrl+R reaches the shell (atuin history search) instead.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nl"&gt; shared_except&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;locked&amp;#34;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;{&lt;/span&gt;&lt;span class="nl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nl"&gt; unbind&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;Ctrl r&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Cierra &lt;strong&gt;todas&lt;/strong&gt; las sesiones de zellij para que aplique (&lt;code&gt;zellij kill-all-sessions&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;En el &lt;code&gt;.zshrc&lt;/code&gt;, atuin se carga sin la flecha arriba:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;eval&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;atuin init --disable-up-arrow zsh&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="diagnóstico-rápido-para-otras-teclas"&gt;Diagnóstico rápido para otras teclas
+&lt;/h1&gt;&lt;p&gt;Si &lt;code&gt;cat -v&lt;/code&gt; no muestra nada al pulsar una tecla, algo por encima de la shell (zellij, tmux, el terminal o el gestor de ventanas) se la está quedando. Prueba fuera de zellij para saber cuál.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cat -v
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="ojo-con-chezmoi"&gt;Ojo con chezmoi
+&lt;/h1&gt;&lt;p&gt;Hasta el 31-10 el &lt;code&gt;config.kdl&lt;/code&gt; que guardaba chezmoi no tenía este &lt;code&gt;unbind&lt;/code&gt; ni el atajo &lt;code&gt;Ctrl y&lt;/code&gt; de harpoon, y un &lt;code&gt;chezmoi apply&lt;/code&gt; deshacía el arreglo. Ya está guardado (commit &lt;code&gt;94e48bb&lt;/code&gt; de &lt;code&gt;dot_chezmoi&lt;/code&gt;):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chezmoi add ~/.config/zellij/config.kdl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Borra el bloque &lt;code&gt;shared_except &amp;quot;locked&amp;quot; { unbind &amp;quot;Ctrl r&amp;quot; }&lt;/code&gt;. Ojo: entonces &lt;code&gt;Ctrl+R&lt;/code&gt; vuelve a abrir el modo Resize.&lt;/p&gt;</description></item><item><title>hotkeyz, un buscador de todos mis atajos y aliases</title><link>https://volteret4.github.io/notas/p/hotkeyz-buscador-de-atajos/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/hotkeyz-buscador-de-atajos/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Con tantos atajos repartidos entre awesomewm, zellij, zsh y atuin, ya no me acordaba de la mitad. &lt;code&gt;hotkeyz&lt;/code&gt; los junta todos en un CSV y los muestra en un buscador.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Pieza&lt;/th&gt;
+&lt;th&gt;Dónde&lt;/th&gt;
+&lt;th&gt;Cómo se abre&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Generador del CSV&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/scripts/generar_hotkeys_csv.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;lo lanzan el rofi y &lt;code&gt;popo&lt;/code&gt; antes de mostrar la lista&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;CSV&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/.config/hotkeys/hotkeys.csv&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Rofi&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/scripts/ver_hotkeys.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Super+Shift+V&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Terminal (fzf)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/scripts/popo.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;popo&lt;/code&gt; o &lt;code&gt;popo &amp;lt;fuente&amp;gt;&lt;/code&gt; con Tab&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Web (Flask)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/hotkeyz/app.py&lt;/code&gt; en &lt;code&gt;127.0.0.1:5857&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Super+Ctrl+Shift+V&lt;/code&gt; (&lt;code&gt;launch.sh --open&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Descripciones editadas en la web&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;~/.config/hotkeys/overrides.json&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 id="fuentes-que-lee"&gt;Fuentes que lee
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AwesomeWM&lt;/strong&gt;: &lt;code&gt;rc.lua&lt;/code&gt;, &lt;code&gt;keys_second_brain.lua&lt;/code&gt; y &lt;code&gt;keys_shazam.lua&lt;/code&gt;. Los keycodes &lt;code&gt;#N&lt;/code&gt; se traducen al nombre de la tecla según el teclado (&lt;code&gt;Super+#86&lt;/code&gt; → &lt;code&gt;Super+Num +&lt;/code&gt;, &lt;code&gt;#191&lt;/code&gt; → &lt;code&gt;F13&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Aliases de zsh&lt;/strong&gt;: &lt;code&gt;~/.zsh_aliases&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;bindkeys de zsh&lt;/strong&gt;: la sección &lt;code&gt;# --- TECLAS ---&lt;/code&gt; del &lt;code&gt;~/.zshrc&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Zellij&lt;/strong&gt;: &lt;code&gt;~/.config/zellij/config.kdl&lt;/code&gt;. La acción se guarda como comando &lt;code&gt;zellij action ...&lt;/code&gt; completo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scripts de atuin&lt;/strong&gt;: la salida de &lt;code&gt;atuin scripts list&lt;/code&gt;. Se lanzan con &lt;code&gt;atuin scripts run NOMBRE&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Formato del CSV:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;enabled,source,key,description,action
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;1,awesomewm/APPS,F12,dropdown tdrop xfce4,
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Al regenerarlo se conservan la columna &lt;code&gt;enabled&lt;/code&gt; y las descripciones que hayas cambiado en la web (&lt;code&gt;overrides.json&lt;/code&gt;). Los atajos repetidos con la misma fuente y tecla no se guardan en &lt;code&gt;overrides.json&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="atajos-en-awesome"&gt;Atajos en awesome
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/.config/awesome/rc.lua&lt;/code&gt;, grupo &amp;ldquo;Menú&amp;rdquo;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-lua" data-lang="lua"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;awful.key&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt; &lt;span class="n"&gt;modkey&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Shift&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;v&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kr"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;awful.spawn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;with_shell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;python3 $HOME/Scripts/menus/rofi/ver_hotkeys.py&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;end&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;buscar hotkeys/aliases&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Menú&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;}),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;awful.key&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt; &lt;span class="n"&gt;modkey&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Control&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Shift&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;v&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kr"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;awful.spawn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;with_shell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;$HOME/gits/pollo/hotkeyz/launch.sh --open&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;end&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;editar hotkeys (web)&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Menú&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;}),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/Scripts/menus/rofi/ver_hotkeys.py&lt;/code&gt; y &lt;code&gt;generar_hotkeys_csv.py&lt;/code&gt; son &lt;strong&gt;enlaces simbólicos&lt;/strong&gt; a los de &lt;code&gt;~/gits/pollo/hotkeyz/scripts/&lt;/code&gt;, para no tener dos copias.&lt;/p&gt;
+&lt;h1 id="popo-en-el-terminal"&gt;&lt;code&gt;popo&lt;/code&gt; en el terminal
+&lt;/h1&gt;&lt;p&gt;Al final del &lt;code&gt;~/.zshrc&lt;/code&gt;, con autocompletado por fuente:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;alias&lt;/span&gt; &lt;span class="nv"&gt;popo&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;python3 /home/huan/gits/pollo/hotkeyz/scripts/popo.py&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;_popo&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;local&lt;/span&gt; -a sources
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[[&lt;/span&gt; -f &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.config/hotkeys/hotkeys.csv&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;sources&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="p"&gt;(f)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;awk -F, &lt;span class="s1"&gt;&amp;#39;NR&amp;gt;1 &amp;amp;&amp;amp; $1==&amp;#34;1&amp;#34; {print $2}&amp;#39;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.config/hotkeys/hotkeys.csv&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sort -u&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; _arguments &lt;span class="s1"&gt;&amp;#39;1: :(${sources[@]})&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;compdef _popo popo
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Las acciones de zellij se ejecutan sin terminal, con un límite de 5 segundos, y si fallan muestran el error en vez de quedarse colgadas.&lt;/p&gt;
+&lt;h1 id="la-web"&gt;La web
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Editor del CSV&lt;/strong&gt;: activar o desactivar entradas, con &amp;ldquo;todos&amp;rdquo; y &amp;ldquo;ninguno&amp;rdquo; por sección, y editar descripciones.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cheatsheets&lt;/strong&gt;: se generan a partir del CSV y se exportan a PDF, PNG o ventana flotante. Además trae seis predefinidas en &lt;code&gt;data/cheatsheets/&lt;/code&gt; (emacs, vim, surfingkeys, zed, zellij y tmux).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Escucha &lt;strong&gt;solo en &lt;code&gt;127.0.0.1&lt;/code&gt;&lt;/strong&gt; y sin &lt;code&gt;debug&lt;/code&gt;. Al principio estaba en &lt;code&gt;0.0.0.0&lt;/code&gt; con &lt;code&gt;debug=True&lt;/code&gt;, que deja la consola de Werkzeug (capaz de ejecutar código) abierta a toda la red.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;launch.sh --open&lt;/code&gt; arranca el servidor en segundo plano si no está corriendo y abre el navegador.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Las copias de antes de los cambios del 23-10:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;~/gits/pollo/hotkeyz.bak.20261023040026/&lt;/code&gt; (proyecto entero)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;~/.config/hotkeys/hotkeys.csv.bak.20261023040026&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;~/.config/awesome/rc.lua.bak.20261023040026&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;~/Scripts/menus/rofi/ver_hotkeys.py.bak.20261023040026&lt;/code&gt; y &lt;code&gt;generar_hotkeys_csv.py.bak.20261023040026&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Para volver a la versión de junio:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm -r ~/gits/pollo/hotkeyz &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; cp -a ~/gits/pollo/hotkeyz.bak.20261023040026 ~/gits/pollo/hotkeyz
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para quitarlo del todo: borra &lt;code&gt;~/gits/pollo/hotkeyz&lt;/code&gt;, &lt;code&gt;~/.config/hotkeys&lt;/code&gt;, los dos enlaces de &lt;code&gt;~/Scripts/menus/rofi/&lt;/code&gt;, los dos &lt;code&gt;awful.key&lt;/code&gt; de &lt;code&gt;rc.lua&lt;/code&gt; y el bloque &lt;code&gt;POPO&lt;/code&gt; del &lt;code&gt;.zshrc&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>Quitar oh-my-zsh y usar zsh puro</title><link>https://volteret4.github.io/notas/p/zsh-sin-oh-my-zsh/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/zsh-sin-oh-my-zsh/</guid><description>&lt;h1 id="por-qué"&gt;Por qué
+&lt;/h1&gt;&lt;p&gt;El autocompletado con Tab fallaba dentro de oh-my-zsh, y el framework cargaba muchas cosas que no usaba. Lo que me interesaba de él se puede hacer con unas pocas líneas de zsh y dos plugins sueltos.&lt;/p&gt;
+&lt;h1 id="qué-queda-en-el-zshrc"&gt;Qué queda en el &lt;code&gt;.zshrc&lt;/code&gt;
+&lt;/h1&gt;&lt;p&gt;El archivo nuevo (&lt;code&gt;~/.zshrc&lt;/code&gt;) va por secciones:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Sección&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;th&gt;Sustituye a&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Historial&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;HISTFILE&lt;/code&gt; distinto por TTY dentro de tmux, &lt;code&gt;hist_ignore_dups share_history&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Opciones&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;setopt GLOB_DOTS&lt;/code&gt; y &lt;code&gt;WORDCHARS&lt;/code&gt; sin &lt;code&gt;/&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Completado&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;autoload -Uz compinit; compinit&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;completado de omz&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Colored man pages&lt;/td&gt;
+&lt;td&gt;variables &lt;code&gt;LESS_TERMCAP_*&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;plugin &lt;code&gt;colored-man-pages&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Command not found&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;source /usr/share/doc/pkgfile/command-not-found.zsh&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;plugin &lt;code&gt;command-not-found&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Copybuffer&lt;/td&gt;
+&lt;td&gt;función &lt;code&gt;_copybuffer&lt;/code&gt; con xclip en &lt;code&gt;Ctrl+O&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;plugin &lt;code&gt;copybuffer&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Dirhistory&lt;/td&gt;
+&lt;td&gt;funciones &lt;code&gt;_dh_*&lt;/code&gt; en &lt;code&gt;Alt+←→↑↓&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;plugin &lt;code&gt;dirhistory&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Teclas&lt;/td&gt;
+&lt;td&gt;Inicio, Fin, Supr y borrado por palabras&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;key-bindings&lt;/code&gt; de omz (ver &lt;a class="link" href="../teclas-zsh-puro" &gt;teclas en zsh puro&lt;/a&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Atuin&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;eval &amp;quot;$(atuin init --disable-up-arrow zsh)&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Zoxide&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;eval &amp;quot;$(zoxide init zsh)&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;plugin &lt;code&gt;z&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Prompt&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;eval &amp;quot;$(starship init zsh)&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;tema de omz&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Plugins externos&lt;/td&gt;
+&lt;td&gt;autosuggestions y syntax-highlighting, &lt;strong&gt;siempre al final&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;plugins de omz&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Los dos plugins externos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;zsh-syntax-highlighting&lt;/code&gt; sale del paquete de Arch y &lt;code&gt;zsh-autosuggestions&lt;/code&gt; es un clon de git en &lt;code&gt;~/.zsh/&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo pacman -S zsh zsh-completions zsh-syntax-highlighting pkgfile zoxide starship atuin xclip
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo pkgfile --update
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Al final descarté el plugin &lt;code&gt;copyfile&lt;/code&gt;. Los aliases siguen en &lt;code&gt;~/.zsh_aliases&lt;/code&gt;, que se carga con &lt;code&gt;source&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="sección-zinit-para-sistemas-nuevos"&gt;Sección zinit para sistemas nuevos
+&lt;/h1&gt;&lt;p&gt;Al principio del &lt;code&gt;.zshrc&lt;/code&gt; hay una sección comentada para hacer lo mismo con &lt;strong&gt;zinit&lt;/strong&gt;. Sirve en una máquina sin los paquetes instalados: se descomenta y se comentan las secciones &amp;ldquo;puras&amp;rdquo; equivalentes.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ZINIT_HOME=&amp;#34;${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# if [[ ! -d &amp;#34;$ZINIT_HOME&amp;#34; ]]; then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# mkdir -p &amp;#34;$(dirname $ZINIT_HOME)&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# git clone https://github.com/zdharma-continuum/zinit.git &amp;#34;$ZINIT_HOME&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# source &amp;#34;$ZINIT_HOME/zinit.zsh&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit light zsh-users/zsh-autosuggestions&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit light zsh-users/zsh-syntax-highlighting&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit snippet OMZ::plugins/dirhistory/dirhistory.plugin.zsh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit snippet OMZ::plugins/copybuffer/copybuffer.plugin.zsh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# zinit snippet OMZ::plugins/command-not-found/command-not-found.plugin.zsh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="lo-que-no-se-ha-tocado"&gt;Lo que no se ha tocado
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;El paquete &lt;code&gt;oh-my-zsh-git&lt;/code&gt; &lt;strong&gt;sigue instalado&lt;/strong&gt; y la carpeta &lt;code&gt;~/.oh-my-zsh&lt;/code&gt; sigue ahí. El &lt;code&gt;.zshrc&lt;/code&gt; simplemente no los carga.&lt;/li&gt;
+&lt;li&gt;El paquete y la carpeta de oh-my-zsh siguen ahí porque pepecono, dietpi y doctrina todavía lo usan.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="chezmoi-31-10-2026"&gt;chezmoi (31-10-2026)
+&lt;/h1&gt;&lt;p&gt;El &lt;code&gt;.zshrc&lt;/code&gt; nuevo ya está en chezmoi (commit &lt;code&gt;94e48bb&lt;/code&gt; de &lt;code&gt;dot_chezmoi&lt;/code&gt;):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;templates/zshrc/arcolinux&lt;/code&gt; es ahora una copia exacta de &lt;code&gt;~/.zshrc&lt;/code&gt; (zsh puro).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dot_zshrc.tmpl&lt;/code&gt; empieza con un &lt;code&gt;if&lt;/code&gt;: en arcolinux escribe solo esa plantilla, &lt;strong&gt;sin&lt;/strong&gt; &lt;code&gt;templates/zshrc/comunes&lt;/code&gt;, que llevaba ajustes de oh-my-zsh. El resto de máquinas generan el mismo archivo que antes (comprobado con &lt;code&gt;chezmoi execute-template&lt;/code&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{{- if eq .chezmoi.hostname &amp;#34;arcolinux&amp;#34; -}}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{{ include &amp;#34;templates/zshrc/arcolinux&amp;#34; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{{- else -}}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# ~/.zshrc generado por chezmoi
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;... (el bloque de antes, sin la rama de arcolinux)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{{ end -}}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;chezmoi diff ~/.zshrc&lt;/code&gt; no muestra diferencias.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Volver a la versión de oh-my-zsh, recuperando de git la plantilla y el &lt;code&gt;.tmpl&lt;/code&gt; anteriores:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/.zshrc ~/.zshrc.puro &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; git -C ~/.local/share/chezmoi checkout 94e48bb~1 -- dot_zshrc.tmpl templates/zshrc/arcolinux &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; chezmoi apply ~/.zshrc &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;exec&lt;/span&gt; zsh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si cambias &lt;code&gt;~/.zshrc&lt;/code&gt; a mano, cópialo a &lt;code&gt;~/.local/share/chezmoi/templates/zshrc/arcolinux&lt;/code&gt;. Es una plantilla, así que &lt;code&gt;chezmoi re-add&lt;/code&gt; no la actualiza.&lt;/p&gt;
+&lt;p&gt;Si quieres desinstalar oh-my-zsh del todo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo pacman -Rns oh-my-zsh-git &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; rm -rf ~/.oh-my-zsh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Atuin Historial Del Terminal Con Superpodéres</title><link>https://volteret4.github.io/notas/p/atuin-historial-del-terminal-con-superpod%C3%A9res/</link><pubDate>Thu, 24 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/atuin-historial-del-terminal-con-superpod%C3%A9res/</guid><description/></item></channel></rss>

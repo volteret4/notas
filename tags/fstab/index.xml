@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Fstab on memoria digital</title><link>https://volteret4.github.io/notas/tags/fstab/</link><description>Recent content in Fstab on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/fstab/index.xml" rel="self" type="application/rss+xml"/><item><title>Tirones en NFS por WiFi, ahorro de energía y montaje</title><link>https://volteret4.github.io/notas/p/tirones-nfs-por-wifi/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/tirones-nfs-por-wifi/</guid><description>&lt;h1 id="síntomas"&gt;Síntomas
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Tirones al navegar &lt;code&gt;/mnt/NFS/moode&lt;/code&gt; (biblioteca FLAC en pepecono) con el explorador de archivos, incluso con FLAC de 24 bits.&lt;/li&gt;
+&lt;li&gt;Nicotine+ se congelaba al terminar cada descarga, porque la copia a la carpeta montada.&lt;/li&gt;
+&lt;li&gt;Después, DeaDBeeF empezaba &lt;strong&gt;todas&lt;/strong&gt; las canciones trabado, y a veces la ventana entera se congelaba.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="diagnóstico-22-10-2026"&gt;Diagnóstico (22-10-2026)
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Hallazgo&lt;/th&gt;
+&lt;th&gt;Dato&lt;/th&gt;
+&lt;th&gt;Impacto&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;El PC va por &lt;strong&gt;WiFi&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;wlp5s0&lt;/code&gt;; el cable &lt;code&gt;enp6s0&lt;/code&gt; está desconectado&lt;/td&gt;
+&lt;td&gt;causa principal&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Latencia irregular&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;ping a pepecono: mín 2 ms, media 17 ms, &lt;strong&gt;máx 120 ms&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;cada pico bloquea las operaciones NFS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Ahorro de energía WiFi activado&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;iw dev wlp5s0 get power_save&lt;/code&gt; → &lt;code&gt;on&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;la tarjeta se duerme entre paquetes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;El router cambia el ancho de canal 20↔40 MHz&lt;/td&gt;
+&lt;td&gt;en &lt;code&gt;dmesg&lt;/code&gt;, cada 5–15 min&lt;/td&gt;
+&lt;td&gt;microcortes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Velocidad de lectura&lt;/td&gt;
+&lt;td&gt;8,4 MB/s&lt;/td&gt;
+&lt;td&gt;sobra para FLAC 24/192 (~1 MB/s): el problema es la latencia, no el ancho de banda&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;No había retransmisiones ni errores de NFS. Comandos útiles:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iw dev wlp5s0 link
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ping -c &lt;span class="m"&gt;50&lt;/span&gt; -i 0.2 192.168.1.133 &lt;span class="p"&gt;|&lt;/span&gt; tail -1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nfsstat -m
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="nicotine"&gt;Nicotine+
+&lt;/h2&gt;&lt;p&gt;Al terminar una descarga, mueve el archivo a la carpeta de destino desde el hilo de la interfaz. Si esa carpeta está en NFS y la WiFi tiene picos de 120 ms, la ventana se queda congelada hasta que acaba la copia. Solución: descargar en disco local y mover por lotes.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rsync -a --remove-source-files ~/Descargas/nicotine/ /mnt/NFS/moode/Descargas/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="deadbeef-29-10-2026"&gt;DeaDBeeF (29-10-2026)
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;PipeWire no registraba xruns: el corte viene de que DeaDBeeF no recibe los datos a tiempo.&lt;/li&gt;
+&lt;li&gt;Al empezar cada canción, el FLAC se abre &lt;strong&gt;dos veces&lt;/strong&gt;: una para reproducir y otra para el plugin &lt;strong&gt;waveform seekbar&lt;/strong&gt;, que lo decodifica entero (25–35 MB) para dibujar la onda.&lt;/li&gt;
+&lt;li&gt;Leer el principio de un FLAC tardaba 22–31 ms solo, y &lt;strong&gt;986 ms&lt;/strong&gt; con una lectura grande en paralelo, con &lt;code&gt;rsize&lt;/code&gt; de 1 MB.&lt;/li&gt;
+&lt;li&gt;La ventana entera se congela porque el montaje es &lt;code&gt;hard&lt;/code&gt;: mientras la red no responde, cualquier lectura espera sin límite, y DeaDBeeF lee carátulas y metadatos desde el hilo de la interfaz. &lt;code&gt;hard&lt;/code&gt; está bien elegido: con &lt;code&gt;soft&lt;/code&gt; habría errores de lectura y riesgo de dañar archivos.&lt;/li&gt;
+&lt;li&gt;Esa noche además la WiFi se degradó: 697 avisos de &lt;code&gt;missed beacons&lt;/code&gt; desde las 23:23, conectado por 5 GHz a −76 dBm (39 %), cuando la red de 2,4 GHz del mismo router llegaba al 67 %.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;La caché del waveform ya existe (&lt;code&gt;~/.cache/deadbeef/waveform_seekbar/wavecache.db&lt;/code&gt;, unos 500 MB), pero no evita la primera lectura de cada canción.&lt;/p&gt;
+&lt;h1 id="cambios-aplicados"&gt;Cambios aplicados
+&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;&lt;code&gt;/etc/fstab&lt;/code&gt;&lt;/strong&gt;: la línea vieja de moode está comentada y hay una nueva, con bloques de 128 KB para que las lecturas pequeñas no esperen detrás de bloques de 1 MB:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;192.168.1.133:/mnt/NFS/moode /mnt/NFS/moode nfs4 rw,hard,vers=4.2,rsize=131072,wsize=131072,timeo=600,retrans=2,_netdev,nofail 0 0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para aplicarla (con DeaDBeeF cerrado):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo umount /mnt/NFS/moode &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo systemctl daemon-reload &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo mount /mnt/NFS/moode
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="wifi-aplicado-el-31-10-2026"&gt;WiFi (aplicado el 31-10-2026)
+&lt;/h1&gt;&lt;p&gt;Hasta ese día el ahorro de energía seguía activado (&lt;code&gt;Power save: on&lt;/code&gt;) y &lt;code&gt;TeskiyaMaricarmen&lt;/code&gt; estaba &lt;strong&gt;forzada a 5 GHz&lt;/strong&gt; (&lt;code&gt;802-11-wireless.band = a&lt;/code&gt;), la banda con peor señal. Se cambió en NetworkManager, sin tocar &lt;code&gt;/etc&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;802-11-wireless.powersave = 2&lt;/code&gt; (desactivado) en &lt;strong&gt;todas&lt;/strong&gt; las conexiones WiFi guardadas: PapasconChocos, PapasconChocos 1, POCO F6, POCO X3 NFC_6781, TeskiyaMaricarmen, TeskiyaMaricarmen 1 y TeskiyaMaricarmen 2.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;TeskiyaMaricarmen&lt;/code&gt;: &lt;code&gt;802-11-wireless.band = bg&lt;/code&gt; (2,4 GHz).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nmcli -t -f NAME,TYPE connection show &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s1"&gt;&amp;#39;:802-11-wireless$&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; cut -d: -f1 &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="nb"&gt;read&lt;/span&gt; -r c&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; nmcli con modify &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$c&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; 802-11-wireless.powersave 2&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nmcli con modify TeskiyaMaricarmen 802-11-wireless.band &lt;span class="nb"&gt;bg&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El ajuste de ahorro de energía se aplica al reconectar (&lt;code&gt;nmcli device reapply&lt;/code&gt; no lo admite):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nmcli con up &lt;span class="s2"&gt;&amp;#34;PapasconChocos 1&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; iw dev wlp5s0 get power_save
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Resultado: &lt;code&gt;Power save: off&lt;/code&gt;, ping a pepecono de 2–8 ms. Las conexiones WiFi nuevas que crees tendrán &lt;code&gt;powersave = default&lt;/code&gt; (activado): repite el &lt;code&gt;nmcli con modify&lt;/code&gt; en ellas.&lt;/p&gt;
+&lt;p&gt;Otras mejoras: quitar el waveform seekbar (&lt;em&gt;Ver → Modo diseño&lt;/em&gt; → clic derecho en la onda → &lt;em&gt;Reemplazar → Seekbar&lt;/em&gt;) o, la definitiva, &lt;strong&gt;conectar el cable&lt;/strong&gt; a &lt;code&gt;enp6s0&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;/etc/fstab&lt;/code&gt;, comenta la línea nueva y descomenta la anterior (&lt;code&gt;soft,intr,fsc,rsize=65536,...,vers=4.1&lt;/code&gt;). Luego desmonta y vuelve a montar. Hay una copia muy antigua en &lt;code&gt;/etc/fstab.save&lt;/code&gt; (2024).&lt;/p&gt;
+&lt;p&gt;Para volver a la WiFi de antes (ahorro de energía por defecto y 5 GHz en TeskiyaMaricarmen):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nmcli -t -f NAME,TYPE connection show &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s1"&gt;&amp;#39;:802-11-wireless$&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; cut -d: -f1 &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="nb"&gt;read&lt;/span&gt; -r c&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; nmcli con modify &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$c&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; 802-11-wireless.powersave 0&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nmcli con modify TeskiyaMaricarmen 802-11-wireless.band a
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Acoustid on memoria digital</title><link>https://volteret4.github.io/notas/tags/acoustid/</link><description>Recent content in Acoustid on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/acoustid/index.xml" rel="self" type="application/rss+xml"/><item><title>discogs-scrobbler, scrobblear a Last.fm los vinilos de Discogs desde Android</title><link>https://volteret4.github.io/notas/p/android-scrobbler-discogs-lastfm/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/android-scrobbler-discogs-lastfm/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Repo: &lt;code&gt;~/gits/pollo/android_scrobbler&lt;/code&gt; (&lt;code&gt;https://github.com/volteret4/discogs-scrobbler.git&lt;/code&gt;), en Kotlin con Android Studio.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Carga la &lt;strong&gt;colección de Discogs&lt;/strong&gt; (&lt;code&gt;CollectionItem&lt;/code&gt;, &lt;code&gt;Release&lt;/code&gt;, &lt;code&gt;Track&lt;/code&gt;, &lt;code&gt;ReleaseContributor&lt;/code&gt;) y la cachea en una base local (Room, &lt;code&gt;DatabaseModule&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;En la ficha de un disco, &lt;strong&gt;Scrobble&lt;/strong&gt; manda el disco entero a &lt;strong&gt;Last.fm&lt;/strong&gt; (&lt;code&gt;track.scrobble&lt;/code&gt; por cada pista del tracklist).&lt;/li&gt;
+&lt;li&gt;Pantallas extra: &lt;strong&gt;escáner&lt;/strong&gt; (&lt;code&gt;ui/screens/scanner&lt;/code&gt;), &lt;strong&gt;búsqueda en MusicBrainz&lt;/strong&gt; (&lt;code&gt;mbzsearch&lt;/code&gt;), &lt;strong&gt;añadir a la colección&lt;/strong&gt; de Discogs y &lt;strong&gt;alias&lt;/strong&gt; de artista y título, para que el scrobble salga con el nombre que usa Last.fm.&lt;/li&gt;
+&lt;li&gt;Muestra los scrobbles recientes (&lt;code&gt;RecentScrobble&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Arquitectura con inyección de dependencias (&lt;code&gt;di/NetworkModule&lt;/code&gt;, &lt;code&gt;RepositoryModule&lt;/code&gt;, &lt;code&gt;DatabaseModule&lt;/code&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Hace falta un token de Discogs y la API key y el secreto de Last.fm (sesión móvil). Se configuran en la app; no van en el repo.&lt;/p&gt;
+&lt;h1 id="acoustid-con-el-micrófono-no"&gt;AcoustID con el micrófono: no
+&lt;/h1&gt;&lt;p&gt;Intenté reconocer lo que suena en el tocadiscos grabando con el micrófono y consultando &lt;strong&gt;AcoustID&lt;/strong&gt; (Chromaprint). &lt;strong&gt;No funciona&lt;/strong&gt;: AcoustID compara huellas del &lt;strong&gt;archivo de audio&lt;/strong&gt; limpio. El sonido de la sala (ruido, ecualización, reverberación, velocidad del plato) cambia la huella lo bastante para que no coincida casi nunca.&lt;/p&gt;
+&lt;p&gt;Para reconocer por micrófono hace falta un servicio pensado para eso (Shazam y similares, por ejemplo con &lt;code&gt;shazamio&lt;/code&gt;, que es lo que uso en tracklist-id y en el atajo &lt;code&gt;super+º&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="compilar"&gt;Compilar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; ~/gits/pollo/android_scrobbler &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; ./gradlew assembleDebug
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El APK queda en &lt;code&gt;app/build/outputs/apk/debug/&lt;/code&gt;. &lt;code&gt;local.properties&lt;/code&gt; apunta al SDK local y no se sube.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Desinstala la app y revoca su acceso en Last.fm (&lt;em&gt;Ajustes → Aplicaciones&lt;/em&gt;) y el token en Discogs (&lt;em&gt;Ajustes → Desarrolladores&lt;/em&gt;).&lt;/p&gt;</description></item></channel></rss>
