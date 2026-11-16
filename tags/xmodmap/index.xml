@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Xmodmap on memoria digital</title><link>https://volteret4.github.io/notas/tags/xmodmap/</link><description>Recent content in Xmodmap on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/xmodmap/index.xml" rel="self" type="application/rss+xml"/><item><title>Bloq Mayús reasignado y las mayúsculas se quedan activadas</title><link>https://volteret4.github.io/notas/p/bloq-mayus-atascado/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/bloq-mayus-atascado/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Tengo &lt;strong&gt;Bloq Mayús&lt;/strong&gt; reasignado (no hace de bloqueo de mayúsculas). Un día se quedaron las &lt;strong&gt;MAYÚSCULAS ACTIVADAS&lt;/strong&gt; y no había forma de quitarlas, porque la tecla que las desactiva ya no existe.&lt;/p&gt;
+&lt;p&gt;Pasa cuando el estado de bloqueo se activa antes de cargar la reasignación (al arrancar, al cambiar de teclado, al reconectar un teclado USB…) o lo activa otro programa (&lt;code&gt;xdotool&lt;/code&gt;, una VM, un escritorio remoto).&lt;/p&gt;
+&lt;h1 id="en-mi-configuración"&gt;En mi configuración
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/.Xmodmap&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;!Turn Caps Lock into another Control key
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;remove Lock = Caps_Lock
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;!keycode 66 = Hyper_L
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;!add mod3 = Caps_Lock
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;!keysym Caps_Lock = mod3
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;!clear Control
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;!add Control = Control_L Control_R
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;clear lock
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;remove Lock = Caps_Lock&lt;/code&gt; y &lt;code&gt;clear lock&lt;/code&gt; quitan la tecla del modificador &lt;em&gt;Lock&lt;/em&gt;. A partir de ahí, si el estado &lt;em&gt;Lock&lt;/em&gt; está activo, ninguna tecla lo apaga.&lt;/p&gt;
+&lt;h1 id="desactivar-las-mayúsculas-atascadas"&gt;Desactivar las mayúsculas atascadas
+&lt;/h1&gt;&lt;p&gt;Mira el estado:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;xset q &lt;span class="p"&gt;|&lt;/span&gt; grep -i caps
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Apágalas mandando la tecla directamente al servidor X. &lt;code&gt;xdotool&lt;/code&gt; se salta la reasignación física, así que funciona aunque la tecla esté haciendo de Super:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;xdotool key Caps_Lock
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Es lo que usé (18-09-2026). Después &lt;code&gt;xset q&lt;/code&gt; debe mostrar &lt;code&gt;Caps Lock: off&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Si no tienes xdotool, otra opción es reiniciar la distribución y volver a cargar el &lt;code&gt;.Xmodmap&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;setxkbmap es &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; xmodmap ~/.Xmodmap
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Con una opción de xkb (&lt;code&gt;caps:super&lt;/code&gt;, &lt;code&gt;caps:ctrl_modifier&lt;/code&gt;…) en vez de xmodmap, la tecla original no se pierde del todo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;setxkbmap -layout es -option caps:super
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Nada que revertir: los comandos solo cambian el estado actual del teclado.&lt;/p&gt;</description></item></channel></rss>

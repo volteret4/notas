@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Android on memoria digital</title><link>https://volteret4.github.io/notas/tags/android/</link><description>Recent content in Android on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/android/index.xml" rel="self" type="application/rss+xml"/><item><title>discogs-scrobbler, scrobblear a Last.fm los vinilos de Discogs desde Android</title><link>https://volteret4.github.io/notas/p/android-scrobbler-discogs-lastfm/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/android-scrobbler-discogs-lastfm/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Repo: &lt;code&gt;~/gits/pollo/android_scrobbler&lt;/code&gt; (&lt;code&gt;https://github.com/volteret4/discogs-scrobbler.git&lt;/code&gt;), en Kotlin con Android Studio.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Carga la &lt;strong&gt;colección de Discogs&lt;/strong&gt; (&lt;code&gt;CollectionItem&lt;/code&gt;, &lt;code&gt;Release&lt;/code&gt;, &lt;code&gt;Track&lt;/code&gt;, &lt;code&gt;ReleaseContributor&lt;/code&gt;) y la cachea en una base local (Room, &lt;code&gt;DatabaseModule&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;En la ficha de un disco, &lt;strong&gt;Scrobble&lt;/strong&gt; manda el disco entero a &lt;strong&gt;Last.fm&lt;/strong&gt; (&lt;code&gt;track.scrobble&lt;/code&gt; por cada pista del tracklist).&lt;/li&gt;
+&lt;li&gt;Pantallas extra: &lt;strong&gt;escáner&lt;/strong&gt; (&lt;code&gt;ui/screens/scanner&lt;/code&gt;), &lt;strong&gt;búsqueda en MusicBrainz&lt;/strong&gt; (&lt;code&gt;mbzsearch&lt;/code&gt;), &lt;strong&gt;añadir a la colección&lt;/strong&gt; de Discogs y &lt;strong&gt;alias&lt;/strong&gt; de artista y título, para que el scrobble salga con el nombre que usa Last.fm.&lt;/li&gt;
+&lt;li&gt;Muestra los scrobbles recientes (&lt;code&gt;RecentScrobble&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Arquitectura con inyección de dependencias (&lt;code&gt;di/NetworkModule&lt;/code&gt;, &lt;code&gt;RepositoryModule&lt;/code&gt;, &lt;code&gt;DatabaseModule&lt;/code&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Hace falta un token de Discogs y la API key y el secreto de Last.fm (sesión móvil). Se configuran en la app; no van en el repo.&lt;/p&gt;
+&lt;h1 id="acoustid-con-el-micrófono-no"&gt;AcoustID con el micrófono: no
+&lt;/h1&gt;&lt;p&gt;Intenté reconocer lo que suena en el tocadiscos grabando con el micrófono y consultando &lt;strong&gt;AcoustID&lt;/strong&gt; (Chromaprint). &lt;strong&gt;No funciona&lt;/strong&gt;: AcoustID compara huellas del &lt;strong&gt;archivo de audio&lt;/strong&gt; limpio. El sonido de la sala (ruido, ecualización, reverberación, velocidad del plato) cambia la huella lo bastante para que no coincida casi nunca.&lt;/p&gt;
+&lt;p&gt;Para reconocer por micrófono hace falta un servicio pensado para eso (Shazam y similares, por ejemplo con &lt;code&gt;shazamio&lt;/code&gt;, que es lo que uso en tracklist-id y en el atajo &lt;code&gt;super+º&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="compilar"&gt;Compilar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; ~/gits/pollo/android_scrobbler &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; ./gradlew assembleDebug
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El APK queda en &lt;code&gt;app/build/outputs/apk/debug/&lt;/code&gt;. &lt;code&gt;local.properties&lt;/code&gt; apunta al SDK local y no se sube.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Desinstala la app y revoca su acceso en Last.fm (&lt;em&gt;Ajustes → Aplicaciones&lt;/em&gt;) y el token en Discogs (&lt;em&gt;Ajustes → Desarrolladores&lt;/em&gt;).&lt;/p&gt;</description></item><item><title>Construir Koel App Para Android</title><link>https://volteret4.github.io/notas/p/construir-koel-app-para-android/</link><pubDate>Mon, 19 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/construir-koel-app-para-android/</guid><description>&lt;h2 id="requisitos"&gt;Requisitos
+&lt;/h2&gt;&lt;p&gt;Exporta estas variables, modifica las rutas a tu gusto&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;ANDROID_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;/Android/Sdk
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$PATH&lt;/span&gt;:&lt;span class="nv"&gt;$ANDROID_HOME&lt;/span&gt;/cmdline-tools/latest/bin
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$PATH&lt;/span&gt;:&lt;span class="nv"&gt;$ANDROID_HOME&lt;/span&gt;/platform-tools
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$PATH&lt;/span&gt;:&lt;span class="nv"&gt;$ANDROID_HOME&lt;/span&gt;/emulator
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Clona el repositorio&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone --recursive https://github.com/koel/player.git
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; player
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Instala apps necesarias, con Arch sería algo asi&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo pacman -S android-tools jdk-openjdk
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo paru -S flutter
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Ejecuta android-tools e instala:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;al menos un sdk&lt;/li&gt;
+&lt;li&gt;Android SDK Command-line Tools&lt;/li&gt;
+&lt;li&gt;NDK (Side by side)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Acepta las licencias de android con &lt;code&gt;flutter doctor --android-licenses&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Verifica la instalación con &lt;code&gt;flutter doctor -v&lt;/code&gt; si no tienes instalado chrome es probable que aparezca marcado en rojo, pero no lo necesitas&lt;/p&gt;
+&lt;p&gt;Instala requisitos de flutter con &lt;code&gt;flutter pub get&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="instalación"&gt;Instalación
+&lt;/h2&gt;&lt;p&gt;Ejecuta este commando, tardará un rato&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;flutter build apk --debug&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Es possible que te encuentres con errores de versiones, en mi caso NDK, sorteé el mismo modificando el archivo&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;nano PATH/player/android/app/build.gradle&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;especificando la versión instalada de NDK&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-gradle" data-lang="gradle"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;android&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;ndkVersion&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;29.0.14206865&amp;#34;&lt;/span&gt; &lt;span class="c1"&gt;// Cambia esto para usar tu versión
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Puedes ver que versiones tienes instaladas con&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ls -la /home/huan/Android/Sdk/ndk/
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# en mi caso buscaba este archivo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ls -la /home/huan/Android/Sdk/ndk/28.2.13676358/source.properties
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Al finalizar te muestra la ruta donde se ha creado la apk&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kodi on memoria digital</title><link>https://volteret4.github.io/notas/tags/kodi/</link><description>Recent content in Kodi on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/kodi/index.xml" rel="self" type="application/rss+xml"/><item><title>sobrinos, tarjetas NFC para poner música y películas en Kodi</title><link>https://volteret4.github.io/notas/p/sobrinos-tarjetas-nfc-kodi/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/sobrinos-tarjetas-nfc-kodi/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Repo: &lt;code&gt;~/gits/pollo/sobrinos&lt;/code&gt; (&lt;code&gt;git@github.com:volteret4/sobrinos.git&lt;/code&gt;). Documentación detallada en &lt;code&gt;instalacion.md&lt;/code&gt; y &lt;code&gt;uso.md&lt;/code&gt; del propio repo.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Lector&lt;/strong&gt;: ACR122U en una Raspberry Pi (usuario &lt;code&gt;mito&lt;/code&gt;), con &lt;code&gt;pcscd&lt;/code&gt;. Tarjetas MIFARE Classic y, para las nuevas, &lt;strong&gt;NTAG213/215&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reproductor&lt;/strong&gt;: Kodi, por JSON-RPC (&lt;code&gt;http://IP_KODI:8080/jsonrpc&lt;/code&gt;, con usuario y contraseña del control remoto).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Contenido&lt;/strong&gt;: el programa indexa películas, series, álbumes y artistas, y al asociar una tarjeta pregunta primero la categoría y luego el elemento.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Portadas&lt;/strong&gt;: tarjetas de 52×82 mm, delante y detrás, con un único QR a la web del álbum en GitHub Pages. Las de &lt;strong&gt;artista&lt;/strong&gt; llevan su foto delante (Last.fm, Wikipedia o MusicBrainz; si no la encuentra, pide una ruta) y detrás un collage de sus discos. Las de &lt;strong&gt;cine&lt;/strong&gt; salen de TMDB.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Impresión&lt;/strong&gt;: &lt;code&gt;imprimir_tarjetas.py&lt;/code&gt; las junta en A4 (9 por página), con modo dúplex y marcas de corte.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Android como lector&lt;/strong&gt; (tarjetas NTAG): una página Flask servida por nginx en &lt;code&gt;raspberrypi.local&lt;/code&gt;, en el mismo proceso que lee las tarjetas.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Secretos&lt;/strong&gt;: &lt;code&gt;secrets.enc.yaml&lt;/code&gt; cifrado con sops + age.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="instalación-resumen"&gt;Instalación (resumen)
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt-get install -y libacsccid1 pcscd pcsc-tools nginx avahi-daemon fonts-dejavu-core &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; --now pcscd.socket avahi-daemon
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Desactivar los módulos NFC del kernel, que se pelean con &lt;code&gt;pcscd&lt;/code&gt;, en &lt;code&gt;/etc/modprobe.d/blacklist.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;install nfc /bin/false
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;install pn533 /bin/false
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo usermod -aG plugdev &lt;span class="nv"&gt;$USER&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 -m venv ~/Scripts/python_venv &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; ~/Scripts/python_venv/bin/pip install -r requirements.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;sops para arm64 (&lt;code&gt;.deb&lt;/code&gt; de github.com/getsops/sops) y la clave age copiada de la máquina principal a &lt;code&gt;~/.config/sops/age/keys.txt&lt;/code&gt;. Luego:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sops edit secrets.enc.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="uso"&gt;Uso
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Script&lt;/th&gt;
+&lt;th&gt;Para qué&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;orquestar.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;flujo completo: portada → asociar tarjeta → actualizar web&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;nfc/nfc_detect_uid.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;leer el UID de una tarjeta&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;nfc/nfc_config_gen.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;asociar UID ↔ contenido&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;nfc/nfc_reaccionar.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;el monitor que reproduce al leer&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;nfc/nfc_generar_portada.py&lt;/code&gt;, &lt;code&gt;nfc_generar_portada_artista.py&lt;/code&gt;, &lt;code&gt;nfc_tarjetas_cine.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;portadas&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;nfc/imprimir_tarjetas.py --entrada docs/portadas/musica&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;A4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;album_web_generator.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;web del álbum (GitHub Pages, carpeta &lt;code&gt;docs/&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Servicio en la Raspberry, &lt;code&gt;/etc/systemd/system/sobrinos.service&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Unit]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Description&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Sobrinos NFC Monitor&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;After&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;network.target&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Service]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;User&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;mito&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;WorkingDirectory&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/home/mito/gits/pollo/sobrinos&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;ExecStart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/home/mito/Scripts/python_venv/bin/python nfc/nfc_reaccionar.py&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Restart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;on-failure&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;RestartSec&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Install]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;WantedBy&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;multi-user.target&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Errores que salieron: con &lt;code&gt;sudo&lt;/code&gt; no se usaba el venv del usuario (por eso el servicio usa la ruta absoluta del intérprete), el bucle de &amp;ldquo;No smart card inserted&amp;rdquo; llenaba el log (silenciado), y la información de los discos se guardaba en la carpeta de la música (ahora va dentro del proyecto).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl disable --now sobrinos &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo rm /etc/systemd/system/sobrinos.service /etc/nginx/sites-enabled/sobrinos
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Quita las dos líneas de &lt;code&gt;blacklist.conf&lt;/code&gt; si quieres volver a usar los módulos NFC del kernel.&lt;/p&gt;</description></item></channel></rss>

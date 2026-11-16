@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hidhide on memoria digital</title><link>https://volteret4.github.io/notas/tags/hidhide/</link><description>Recent content in Hidhide on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/hidhide/index.xml" rel="self" type="application/rss+xml"/><item><title>Windows reconoce el mando de Xbox como uno de PlayStation</title><link>https://volteret4.github.io/notas/p/mando-xbox-como-playstation-en-windows/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mando-xbox-como-playstation-en-windows/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Desde un día concreto (02-09-2026), Windows y los juegos trataban mi &lt;strong&gt;mando de Xbox&lt;/strong&gt; como uno de &lt;strong&gt;PlayStation&lt;/strong&gt;: botones △○✕□ y controles cambiados en cada juego.&lt;/p&gt;
+&lt;p&gt;Windows no hace eso por sí solo: un mando de Xbox es &lt;strong&gt;XInput&lt;/strong&gt; de forma nativa. Si aparece como DualShock, es que hay un &lt;strong&gt;mando virtual&lt;/strong&gt; emulado encima.&lt;/p&gt;
+&lt;h1 id="sospechosos-habituales"&gt;Sospechosos habituales
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Programa&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;th&gt;Dónde mirarlo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;DS4Windows&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;emula un DualShock 4 con ViGEmBus&lt;/td&gt;
+&lt;td&gt;icono en la bandeja, perfil &amp;ldquo;DS4&amp;rdquo;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Steam Input&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;puede presentar el mando como PlayStation si está marcado &lt;em&gt;Soporte de configuración de PlayStation&lt;/em&gt;&lt;/td&gt;
+&lt;td&gt;Steam → &lt;em&gt;Ajustes → Mando&lt;/em&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;ViGEmBus / HidHide&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;el driver del mando virtual y el que oculta el físico&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;Administrador de dispositivos → Dispositivos del sistema&lt;/em&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Emuladores (PCSX2, RPCS3…)&lt;/td&gt;
+&lt;td&gt;algunos instalan drivers DS4&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;Panel de control → Programas&lt;/em&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Comprobar desde PowerShell qué mandos ve Windows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-powershell" data-lang="powershell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;Get-PnpDevice&lt;/span&gt; &lt;span class="n"&gt;-Class&lt;/span&gt; &lt;span class="n"&gt;HIDClass&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;XnaComposite&lt;/span&gt; &lt;span class="n"&gt;-PresentOnly&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="nb"&gt;Where-Object&lt;/span&gt; &lt;span class="n"&gt;FriendlyName&lt;/span&gt; &lt;span class="o"&gt;-match&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Xbox|XINPUT|Wireless Controller|DualShock|Game&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="nb"&gt;Select-Object&lt;/span&gt; &lt;span class="n"&gt;Status&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FriendlyName&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;InstanceId&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si sale un &lt;em&gt;Wireless Controller&lt;/em&gt; (Sony) además del &lt;em&gt;Xbox Controller&lt;/em&gt;, el primero es el virtual. Quitarlo es tan simple como cerrar o desinstalar el programa que lo crea.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;joy.cpl&lt;/code&gt; (&lt;em&gt;Dispositivos de juego&lt;/em&gt;) muestra la lista que usan los juegos antiguos.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nota: la sesión del 03-09 ya no se conserva y hoy no puedo entrar en Windows, así que no sé cuál de estos fue la causa ni qué se cambió exactamente.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Si se desinstaló DS4Windows o ViGEmBus, se reinstalan desde sus releases de GitHub. Si fue un ajuste de Steam Input, se vuelve a marcar en &lt;em&gt;Ajustes → Mando&lt;/em&gt;.&lt;/p&gt;</description></item></channel></rss>

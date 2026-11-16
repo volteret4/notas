@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pamplinas on memoria digital</title><link>https://volteret4.github.io/notas/categories/pamplinas/</link><description>Recent content in Pamplinas on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/categories/pamplinas/index.xml" rel="self" type="application/rss+xml"/><item><title>Bombillas Tuya y aspirador Xiaomi atados a una cuenta antigua</title><link>https://volteret4.github.io/notas/p/tuya-y-xiaomi-en-home-assistant/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/tuya-y-xiaomi-en-home-assistant/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Tras reinstalar el móvil, la app de Tuya no reconocía mis bombillas ni el aspirador Xiaomi. Seguramente seguían vinculados a una cuenta antigua a la que ya no tengo acceso, así que Home Assistant (en otro servidor) tampoco podía usarlos.&lt;/p&gt;
+&lt;p&gt;Un dispositivo Tuya o Xiaomi solo puede estar en &lt;strong&gt;una cuenta a la vez&lt;/strong&gt;. Mientras siga en la vieja, la nueva no lo encuentra al buscar.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nota: de esta sesión (11-06-2026) solo queda la petición. La transcripción ya no existe, así que esta entrada recoge el procedimiento, no los comandos exactos de ese día.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="bombillas-tuya"&gt;Bombillas Tuya
+&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Reset de fábrica&lt;/strong&gt; de cada bombilla: encender y apagar 3 veces seguidas (encendido 1–2 s) hasta que parpadee rápido. Eso la saca de la cuenta vieja.&lt;/li&gt;
+&lt;li&gt;Emparejarla en &lt;strong&gt;Smart Life&lt;/strong&gt; (o Tuya Smart) con la cuenta nueva. La red tiene que ser de &lt;strong&gt;2,4 GHz&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;En Home Assistant: integración oficial &lt;strong&gt;Tuya&lt;/strong&gt; → &lt;em&gt;Añadir&lt;/em&gt; → escanear el &lt;strong&gt;QR&lt;/strong&gt; con la app Smart Life (&lt;em&gt;Yo → icono de escanear&lt;/em&gt;). Ya no hace falta crear un proyecto en la plataforma de desarrolladores de Tuya.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Si no quieres depender de la nube, la alternativa es &lt;strong&gt;LocalTuya&lt;/strong&gt; (HACS), que necesita el &lt;code&gt;local_key&lt;/code&gt; de cada dispositivo (se saca con &lt;code&gt;tinytuya wizard&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="aspirador-xiaomi"&gt;Aspirador Xiaomi
+&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Reset del wifi&lt;/strong&gt; del robot: mantener pulsados a la vez los botones indicados en el manual (normalmente &lt;em&gt;Inicio&lt;/em&gt; y &lt;em&gt;Base&lt;/em&gt;) hasta que avise por voz.&lt;/li&gt;
+&lt;li&gt;Añadirlo en &lt;strong&gt;Xiaomi Home&lt;/strong&gt; con la cuenta nueva y la &lt;strong&gt;región&lt;/strong&gt; correcta. La región tiene que coincidir con la de Home Assistant.&lt;/li&gt;
+&lt;li&gt;En Home Assistant: integración &lt;strong&gt;Xiaomi Home&lt;/strong&gt; (oficial) o &lt;strong&gt;Xiaomi Miot Auto&lt;/strong&gt; (HACS), con la cuenta y la región. Para el mapa, &lt;em&gt;Xiaomi Cloud Map Extractor&lt;/em&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Si Xiaomi dice que el dispositivo está &amp;ldquo;vinculado a otra cuenta&amp;rdquo;, hay que pedir la desvinculación al soporte de Xiaomi con una foto de la etiqueta y del ticket de compra.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Borra la integración en &lt;em&gt;Ajustes → Dispositivos y servicios&lt;/em&gt; y los dispositivos de las apps. No hay archivos que restaurar.&lt;/p&gt;</description></item><item><title>ES-DE en Windows, juegos multidisco con .m3u y accesos de Steam y Epic</title><link>https://volteret4.github.io/notas/p/es-de-multidisco-y-accesos-de-steam/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/es-de-multidisco-y-accesos-de-steam/</guid><description>&lt;h1 id="multidisco-con-m3u"&gt;Multidisco con &lt;code&gt;.m3u&lt;/code&gt;
+&lt;/h1&gt;&lt;p&gt;Un juego de PS1 o Dreamcast con varios discos aparece en ES-DE como varias entradas, una por &lt;code&gt;.cue&lt;/code&gt; o &lt;code&gt;.chd&lt;/code&gt;. La solución es un &lt;strong&gt;&lt;code&gt;.m3u&lt;/code&gt;&lt;/strong&gt; con la lista de discos, que es lo que se lanza. El emulador (RetroArch, Duckstation, Flycast…) cambia de disco desde su menú.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Final Fantasy VII (Europe).m3u
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Final Fantasy VII (Europe) (Disc 1).chd
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Final Fantasy VII (Europe) (Disc 2).chd
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Final Fantasy VII (Europe) (Disc 3).chd
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Las rutas son &lt;strong&gt;relativas&lt;/strong&gt; a la ubicación del &lt;code&gt;.m3u&lt;/code&gt;. Para generarlos en Linux:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; g in &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ls *&lt;span class="s2"&gt;&amp;#34;(Disc 1)&amp;#34;&lt;/span&gt;* &lt;span class="p"&gt;|&lt;/span&gt; sed &lt;span class="s1"&gt;&amp;#39;s/ (Disc 1).*//&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; ls &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$g&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;*&lt;span class="s2"&gt;&amp;#34;(Disc &amp;#34;&lt;/span&gt;* &amp;gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$g&lt;/span&gt;&lt;span class="s2"&gt;.m3u&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="una-sola-entrada-por-juego-carpeta-con-el-nombre-del-archivo"&gt;Una sola entrada por juego: carpeta con el nombre del archivo
+&lt;/h1&gt;&lt;p&gt;ES-DE trata como &lt;strong&gt;archivo&lt;/strong&gt; una carpeta cuyo nombre termina en una extensión del sistema (&lt;em&gt;directories interpreted as files&lt;/em&gt;). Si dentro hay un archivo con &lt;strong&gt;el mismo nombre&lt;/strong&gt;, lanza ese. Así se agrupan los discos y la carpeta no se ve como tal en la interfaz:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;psx/
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└── Final Fantasy VII (Europe).m3u/ ← carpeta
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ├── Final Fantasy VII (Europe).m3u ← lo que se lanza
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ├── Final Fantasy VII (Europe) (Disc 1).chd
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ├── Final Fantasy VII (Europe) (Disc 2).chd
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; └── Final Fantasy VII (Europe) (Disc 3).chd
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Apliqué el mismo criterio a &lt;strong&gt;todos&lt;/strong&gt; los multidisco (PSX, Dreamcast, PS2…), y en juegos de un disco con varios archivos (&lt;code&gt;.cue&lt;/code&gt; + &lt;code&gt;.bin&lt;/code&gt;), la carpeta se llama como el &lt;code&gt;.cue&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;En ES-DE: &lt;em&gt;Ajustes de la interfaz → Mostrar archivos ocultos&lt;/em&gt; desactivado y, tras mover cosas, &lt;em&gt;Opciones → Actualizar lista de juegos&lt;/em&gt;. Los metadatos (&lt;code&gt;gamelist.xml&lt;/code&gt;) y las imágenes se buscan por la ruta, así que puede que haya que repetir el &lt;em&gt;scraping&lt;/em&gt; de los juegos que has movido.&lt;/p&gt;
+&lt;p&gt;Las ROMs pasaron de la unidad Samba de pepecono a &lt;strong&gt;&lt;code&gt;C:\ROMs&lt;/code&gt;&lt;/strong&gt; (&lt;em&gt;Ajustes → Directorio de ROMs&lt;/em&gt;). Desde disco local, ES-DE arranca y escanea mucho más rápido.&lt;/p&gt;
+&lt;h1 id="accesos-url-de-steam-y-epic"&gt;Accesos &lt;code&gt;.url&lt;/code&gt; de Steam y Epic
+&lt;/h1&gt;&lt;p&gt;ES-DE puede importar como &amp;ldquo;juegos&amp;rdquo; los accesos directos que crean Steam y Epic, que son archivos &lt;code&gt;.url&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[InternetShortcut]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;URL&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;steam://rungameid/1145360&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[InternetShortcut]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;URL&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;com.epicgames.launcher://apps/Fortnite?action=launch&amp;amp;silent=true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Al lanzarlos, Windows preguntaba con qué programa abrir el &lt;code&gt;.url&lt;/code&gt;. Que se abran sin preguntar depende de dos cosas:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Que &lt;code&gt;.url&lt;/code&gt; tenga su asociación normal (&lt;code&gt;InternetShortcut&lt;/code&gt;):&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bat" data-lang="bat"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;assoc&lt;/span&gt; .url
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;ftype&lt;/span&gt; InternetShortcut
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start="2"&gt;
+&lt;li&gt;Que los protocolos &lt;code&gt;steam://&lt;/code&gt; y &lt;code&gt;com.epicgames.launcher://&lt;/code&gt; estén registrados. Se registran al reinstalar o reparar los lanzadores, o abriendo una vez un enlace &lt;code&gt;steam://&lt;/code&gt; desde el navegador y marcando &amp;ldquo;recordar&amp;rdquo;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nota: la sesión del 22-07 ya no se conserva y hoy no puedo entrar en Windows, así que no he comprobado la asociación ni la configuración de ES-DE.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Mover los archivos de cada carpeta &lt;code&gt;Nombre.m3u/&lt;/code&gt; al directorio del sistema y borrar los &lt;code&gt;.m3u&lt;/code&gt;. En ES-DE, volver a apuntar el directorio de ROMs a la unidad de red si hace falta.&lt;/p&gt;</description></item><item><title>Super Mario Galaxy en Dolphin con un mando de Xbox</title><link>https://volteret4.github.io/notas/p/dolphin-mario-galaxy-mando-xbox/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/dolphin-mario-galaxy-mando-xbox/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;En Windows (Dolphin en &lt;code&gt;C:\Program Files\Emulators\Dolphin-x64&lt;/code&gt;), &lt;em&gt;Super Mario Galaxy&lt;/em&gt; no reconocía bien el mando. El &lt;strong&gt;Wiimote 1&lt;/strong&gt; tenía tres fallos:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;La extensión era el &lt;strong&gt;Classic Controller&lt;/strong&gt;, que Galaxy no admite: necesita &lt;strong&gt;Nunchuk&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;El stick del Nunchuk estaba en &lt;strong&gt;W/A/S/D&lt;/strong&gt; del teclado, pero el dispositivo era el mando de Xbox, así que Mario no se movía.&lt;/li&gt;
+&lt;li&gt;El puntero estaba en el &lt;strong&gt;ratón&lt;/strong&gt; y el giro en el clic derecho.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Además, en el mando de GameCube la cruceta abajo estaba en &lt;code&gt;Pad W&lt;/code&gt; (izquierda) en vez de &lt;code&gt;Pad S&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="la-asignación"&gt;La asignación
+&lt;/h1&gt;&lt;p&gt;Dispositivo: &lt;code&gt;SDL/0/XInput Controller #1&lt;/code&gt;. Extensión: &lt;strong&gt;Nunchuk&lt;/strong&gt;.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Mando Xbox&lt;/th&gt;
+&lt;th&gt;Wii&lt;/th&gt;
+&lt;th&gt;En Galaxy&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Stick izquierdo&lt;/td&gt;
+&lt;td&gt;Stick del Nunchuk&lt;/td&gt;
+&lt;td&gt;moverse&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;saltar&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;Agitar Wiimote&lt;/td&gt;
+&lt;td&gt;giro (ataque)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;RT&lt;/td&gt;
+&lt;td&gt;B&lt;/td&gt;
+&lt;td&gt;disparar trozos de estrella&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;LT&lt;/td&gt;
+&lt;td&gt;Z&lt;/td&gt;
+&lt;td&gt;agacharse&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;LB&lt;/td&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;centrar la cámara&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Stick derecho&lt;/td&gt;
+&lt;td&gt;Puntero (IR)&lt;/td&gt;
+&lt;td&gt;apuntar y recoger trozos de estrella&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Pulsar stick derecho&lt;/td&gt;
+&lt;td&gt;Recentrar puntero&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Start / Back / Guía&lt;/td&gt;
+&lt;td&gt;+ / − / Home&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Cruceta&lt;/td&gt;
+&lt;td&gt;Cruceta&lt;/td&gt;
+&lt;td&gt;cámara&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;WiimoteNew.ini&lt;/code&gt; completo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;span class="lnt"&gt;29
+&lt;/span&gt;&lt;span class="lnt"&gt;30
+&lt;/span&gt;&lt;span class="lnt"&gt;31
+&lt;/span&gt;&lt;span class="lnt"&gt;32
+&lt;/span&gt;&lt;span class="lnt"&gt;33
+&lt;/span&gt;&lt;span class="lnt"&gt;34
+&lt;/span&gt;&lt;span class="lnt"&gt;35
+&lt;/span&gt;&lt;span class="lnt"&gt;36
+&lt;/span&gt;&lt;span class="lnt"&gt;37
+&lt;/span&gt;&lt;span class="lnt"&gt;38
+&lt;/span&gt;&lt;span class="lnt"&gt;39
+&lt;/span&gt;&lt;span class="lnt"&gt;40
+&lt;/span&gt;&lt;span class="lnt"&gt;41
+&lt;/span&gt;&lt;span class="lnt"&gt;42
+&lt;/span&gt;&lt;span class="lnt"&gt;43
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Wiimote1]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Device&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;SDL/0/XInput Controller #1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/A&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button S`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/B&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Trigger R`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button N`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button E`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/-&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;Back&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/+&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;Start&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/Home&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;Guide&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;D-Pad/Up&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Pad N`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;D-Pad/Down&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Pad S`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;D-Pad/Left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Pad W`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;D-Pad/Right&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Pad E`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;IR/Up&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Right Y+`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;IR/Down&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Right Y-`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;IR/Left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Right X-`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;IR/Right&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Right X+`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;IR/Recenter&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Thumb R`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Shake/X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button W`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Shake/Y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button W`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Shake/Z&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button W`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Extension&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;Nunchuk&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Buttons/C&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Shoulder L`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Buttons/Z&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Trigger L`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Stick/Up&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Left Y+`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Stick/Down&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Left Y-`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Stick/Left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Left X-`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Stick/Right&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Left X+`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Stick/Calibration&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;100.00 141.42 100.00 141.42 100.00 141.42 100.00 141.42&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Extension/Attach MotionPlus&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;False&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Wiimote2]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Device&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;DInput/0/Keyboard Mouse&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Wiimote3]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Device&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;DInput/0/Keyboard Mouse&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Wiimote4]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Device&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;DInput/0/Keyboard Mouse&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[BalanceBoard]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Device&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;DInput/0/Keyboard Mouse&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los archivos están en &lt;code&gt;%APPDATA%\Dolphin Emulator\Config\&lt;/code&gt; (&lt;code&gt;WiimoteNew.ini&lt;/code&gt; y &lt;code&gt;GCPadNew.ini&lt;/code&gt;). Dolphin tiene que estar &lt;strong&gt;cerrado&lt;/strong&gt; al editarlos, o los sobrescribe.&lt;/p&gt;
+&lt;h1 id="si-algo-no-va"&gt;Si algo no va
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;El mando no responde&lt;/strong&gt;: &lt;em&gt;Controles → Wii Remote 1 → Configurar&lt;/em&gt;, y elige el mando en &lt;em&gt;Dispositivo&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El puntero vuelve al centro al soltar el stick&lt;/strong&gt;: activa &lt;em&gt;Entrada relativa&lt;/em&gt; en la pestaña del puntero (IR).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Las copias de seguridad están en &lt;code&gt;%APPDATA%\Dolphin Emulator\Config\&lt;/code&gt; con el sufijo &lt;code&gt;.bak.20261008015303&lt;/code&gt;. Con Dolphin cerrado, desde PowerShell:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-powershell" data-lang="powershell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd &lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$env:APPDATA&lt;/span&gt;&lt;span class="s2"&gt;\Dolphin Emulator\Config&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nb"&gt;Copy-Item&lt;/span&gt; &lt;span class="n"&gt;WiimoteNew&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;ini&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;bak&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;20261008015303&lt;/span&gt; &lt;span class="n"&gt;WiimoteNew&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;-Force&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nb"&gt;Copy-Item&lt;/span&gt; &lt;span class="n"&gt;GCPadNew&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;ini&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;bak&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;20261008015303&lt;/span&gt; &lt;span class="n"&gt;GCPadNew&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;-Force&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Windows reconoce el mando de Xbox como uno de PlayStation</title><link>https://volteret4.github.io/notas/p/mando-xbox-como-playstation-en-windows/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mando-xbox-como-playstation-en-windows/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Desde un día concreto (02-09-2026), Windows y los juegos trataban mi &lt;strong&gt;mando de Xbox&lt;/strong&gt; como uno de &lt;strong&gt;PlayStation&lt;/strong&gt;: botones △○✕□ y controles cambiados en cada juego.&lt;/p&gt;
+&lt;p&gt;Windows no hace eso por sí solo: un mando de Xbox es &lt;strong&gt;XInput&lt;/strong&gt; de forma nativa. Si aparece como DualShock, es que hay un &lt;strong&gt;mando virtual&lt;/strong&gt; emulado encima.&lt;/p&gt;
+&lt;h1 id="sospechosos-habituales"&gt;Sospechosos habituales
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Programa&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;th&gt;Dónde mirarlo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;DS4Windows&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;emula un DualShock 4 con ViGEmBus&lt;/td&gt;
+&lt;td&gt;icono en la bandeja, perfil &amp;ldquo;DS4&amp;rdquo;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Steam Input&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;puede presentar el mando como PlayStation si está marcado &lt;em&gt;Soporte de configuración de PlayStation&lt;/em&gt;&lt;/td&gt;
+&lt;td&gt;Steam → &lt;em&gt;Ajustes → Mando&lt;/em&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;ViGEmBus / HidHide&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;el driver del mando virtual y el que oculta el físico&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;Administrador de dispositivos → Dispositivos del sistema&lt;/em&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Emuladores (PCSX2, RPCS3…)&lt;/td&gt;
+&lt;td&gt;algunos instalan drivers DS4&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;Panel de control → Programas&lt;/em&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Comprobar desde PowerShell qué mandos ve Windows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-powershell" data-lang="powershell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;Get-PnpDevice&lt;/span&gt; &lt;span class="n"&gt;-Class&lt;/span&gt; &lt;span class="n"&gt;HIDClass&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;XnaComposite&lt;/span&gt; &lt;span class="n"&gt;-PresentOnly&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="nb"&gt;Where-Object&lt;/span&gt; &lt;span class="n"&gt;FriendlyName&lt;/span&gt; &lt;span class="o"&gt;-match&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Xbox|XINPUT|Wireless Controller|DualShock|Game&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="nb"&gt;Select-Object&lt;/span&gt; &lt;span class="n"&gt;Status&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FriendlyName&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;InstanceId&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si sale un &lt;em&gt;Wireless Controller&lt;/em&gt; (Sony) además del &lt;em&gt;Xbox Controller&lt;/em&gt;, el primero es el virtual. Quitarlo es tan simple como cerrar o desinstalar el programa que lo crea.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;joy.cpl&lt;/code&gt; (&lt;em&gt;Dispositivos de juego&lt;/em&gt;) muestra la lista que usan los juegos antiguos.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nota: la sesión del 03-09 ya no se conserva y hoy no puedo entrar en Windows, así que no sé cuál de estos fue la causa ni qué se cambió exactamente.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Si se desinstaló DS4Windows o ViGEmBus, se reinstalan desde sus releases de GitHub. Si fue un ajuste de Steam Input, se vuelve a marcar en &lt;em&gt;Ajustes → Mando&lt;/em&gt;.&lt;/p&gt;</description></item><item><title>Bloquea Comentarios Y Recomendaciones En Youtube</title><link>https://volteret4.github.io/notas/p/bloquea-comentarios-y-recomendaciones-en-youtube/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/bloquea-comentarios-y-recomendaciones-en-youtube/</guid><description>&lt;p&gt;Añade esto a las reglas de ublock para bloquear dichas secciones:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;www.youtube.com###comments
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;www.youtube.com###related
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;www.youtube.com###sponsor-button
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;www.youtube.com###donation-shelf
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;www.youtube.com##.ytp-endscreen-content
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;www.youtube.com###chat:remove&lt;span class="o"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;www.youtube.com##ytd-reel-shelf-renderer.ytd-item-section-renderer.style-scope
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;www.youtube.com###chat-container
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Lee Desde Youtube Las Letras De Las Canciones</title><link>https://volteret4.github.io/notas/p/lee-desde-youtube-las-letras-de-las-canciones/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/lee-desde-youtube-las-letras-de-las-canciones/</guid><description>&lt;p&gt;Necesitas una extensión para ejecutar scripts java en el navegador como &lt;a class="link" href="https://www.tampermonkey.net/" target="_blank" rel="noopener"
+&gt;Tamper-Monkey&lt;/a&gt; o &lt;a class="link" href="https://violentmonkey.github.io/" target="_blank" rel="noopener"
+&gt;Violent-Monkey&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Una vez instalado instala el siguiente &lt;a class="link" href="https://greasyfork.org/en/scripts/386259-youtube-genius-lyrics" target="_blank" rel="noopener"
+&gt;script&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>El Tiempo En El Terminal Oneline</title><link>https://volteret4.github.io/notas/p/el-tiempo-en-el-terminal-oneline/</link><pubDate>Sun, 18 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/el-tiempo-en-el-terminal-oneline/</guid><description>&lt;p&gt;Muestra la previsión metereológica para la ciudad que elijas durante los próximos días&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl wttr.in/Jerez
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Excluir Path De Busqueda</title><link>https://volteret4.github.io/notas/p/excluir-path-de-busqueda/</link><pubDate>Sun, 18 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/excluir-path-de-busqueda/</guid><description>&lt;p&gt;Para poder borrar todo el contenido de una carpeta excepto una ruta concreta se puede:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;find &lt;span class="nv"&gt;$carpeta&lt;/span&gt; -maxdepth &lt;span class="m"&gt;1&lt;/span&gt; -type d ! -iname &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;ruta&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt; -delete
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;no termina de funcionar asi&lt;/p&gt;</description></item><item><title>Agregar Nota A Tiddlywiki</title><link>https://volteret4.github.io/notas/p/agregar-nota-a-tiddlywiki/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/agregar-nota-a-tiddlywiki/</guid><description>&lt;p&gt;&lt;a class="link" href="https://tiddlywiki.com/" target="_blank" rel="noopener"
+&gt;Tiddlywiki&lt;/a&gt; es una aplicación genial para guardar notas en un solo archivo html. Gracias a su api puedes añadir notas usando este commando &lt;code&gt;curl&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -X PUT -i &lt;span class="s1"&gt;&amp;#39;http://192.168.0.12:8080/recipes/default/tiddlers/NewTiddlerTitle&amp;#39;&lt;/span&gt; --data &lt;span class="s1"&gt;&amp;#39;{
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt; &amp;#34;tags&amp;#34;: &amp;#34;firstTag anotherTag&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt; &amp;#34;creator&amp;#34;: &amp;#34;gene&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt; &amp;#34;modifier&amp;#34;: &amp;#34;gene&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt; &amp;#34;text&amp;#34;: &amp;#34;The use of knowledge in society&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;}&amp;#39;&lt;/span&gt; -H &lt;span class="s2"&gt;&amp;#34;X-Requested-With: TiddlyWiki&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Conseguir Color De Una Imagen</title><link>https://volteret4.github.io/notas/p/conseguir-color-de-una-imagen/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/conseguir-color-de-una-imagen/</guid><description>&lt;p&gt;Convierte el ratón en un selector de colores de tu pantalla&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;xcolor
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Detecta La RAM De Tu GPU</title><link>https://volteret4.github.io/notas/p/detecta-la-ram-de-tu-gpu/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/detecta-la-ram-de-tu-gpu/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.cyberciti.biz/faq/howto-find-linux-vga-video-card-ram" target="_blank" rel="noopener"
+&gt;Origen&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;glxinfo &lt;span class="p"&gt;|&lt;/span&gt; grep -E -i &lt;span class="s1"&gt;&amp;#39;device|memory&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Ea, a merendar.&lt;/p&gt;</description></item><item><title>Khal. Crear Nueva Entrada En Calendario</title><link>https://volteret4.github.io/notas/p/khal.-crear-nueva-entrada-en-calendario/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/khal.-crear-nueva-entrada-en-calendario/</guid><description>&lt;p&gt;Usa khal para agregar una entrada en el calendario.&lt;/p&gt;
+&lt;p&gt;Reemplaza las variables del siguiente commando por tus datos.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;khal new -a discos &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;fecha&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;:::&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;title&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;zenity –info –text&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;creado nuevo evento&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Obtener Último Video De Un Canal De Youtube</title><link>https://volteret4.github.io/notas/p/obtener-%C3%BAltimo-video-de-un-canal-de-youtube/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-%C3%BAltimo-video-de-un-canal-de-youtube/</guid><description>&lt;p&gt;&lt;code&gt;curl -s &amp;quot;https://decapi.me/youtube/latest_video?user=NPR&lt;/code&gt;&lt;/p&gt;</description></item><item><title>Usar Bat Para Los Menus De Ayuda De Otras Apps</title><link>https://volteret4.github.io/notas/p/usar-bat-para-los-menus-de-ayuda-de-otras-apps/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/usar-bat-para-los-menus-de-ayuda-de-otras-apps/</guid><description>&lt;p&gt;Añade esto a tu &lt;code&gt;.zshrc&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-zsh" data-lang="zsh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;alias&lt;/span&gt; -g -- -h&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-h 2&amp;gt;&amp;amp;1 | bat --language=help --style=plain&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;alias&lt;/span&gt; -g -- --help&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;--help 2&amp;gt;&amp;amp;1 | bat --language=help --style=plain&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Acortar Url</title><link>https://volteret4.github.io/notas/p/acortar-url/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/acortar-url/</guid><description>&lt;p&gt;Devuelve un link corto para compartir facilmente&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Desconozco la duración de dichos enlaces&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;curl https://is.gd/create.php\?format\=simple\&amp;amp;url\=google.com&lt;/code&gt;&lt;/p&gt;</description></item><item><title>Compartir Archivo Oneline</title><link>https://volteret4.github.io/notas/p/compartir-archivo-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/compartir-archivo-oneline/</guid><description>&lt;p&gt;Con este comando puedes subir un archivo de texto para compartirlo fácilmente&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -F &lt;span class="nv"&gt;file&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;@starship.toml https://0x0.st
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Crear Código Qr Con Texto</title><link>https://volteret4.github.io/notas/p/crear-c%C3%B3digo-qr-con-texto/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-c%C3%B3digo-qr-con-texto/</guid><description>&lt;p&gt;&lt;code&gt;curl qrenco.de/STRING&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;echo STRING | curl -F-=\&amp;lt;- qrenco.de&lt;/code&gt;&lt;/p&gt;</description></item><item><title>Valor Criptomonedas Oneline</title><link>https://volteret4.github.io/notas/p/valor-criptomonedas-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/valor-criptomonedas-oneline/</guid><description>&lt;p&gt;Con este linea puedes obtener información sobre el valor de diversas criptomonedas:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl rate.sx
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

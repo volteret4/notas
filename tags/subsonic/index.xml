@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Subsonic on memoria digital</title><link>https://volteret4.github.io/notas/tags/subsonic/</link><description>Recent content in Subsonic on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/subsonic/index.xml" rel="self" type="application/rss+xml"/><item><title>Playlists de Mixxx en cajones y en Airsonic</title><link>https://volteret4.github.io/notas/p/mixxx-cajones-y-playlists-en-airsonic/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mixxx-cajones-y-playlists-en-airsonic/</guid><description>&lt;h1 id="contexto"&gt;Contexto
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;La música para pinchar está en &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, con un &lt;code&gt;.m3u&lt;/code&gt; por lista, que regenera &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt; cada vez que muevo una canción.&lt;/li&gt;
+&lt;li&gt;Syncthing clona esa carpeta en pepecono (&lt;code&gt;/mnt/NFS/moode/Mixxx&lt;/code&gt;), y Airsonic la tiene como carpeta de medios &lt;strong&gt;Mixxx&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="1-cajones-de-mixxx-desde-los-m3u-sync_cratespy"&gt;1. Cajones de Mixxx desde los &lt;code&gt;.m3u&lt;/code&gt; (&lt;code&gt;sync_crates.py&lt;/code&gt;)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/sync_crates.py&lt;/code&gt; deja un &lt;strong&gt;cajón&lt;/strong&gt; (crate) por cada &lt;code&gt;.m3u&lt;/code&gt; de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt;, con el mismo nombre y las mismas canciones. La primera vez creó 59.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cada cajón queda &lt;strong&gt;idéntico&lt;/strong&gt; a su &lt;code&gt;.m3u&lt;/code&gt;: añade lo que falta y quita lo que sobra. Si borras el &lt;code&gt;.m3u&lt;/code&gt;, borra el cajón.&lt;/li&gt;
+&lt;li&gt;No toca las playlists de Mixxx ni los cajones creados a mano.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Canciones movidas de carpeta&lt;/strong&gt;: las reconoce por nombre y tamaño y actualiza la ruta, así conservan cues, BPM y análisis. De 441 que faltaban recuperó 404.&lt;/li&gt;
+&lt;li&gt;Las canciones totalmente nuevas tienen que entrar antes en la biblioteca de Mixxx (en el escaneo al arrancar), así que entran en su cajón al cerrar Mixxx.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Solo escribe con Mixxx cerrado&lt;/strong&gt;, y antes guarda una copia de la base de datos en &lt;code&gt;~/.mixxx/backups_sync_crates/&lt;/code&gt; (las 5 últimas). Si algo falla a mitad, no aplica nada.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/sync_crates.py --dry-run
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="cuándo-se-ejecuta"&gt;Cuándo se ejecuta
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Cuándo&lt;/th&gt;
+&lt;th&gt;Cómo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Al mover una canción con &lt;code&gt;mover_mix_playerctl.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;lo llama con &lt;code&gt;--quiet --notify&lt;/code&gt; después de regenerar los &lt;code&gt;.m3u&lt;/code&gt;. Si Mixxx está abierto, solo avisa&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Al abrir Mixxx desde el lanzador&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;mixxx-sync.sh&lt;/code&gt; sincroniza antes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Al cerrar Mixxx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;mixxx-sync.sh&lt;/code&gt; sincroniza después&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/mixxx-sync.sh&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;sync_crates&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;dirname &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;readlink -f &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$0&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;/sync_crates.py&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$sync_crates&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; --quiet --notify
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pasuspender -- mixxx &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; mixxx &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$sync_crates&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; --quiet
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/.local/share/applications/org.mixxx.Mixxx.desktop&lt;/code&gt; sobrescribe el lanzador del sistema para que &lt;code&gt;Exec&lt;/code&gt; use ese script.&lt;/p&gt;
+&lt;h1 id="2-playlists-de-mixxx-en-airsonic-mixxx_to_airsonicpy"&gt;2. Playlists de Mixxx en Airsonic (&lt;code&gt;mixxx_to_airsonic.py&lt;/code&gt;)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py&lt;/code&gt; copia las &lt;strong&gt;playlists con nombre&lt;/strong&gt; de Mixxx (no Auto DJ ni el historial) al usuario &lt;strong&gt;&lt;code&gt;mix&lt;/code&gt;&lt;/strong&gt; de Airsonic.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lee la base de datos de Mixxx en solo lectura, así que puede estar abierto.&lt;/li&gt;
+&lt;li&gt;Una canción en &lt;code&gt;/mnt/windows/Mix/X&lt;/code&gt; se busca en Airsonic como &lt;code&gt;Mixxx/X&lt;/code&gt;. Las que Airsonic aún no tiene salen al final como &amp;ldquo;falta&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;Cada playlist lleva en el comentario la marca &lt;code&gt;Mixxx: &amp;lt;nombre&amp;gt;&lt;/code&gt;. Así, al volver a ejecutarlo actualiza la misma playlist en el orden de Mixxx en lugar de duplicarla. Las playlists sin esa marca no se tocan.&lt;/li&gt;
+&lt;li&gt;Usa GET en la API de Subsonic, porque Airsonic-Advanced bloquea los POST por CSRF.&lt;/li&gt;
+&lt;li&gt;Airsonic-Advanced no devuelve la playlist en la respuesta de &lt;code&gt;createPlaylist&lt;/code&gt;, así que el script la busca después por nombre (la de id más alto).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Credenciales en &lt;code&gt;~/Scripts/Musica/playlists/airsonic/.env&lt;/code&gt;: &lt;code&gt;AIRSONIC_URL&lt;/code&gt;, &lt;code&gt;AIRSONIC_MIX_PASSWORD&lt;/code&gt; y, si el usuario no se llama &lt;code&gt;mix&lt;/code&gt;, &lt;code&gt;AIRSONIC_MIX_USER&lt;/code&gt;. El usuario necesita acceso a la carpeta de medios &lt;strong&gt;Mixxx&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py --dry-run
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python3 ~/Scripts/Musica/playlists/mixxx/mixxx_to_airsonic.py --scan
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Opción&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--dry-run&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;muestra los cambios sin escribir&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--scan&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;hace que Airsonic escanee antes la biblioteca (tarda más de 10 minutos, recorre toda la biblioteca)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--prune&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;borra de Airsonic las playlists que ya no existen en Mixxx&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--quiet&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;solo el resumen&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Errores corregidos al probarlo: &lt;code&gt;IndexError: pop from empty list&lt;/code&gt; con carpetas vacías en Airsonic, y la playlist &lt;code&gt;deep&lt;/code&gt;, que se creó sin la marca la primera vez.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Cajones&lt;/strong&gt;: con Mixxx cerrado, restaura la última copia.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ls -1t ~/.mixxx/backups_sync_crates/*.sqlite &lt;span class="p"&gt;|&lt;/span&gt; head -1&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; ~/.mixxx/mixxxdb.sqlite
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Lanzador&lt;/strong&gt;: borra &lt;code&gt;~/.local/share/applications/org.mixxx.Mixxx.desktop&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;mover_mix_playerctl.py&lt;/strong&gt;: quita la llamada a &lt;code&gt;sync_crates.py&lt;/code&gt; (hay una copia &lt;code&gt;.bak.&amp;lt;fecha&amp;gt;&lt;/code&gt; del original).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Airsonic&lt;/strong&gt;: borra las playlists cuyo comentario empieza por &lt;code&gt;Mixxx:&lt;/code&gt; desde la web, con el usuario &lt;code&gt;mix&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

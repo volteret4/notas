@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Sddm on memoria digital</title><link>https://volteret4.github.io/notas/tags/sddm/</link><description>Recent content in Sddm on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/sddm/index.xml" rel="self" type="application/rss+xml"/><item><title>Dos monitores clonados al arrancar awesomewm</title><link>https://volteret4.github.io/notas/p/xrandr-dos-monitores-al-arrancar/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/xrandr-dos-monitores-al-arrancar/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Al iniciar sesión, los dos monitores mostraban lo mismo (espejo). Al pulsar F12, que abre un terminal flotante en awesome, se colocaban bien.&lt;/p&gt;
+&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;La línea de &lt;code&gt;xrandr&lt;/code&gt; estaba en &lt;code&gt;~/.xinitrc&lt;/code&gt; y comentada en &lt;code&gt;~/.config/awesome/autostart.sh&lt;/code&gt;. Pero la sesión arranca con &lt;strong&gt;SDDM&lt;/strong&gt;, y los gestores de inicio de sesión no leen &lt;code&gt;~/.xinitrc&lt;/code&gt;: ese archivo solo lo usa &lt;code&gt;startx&lt;/code&gt;. Lo que sí leen es &lt;code&gt;~/.xprofile&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Hasta que algo forzaba a X a recalcular las pantallas, se quedaban en modo espejo.&lt;/p&gt;
+&lt;h1 id="la-solución"&gt;La solución
+&lt;/h1&gt;&lt;p&gt;Crear &lt;code&gt;~/.xprofile&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;XDG_CURRENT_DESKTOP&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;Awesome
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;xrandr --output HDMI-A-0 --mode 1920x1080 --pos 0x0 --rotate normal --primary --output DisplayPort-0 --mode 1920x1080 --pos 1920x0 --rotate normal
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los nombres de salida (&lt;code&gt;HDMI-A-0&lt;/code&gt;, &lt;code&gt;DisplayPort-0&lt;/code&gt;) salen de:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;xrandr --listmonitors
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Archivo&lt;/th&gt;
+&lt;th&gt;Lo lee&lt;/th&gt;
+&lt;th&gt;Estado&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.xinitrc&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;startx&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;tiene la misma línea (sin cambios)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.xprofile&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;SDDM, LightDM, GDM&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;nuevo&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/.config/awesome/autostart.sh&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;awesome&lt;/td&gt;
+&lt;td&gt;líneas viejas de xrandr comentadas (sin cambios)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;~/.xprofile&lt;/code&gt; no está en chezmoi. Si lo quieres guardar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chezmoi add ~/.xprofile
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm ~/.xprofile
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

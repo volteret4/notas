@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lastfm on memoria digital</title><link>https://volteret4.github.io/notas/tags/lastfm/</link><description>Recent content in Lastfm on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/lastfm/index.xml" rel="self" type="application/rss+xml"/><item><title>discogs-scrobbler, scrobblear a Last.fm los vinilos de Discogs desde Android</title><link>https://volteret4.github.io/notas/p/android-scrobbler-discogs-lastfm/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/android-scrobbler-discogs-lastfm/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Repo: &lt;code&gt;~/gits/pollo/android_scrobbler&lt;/code&gt; (&lt;code&gt;https://github.com/volteret4/discogs-scrobbler.git&lt;/code&gt;), en Kotlin con Android Studio.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Carga la &lt;strong&gt;colección de Discogs&lt;/strong&gt; (&lt;code&gt;CollectionItem&lt;/code&gt;, &lt;code&gt;Release&lt;/code&gt;, &lt;code&gt;Track&lt;/code&gt;, &lt;code&gt;ReleaseContributor&lt;/code&gt;) y la cachea en una base local (Room, &lt;code&gt;DatabaseModule&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;En la ficha de un disco, &lt;strong&gt;Scrobble&lt;/strong&gt; manda el disco entero a &lt;strong&gt;Last.fm&lt;/strong&gt; (&lt;code&gt;track.scrobble&lt;/code&gt; por cada pista del tracklist).&lt;/li&gt;
+&lt;li&gt;Pantallas extra: &lt;strong&gt;escáner&lt;/strong&gt; (&lt;code&gt;ui/screens/scanner&lt;/code&gt;), &lt;strong&gt;búsqueda en MusicBrainz&lt;/strong&gt; (&lt;code&gt;mbzsearch&lt;/code&gt;), &lt;strong&gt;añadir a la colección&lt;/strong&gt; de Discogs y &lt;strong&gt;alias&lt;/strong&gt; de artista y título, para que el scrobble salga con el nombre que usa Last.fm.&lt;/li&gt;
+&lt;li&gt;Muestra los scrobbles recientes (&lt;code&gt;RecentScrobble&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Arquitectura con inyección de dependencias (&lt;code&gt;di/NetworkModule&lt;/code&gt;, &lt;code&gt;RepositoryModule&lt;/code&gt;, &lt;code&gt;DatabaseModule&lt;/code&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Hace falta un token de Discogs y la API key y el secreto de Last.fm (sesión móvil). Se configuran en la app; no van en el repo.&lt;/p&gt;
+&lt;h1 id="acoustid-con-el-micrófono-no"&gt;AcoustID con el micrófono: no
+&lt;/h1&gt;&lt;p&gt;Intenté reconocer lo que suena en el tocadiscos grabando con el micrófono y consultando &lt;strong&gt;AcoustID&lt;/strong&gt; (Chromaprint). &lt;strong&gt;No funciona&lt;/strong&gt;: AcoustID compara huellas del &lt;strong&gt;archivo de audio&lt;/strong&gt; limpio. El sonido de la sala (ruido, ecualización, reverberación, velocidad del plato) cambia la huella lo bastante para que no coincida casi nunca.&lt;/p&gt;
+&lt;p&gt;Para reconocer por micrófono hace falta un servicio pensado para eso (Shazam y similares, por ejemplo con &lt;code&gt;shazamio&lt;/code&gt;, que es lo que uso en tracklist-id y en el atajo &lt;code&gt;super+º&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="compilar"&gt;Compilar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; ~/gits/pollo/android_scrobbler &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; ./gradlew assembleDebug
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El APK queda en &lt;code&gt;app/build/outputs/apk/debug/&lt;/code&gt;. &lt;code&gt;local.properties&lt;/code&gt; apunta al SDK local y no se sube.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Desinstala la app y revoca su acceso en Last.fm (&lt;em&gt;Ajustes → Aplicaciones&lt;/em&gt;) y el token en Discogs (&lt;em&gt;Ajustes → Desarrolladores&lt;/em&gt;).&lt;/p&gt;</description></item><item><title>escuchowsky, recomendaciones musicales con Last.fm en AWS</title><link>https://volteret4.github.io/notas/p/escuchowsky-recomendaciones-lastfm/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/escuchowsky-recomendaciones-lastfm/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Repo: &lt;code&gt;~/gits/pollo/escuchowsky&lt;/code&gt; (&lt;code&gt;https://github.com/volteret4/escuchowsky.git&lt;/code&gt;).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Recomendaciones&lt;/strong&gt; a partir de los scrobbles de Last.fm y &lt;strong&gt;ListenBrainz&lt;/strong&gt;, también con &lt;strong&gt;usuarios secundarios&lt;/strong&gt;: amigos cuyos gustos se cruzan con los tuyos.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Colecciones &amp;ldquo;must hear&amp;rdquo;&lt;/strong&gt; (listas de RYM, Scaruffi, AOTY…), con lo que ya has escuchado marcado.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Árbol de géneros&lt;/strong&gt; en mermaid (&lt;code&gt;app_genre_mermaid.py&lt;/code&gt;) y descubrimiento (&lt;code&gt;app_discover.py&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Traducciones (las claves tipo &lt;code&gt;um.search.button&lt;/code&gt; tienen que existir en todos los idiomas, o salen sin traducir).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="despliegue"&gt;Despliegue
+&lt;/h1&gt;&lt;p&gt;No corre en casa, sino en una instancia del &lt;strong&gt;free tier de AWS&lt;/strong&gt;. Fueron mis primeros pasos con AWS.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;docker-compose.yml&lt;/code&gt;: servicios &lt;code&gt;escuchowsky&lt;/code&gt;, &lt;code&gt;musthear&lt;/code&gt; y &lt;code&gt;tumtumpa&lt;/code&gt; (Flask + Gunicorn), un &lt;code&gt;nginx&lt;/code&gt; con &lt;strong&gt;ModSecurity&lt;/strong&gt; como proxy inverso (puertos 8085 y 8443 dentro, 80 y 443 hacia fuera con iptables), y &lt;code&gt;nginx-exporter&lt;/code&gt; + &lt;code&gt;node-exporter&lt;/code&gt; para Prometheus/Grafana en otro servidor.&lt;/p&gt;
+&lt;p&gt;Endurecimiento, según &lt;code&gt;CLAUDE.md&lt;/code&gt; del repo:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Docker &lt;strong&gt;rootless&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Solo 80/443 expuestos.&lt;/li&gt;
+&lt;li&gt;CrowdSec leyendo los logs del sistema y de las apps.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;auditd&lt;/code&gt;, rotación de logs y escaneos con &lt;strong&gt;trivy&lt;/strong&gt; (&lt;code&gt;trivy_reports/&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Certificados con acme.sh, uno de ellos solo para Prometheus.&lt;/li&gt;
+&lt;li&gt;Imágenes fijadas por &lt;code&gt;sha256&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose up -d --build
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los secretos van en &lt;code&gt;.env&lt;/code&gt; cifrado con sops (&lt;code&gt;sops_env.py&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Es un proyecto aparte: para quitarlo, &lt;code&gt;docker compose down -v&lt;/code&gt; en la instancia y terminar la instancia en la consola de AWS (vigila que no queden volúmenes EBS ni IPs elásticas facturando).&lt;/p&gt;</description></item><item><title>Un panel propio para DeaDBeeF con letras, artista, álbum y similares</title><link>https://volteret4.github.io/notas/p/deadbeef-infobar-ng/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/deadbeef-infobar-ng/</guid><description>&lt;h1 id="por-qué"&gt;Por qué
+&lt;/h1&gt;&lt;p&gt;El plugin &lt;a class="link" href="https://github.com/DeaDBeeF-Player/deadbeef-infobar" target="_blank" rel="noopener"
+&gt;deadbeef-infobar&lt;/a&gt; tiene su último commit en 2014. Lo compilé en &lt;code&gt;~/gits/deadbeef-infobar&lt;/code&gt;, pero no aparecía en DeaDBeeF ni en el modo diseño. En lugar de arreglarlo, hice uno nuevo: &lt;strong&gt;Infobar NG&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1 id="cómo-está-hecho"&gt;Cómo está hecho
+&lt;/h1&gt;&lt;p&gt;El plugin en C solo crea el widget y lanza scripts. Los datos los buscan scripts de Python, mucho más fáciles de cambiar.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Archivo&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/Scripts/Musica/deadbeef/infobar/plugin.c&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;registra el widget &lt;code&gt;infobar_ng&lt;/code&gt; en gtkui y escucha &lt;code&gt;DB_EV_SONGCHANGED&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;infobar/ui.c&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;cabecera &amp;ldquo;Artista — Título&amp;rdquo; con spinner y un &lt;code&gt;GtkNotebook&lt;/code&gt; con 4 pestañas de solo lectura: &lt;strong&gt;Letras, Artista, Álbum, Similares&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;infobar/runner.c&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;ejecuta los scripts en segundo plano con un número de &amp;ldquo;generación&amp;rdquo;, para descartar resultados de una canción anterior si cambias rápido&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;letras_ovh.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;letra desde lyrics.ovh&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;letras_genius.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;letra desde Genius si lyrics.ovh falla (token &lt;code&gt;GENIUS_TOKEN&lt;/code&gt; en &lt;code&gt;.encrypted.env&lt;/code&gt; con sops)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;bio_artista.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;biografía (Last.fm, MusicBrainz, Wikipedia)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;info_album.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;información del álbum (MusicBrainz, Wikipedia, Last.fm)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;similares.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;canciones similares en Last.fm o, si no, artistas relacionados en MusicBrainz&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Los scripts reciben artista y título (o álbum) como argumentos y escriben texto plano en stdout. El intérprete se puede cambiar con la opción &lt;code&gt;infobar_ng.python_cmd&lt;/code&gt; de DeaDBeeF; por defecto usan el shebang &lt;code&gt;~/Scripts/python_venv/bin/python&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="compilar-e-instalar"&gt;Compilar e instalar
+&lt;/h1&gt;&lt;p&gt;Necesita las cabeceras de DeaDBeeF (&lt;code&gt;/usr/include/deadbeef&lt;/code&gt;) y GTK3.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; ~/Scripts/Musica/deadbeef/infobar &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; make install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;make install&lt;/code&gt; copia:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ddb_infobar_ng.so&lt;/code&gt; en &lt;code&gt;~/.local/lib/deadbeef/&lt;/code&gt;,&lt;/li&gt;
+&lt;li&gt;los cinco scripts en &lt;code&gt;~/.config/deadbeef/infobar_scripts/&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Después, reinicia DeaDBeeF, entra en &lt;em&gt;Ver → Modo diseño&lt;/em&gt; y añade el widget &lt;strong&gt;Infobar NG&lt;/strong&gt; donde quieras. En mi layout está como primera pestaña de un &lt;code&gt;tabs&lt;/code&gt; debajo de la carátula, junto a &amp;ldquo;propiedades&amp;rdquo; y &amp;ldquo;visuals&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Si cambias un script en &lt;code&gt;~/Scripts/Musica/deadbeef/&lt;/code&gt;, vuelve a ejecutar &lt;code&gt;make install&lt;/code&gt; para copiarlo a &lt;code&gt;infobar_scripts&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;En &lt;em&gt;Modo diseño&lt;/em&gt;, quita el widget y luego:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm ~/.local/lib/deadbeef/ddb_infobar_ng.so &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; rm -r ~/.config/deadbeef/infobar_scripts
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El clon del plugin viejo (&lt;code&gt;~/gits/deadbeef-infobar&lt;/code&gt;) no se usa y se puede borrar.&lt;/p&gt;</description></item></channel></rss>
