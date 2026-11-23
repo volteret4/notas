@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Bluez on memoria digital</title><link>https://volteret4.github.io/notas/tags/bluez/</link><description>Recent content in Bluez on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/bluez/index.xml" rel="self" type="application/rss+xml"/><item><title>Una Raspberry Pi como teclado Bluetooth para una TV Hisense (VIDAA)</title><link>https://volteret4.github.io/notas/p/raspberry-teclado-bluetooth-tv/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/raspberry-teclado-bluetooth-tv/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/gits/pollo/mando_bluetooth&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;rpi/&lt;/code&gt;&lt;/strong&gt;: en la Raspberry Pi 4 (&lt;code&gt;chino&lt;/code&gt;). Se presenta a la TV como un teclado Bluetooth y escucha órdenes por &lt;strong&gt;TCP en el puerto 5555&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;beelink/client.py&lt;/code&gt;&lt;/strong&gt;: en el mini PC (Beelink). Manda las teclas a la Raspberry: &lt;code&gt;python3 client.py &amp;lt;ip-rpi&amp;gt;&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Protocolo (JSON, uno por línea):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;key&amp;#34;, &amp;#34;key&amp;#34;: &amp;#34;UP&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;media&amp;#34;, &amp;#34;key&amp;#34;: &amp;#34;VOLUP&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;combo&amp;#34;, &amp;#34;mod&amp;#34;: &amp;#34;LCTRL&amp;#34;, &amp;#34;key&amp;#34;: &amp;#34;C&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;type&amp;#34;, &amp;#34;text&amp;#34;: &amp;#34;hola&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;pin&amp;#34;, &amp;#34;code&amp;#34;: &amp;#34;123456&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;consumer&amp;#34;, &amp;#34;usage&amp;#34;: 96}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="preparar-la-raspberry-rpisetupsh"&gt;Preparar la Raspberry (&lt;code&gt;rpi/setup.sh&lt;/code&gt;)
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo bash rpi/setup.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol&gt;
+&lt;li&gt;Instala &lt;code&gt;python3-dbus python3-gi bluez bluez-tools&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Crea un drop-in de systemd para &lt;code&gt;bluetoothd&lt;/code&gt;. No se toca la unidad de la distro:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# /etc/systemd/system/bluetooth.service.d/hid.conf&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Service]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;ExecStart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;ExecStart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/usr/libexec/bluetooth/bluetoothd --compat --noplugin=input&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--noplugin=input&lt;/code&gt;: si no, el plugin &lt;em&gt;input&lt;/em&gt; de BlueZ se queda los PSM HID 0x11 y 0x13 y el servidor no puede abrirlos (&lt;code&gt;Cannot bind L2CAP PSM&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--compat&lt;/code&gt;: habilita el socket SDP antiguo para &lt;code&gt;sdptool&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;&lt;code&gt;rfkill unblock bluetooth&lt;/code&gt; (venía bloqueado). En &lt;code&gt;/boot/config.txt&lt;/code&gt; no puede haber &lt;code&gt;dtoverlay=disable-bt&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Clase de dispositivo &lt;strong&gt;teclado&lt;/strong&gt; (&lt;code&gt;0x000540&lt;/code&gt;), visible y nombre &lt;code&gt;RPi-BT-Keyboard&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id="lo-que-falló-por-el-camino"&gt;Lo que falló por el camino
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Problema&lt;/th&gt;
+&lt;th&gt;Causa y solución&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;sdptool browse local&lt;/code&gt; vacío tras &lt;code&gt;sdptool add HID&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;sdptool&lt;/code&gt; no sirve para HID en BlueZ 5. El registro SDP se hace por D-Bus con &lt;code&gt;ProfileManager1&lt;/code&gt; (&lt;code&gt;pairing_agent.register_hid_sdp()&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;La clase del dispositivo volvía a la de antes&lt;/td&gt;
+&lt;td&gt;BlueZ pisa la de &lt;code&gt;hciconfig class&lt;/code&gt;. Hay que usar &lt;code&gt;btmgmt --index 0 class 5 64&lt;/code&gt; (periférico + teclado)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;La TV muestra un &lt;strong&gt;código de 6 dígitos&lt;/strong&gt; y falla la conexión&lt;/td&gt;
+&lt;td&gt;La TV muestra el código y la Raspberry tiene que &lt;strong&gt;teclearlo&lt;/strong&gt;. El agente de emparejamiento (&lt;code&gt;pairing_agent.py&lt;/code&gt;, &lt;code&gt;KeyboardDisplay&lt;/code&gt;) espera a que llegue el PIN con &lt;code&gt;{&amp;quot;action&amp;quot;:&amp;quot;pin&amp;quot;,&amp;quot;code&amp;quot;:&amp;quot;...&amp;quot;}&lt;/code&gt; en lugar de aceptar solo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Tres emparejamientos repetidos&lt;/td&gt;
+&lt;td&gt;por borrar y volver a emparejar. Limpia con &lt;code&gt;bluetoothctl remove &amp;lt;MAC&amp;gt;&lt;/code&gt; en los dos lados&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;El móvil lo veía y la TV no&lt;/td&gt;
+&lt;td&gt;condición de carrera: los sockets L2CAP tienen que estar abiertos &lt;strong&gt;antes&lt;/strong&gt; de ponerse visible (&lt;code&gt;prepare_l2cap_servers()&lt;/code&gt; va antes de &lt;code&gt;piscan&lt;/code&gt;). &lt;code&gt;--no-sdp&lt;/code&gt; solo sirve para probar el descubrimiento&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Diagnóstico útil:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo btmon
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl cat bluetooth &lt;span class="p"&gt;|&lt;/span&gt; grep ExecStart
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;hciconfig hci0 -a
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="arrancar"&gt;Arrancar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo python3 rpi/bt_hid_server.py --host 0.0.0.0 --port &lt;span class="m"&gt;5555&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;En la TV: &lt;em&gt;Configuración → Conexiones → Bluetooth&lt;/em&gt; → buscar → &lt;code&gt;RPi-BT-Keyboard&lt;/code&gt; → teclear el código que muestra con &lt;code&gt;{&amp;quot;action&amp;quot;:&amp;quot;pin&amp;quot;,...}&lt;/code&gt; desde el cliente.&lt;/p&gt;
+&lt;h1 id="teclas-especiales-de-la-tv"&gt;Teclas especiales de la TV
+&lt;/h1&gt;&lt;p&gt;El descriptor HID tiene un tercer informe (&lt;em&gt;Report ID 3&lt;/em&gt;) de &lt;strong&gt;Consumer Control&lt;/strong&gt; con un código libre, para probar teclas propias de cada tele sin tocar el descriptor. En &lt;code&gt;rpi/hid.py&lt;/code&gt; están los candidatos que probé para la Hisense:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Alias&lt;/th&gt;
+&lt;th&gt;Código&lt;/th&gt;
+&lt;th&gt;Para&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;INPUT&lt;/code&gt;, &lt;code&gt;INPUT2&lt;/code&gt;, &lt;code&gt;INPUT3&lt;/code&gt;, &lt;code&gt;INPUT4&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;0x0060, 0x0086, 0x00A0, 0x0183&lt;/td&gt;
+&lt;td&gt;menú de fuentes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;YOUTUBE&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;0x0196 (AL Internet Browser)&lt;/td&gt;
+&lt;td&gt;abrir YouTube&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;APPS&lt;/code&gt;, &lt;code&gt;SMART&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;0x023C, 0x0223&lt;/td&gt;
+&lt;td&gt;lanzador&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;CH_UP&lt;/code&gt;, &lt;code&gt;CH_DOWN&lt;/code&gt;, &lt;code&gt;POWER&lt;/code&gt;, &lt;code&gt;SLEEP&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;0x009C, 0x009D, 0x0030, 0x0032&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;El &amp;ldquo;favorito&amp;rdquo; que lleva a HDMI3 es la misma idea: probar códigos hasta dar con el que usa VIDAA.&lt;/p&gt;
+&lt;h1 id="revertir-en-la-raspberry"&gt;Revertir (en la Raspberry)
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo rm /etc/systemd/system/bluetooth.service.d/hid.conf &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo systemctl daemon-reload &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo systemctl restart bluetooth
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;bluetoothctl remove &amp;lt;MAC-de-la-TV&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Y en la TV, olvida el dispositivo &lt;code&gt;RPi-BT-Keyboard&lt;/code&gt;.&lt;/p&gt;</description></item></channel></rss>

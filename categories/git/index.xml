@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Git on memoria digital</title><link>https://volteret4.github.io/notas/categories/git/</link><description>Recent content in Git on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/categories/git/index.xml" rel="self" type="application/rss+xml"/><item><title>chezmoi re-add y plantillas por hostname</title><link>https://volteret4.github.io/notas/p/chezmoi-re-add-y-plantillas/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/chezmoi-re-add-y-plantillas/</guid><description>&lt;h1 id="subir-los-cambios-hechos-a-mano"&gt;Subir los cambios hechos a mano
+&lt;/h1&gt;&lt;p&gt;Si editas un archivo que ya controla chezmoi (por ejemplo &lt;code&gt;~/.config/zellij/config.kdl&lt;/code&gt;), chezmoi no se entera hasta que lo vuelves a añadir:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chezmoi re-add
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Sin argumentos, actualiza la copia de &lt;strong&gt;todos&lt;/strong&gt; los archivos que han cambiado. Con una ruta, solo ese archivo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chezmoi re-add ~/.config/zellij/config.kdl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Antes, mira qué cambiaría:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chezmoi status
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chezmoi diff
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;En &lt;code&gt;chezmoi diff&lt;/code&gt;, el signo &lt;code&gt;-&lt;/code&gt; es tu archivo en &lt;code&gt;$HOME&lt;/code&gt; y el &lt;code&gt;+&lt;/code&gt; es lo que pondría chezmoi.&lt;/p&gt;
+&lt;p&gt;Como &lt;code&gt;.chezmoi.toml.tmpl&lt;/code&gt; tiene &lt;code&gt;autoCommit = true&lt;/code&gt; y &lt;code&gt;autoPush = true&lt;/code&gt;, &lt;code&gt;re-add&lt;/code&gt; hace commit y push solo.&lt;/p&gt;
+&lt;h2 id="ojo-re-add-no-toca-las-plantillas"&gt;Ojo: &lt;code&gt;re-add&lt;/code&gt; no toca las plantillas
+&lt;/h2&gt;&lt;p&gt;Los archivos &lt;code&gt;.tmpl&lt;/code&gt; (&lt;code&gt;dot_zshrc.tmpl&lt;/code&gt;, &lt;code&gt;dot_zsh_aliases.tmpl&lt;/code&gt;…) &lt;strong&gt;no se actualizan con &lt;code&gt;re-add&lt;/code&gt;&lt;/strong&gt;: chezmoi no sabe convertir el archivo final otra vez en plantilla. Hay que editar la plantilla, o lo que incluye, a mano:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chezmoi edit ~/.zsh_aliases
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;O edita directamente &lt;code&gt;~/.local/share/chezmoi/templates/zsh_aliases/arcolinux&lt;/code&gt; (o &lt;code&gt;comunes&lt;/code&gt;) y comprueba el resultado con:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chezmoi cat ~/.zsh_aliases &lt;span class="p"&gt;|&lt;/span&gt; less
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="aliases-que-solo-salían-en-arcolinux"&gt;Aliases que solo salían en arcolinux
+&lt;/h1&gt;&lt;p&gt;El &lt;code&gt;.zshrc&lt;/code&gt; se dividía bien por máquina, pero en pepecono y el resto de servidores el &lt;code&gt;~/.zsh_aliases&lt;/code&gt; solo traía los comunes. &lt;code&gt;dot_zsh_aliases.tmpl&lt;/code&gt; solo incluía el bloque adicional si el hostname era &lt;code&gt;arcolinux&lt;/code&gt;, y en cualquier otro dejaba un comentario:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-diff" data-lang="diff"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; # --- COMÚN ---
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; {{- include &amp;#34;templates/zsh_aliases/comunes&amp;#34; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;-# --- ESPECÍFICO POR HOSTNAME ---
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;-{{- if eq .chezmoi.hostname &amp;#34;arcolinux&amp;#34; }}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;-{{- include &amp;#34;templates/zsh_aliases/arcolinux&amp;#34; }}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;-{{- else }}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;-# Hostname desconocido: {{ .chezmoi.hostname }}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;-{{- end }}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+# --- ADICIONALES (igual en todos los hosts) ---
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+{{- include &amp;#34;templates/zsh_aliases/arcolinux&amp;#34; }}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;dot_zshrc.tmpl&lt;/code&gt; sí distingue por hostname (&lt;code&gt;arcolinux&lt;/code&gt;, &lt;code&gt;pepe-cono&lt;/code&gt;, &lt;code&gt;dietpi&lt;/code&gt;, &lt;code&gt;doctrina&lt;/code&gt;) y &lt;strong&gt;falla&lt;/strong&gt; con un hostname desconocido (&lt;code&gt;{{ fail ... }}&lt;/code&gt;). Si añades una máquina nueva, añádele su rama.&lt;/p&gt;
+&lt;p&gt;Para aplicarlo en cada servidor:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chezmoi update &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; chezmoi apply &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;exec&lt;/span&gt; zsh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Es lo mismo que el alias &lt;code&gt;chzd&lt;/code&gt;. Para subir los cambios está &lt;code&gt;chzu&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;El cambio está en el commit &lt;code&gt;2c1adac&lt;/code&gt; del repo de chezmoi (29-10, junto con otros archivos). Para recuperar solo la plantilla anterior:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/.local/share/chezmoi checkout 2c1adac~1 -- dot_zsh_aliases.tmpl &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; chezmoi apply ~/.zsh_aliases
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Recuperar espacio, copias ocultas de un repo con Git LFS</title><link>https://volteret4.github.io/notas/p/recuperar-espacio-repo-git-lfs/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/recuperar-espacio-repo-git-lfs/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/gits/pollo/rym_lastfm/.zed&lt;/code&gt; ocupaba muchísimo. Pero Zed es solo un editor: lo único suyo en esa carpeta es &lt;code&gt;settings.json&lt;/code&gt; (211 bytes).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;du -sh ~/gits/pollo/rym_lastfm/.zed/* ~/gits/pollo/rym_lastfm/.zed/.&lt;span class="o"&gt;[&lt;/span&gt;!.&lt;span class="o"&gt;]&lt;/span&gt;* 2&amp;gt;/dev/null &lt;span class="p"&gt;|&lt;/span&gt; sort -h
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Contenido de &lt;code&gt;.zed&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;Tamaño&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;.git&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;2,1 GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;.old&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;1,4 GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;docs&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;687 MB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;db&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;198 MB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Era &lt;strong&gt;una copia entera del repo&lt;/strong&gt; del 19-03-2026, de antes de reescribir el historial (cuando moví la base SQLite a Git LFS). Su &lt;code&gt;main&lt;/code&gt; estaba &amp;ldquo;353 delante, 349 detrás&amp;rdquo; de &lt;code&gt;origin/main&lt;/code&gt;: mismos mensajes de commit, pero con otros hashes.&lt;/p&gt;
+&lt;h1 id="cómo-comprobé-que-se-podía-borrar"&gt;Cómo comprobé que se podía borrar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/gits/pollo/rym_lastfm/.zed log -1 --format&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;%H %ad %s&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/gits/pollo/rym_lastfm/.zed rev-list --left-right --count main...origin/main
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Commits&lt;/strong&gt;: el historial viejo está entero en pepecono (&lt;code&gt;~/gits/pollo/rym_lastfm&lt;/code&gt;), y los mensajes están en el historial actual.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Archivos sueltos&lt;/strong&gt;: los &lt;code&gt;.sql&lt;/code&gt; y los scripts viejos son idénticos en &lt;code&gt;db/&lt;/code&gt; y &lt;code&gt;.old/&lt;/code&gt;, o se recuperan del historial de git.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Bases de datos&lt;/strong&gt;: eran versiones anteriores de las actuales de &lt;code&gt;db/&lt;/code&gt;, que son más nuevas.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="qué-borré-12-10-2026"&gt;Qué borré (12-10-2026)
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Ruta&lt;/th&gt;
+&lt;th&gt;Tamaño&lt;/th&gt;
+&lt;th&gt;Qué era&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/rym_lastfm/.zed/&lt;/code&gt; (todo menos &lt;code&gt;settings.json&lt;/code&gt;)&lt;/td&gt;
+&lt;td&gt;4,4 GB&lt;/td&gt;
+&lt;td&gt;copia del repo del 19-03&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/back_rym_lastfm/&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;4,4 GB&lt;/td&gt;
+&lt;td&gt;otra copia idéntica (mismo commit del 17-03)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/rym_lastfm/.old/db/db_new/lastfm_cache.db&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;1,4 GB&lt;/td&gt;
+&lt;td&gt;base de datos anterior a &lt;code&gt;lastfm_cache_rym_new_normalized.db&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Para conservar la configuración de Zed:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/gits/pollo/rym_lastfm/.zed/settings.json /tmp/zed-settings.json &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; rm -rf ~/gits/pollo/rym_lastfm/.zed &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; mkdir ~/gits/pollo/rym_lastfm/.zed &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; mv /tmp/zed-settings.json ~/gits/pollo/rym_lastfm/.zed/settings.json
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="lo-que-se-perdió-de-verdad"&gt;Lo que se perdió de verdad
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Dos versiones antiguas de las bases de datos (unos 723 MB), que no estaban ni en el repo ni en pepecono. Puede que sigan en el LFS de GitHub (no comprobado).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;lastfm_cache.db&lt;/code&gt;: &lt;code&gt;html_temporal.py&lt;/code&gt; y &lt;code&gt;html_usuarios.py&lt;/code&gt; todavía la usaban. Se adaptaron a la base normalizada: 7 rutas por defecto cambiadas y un error de SQL corregido en &lt;code&gt;db/db_reader.py&lt;/code&gt; (SQLite no admite &lt;code&gt;sub(ts)&lt;/code&gt; como alias de columnas).&lt;/li&gt;
+&lt;li&gt;Un &lt;code&gt;db/.env&lt;/code&gt; viejo (ya había uno más nuevo).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="moraleja"&gt;Moraleja
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Antes de copiar un repo &amp;ldquo;por si acaso&amp;rdquo; para reescribir su historial, haz &lt;code&gt;git bundle&lt;/code&gt; o &lt;code&gt;git clone --mirror&lt;/code&gt; &lt;strong&gt;fuera&lt;/strong&gt; del árbol de trabajo. Una copia dentro de una carpeta oculta se olvida y ocupa el doble.&lt;/li&gt;
+&lt;li&gt;Borrar archivos grandes del árbol no reduce &lt;code&gt;.git&lt;/code&gt; si siguen en el historial.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git count-objects -vH
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git lfs ls-files -s &lt;span class="p"&gt;|&lt;/span&gt; sort -k3 -h &lt;span class="p"&gt;|&lt;/span&gt; tail
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;No se puede: se borró, no se movió. Para recuperar el historial viejo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone pepecono:gits/pollo/rym_lastfm ~/rym_lastfm_viejo
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Git Large File Storage (Lfs)</title><link>https://volteret4.github.io/notas/p/git-large-file-storage-lfs/</link><pubDate>Sat, 14 Mar 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/git-large-file-storage-lfs/</guid><description>&lt;p&gt;Git Large File Storage&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Descargue e instale la extensión de línea de commandos de Git. Una vez descargado e instalado, configure Git LFS para su cuenta de usuario ejecutando:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; git lfs install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;pre&gt;&lt;code&gt;Sólo necesita ejecutar esto una vez por cuenta de usuario.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt;En cada repositorio de Git donde desee utilizar Git LFS, seleccione los tipos de archivos que desea que Git LFS administre (o edite directamente sus atributos .gitat). Puede configurar extensions de archivos adicionales en cualquier memento.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; git lfs track &lt;span class="s2"&gt;&amp;#34;\*.psd&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Now make sure .gitattributes is tracked:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; git add .gitattributes
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;pre&gt;&lt;code&gt;Tenga en cuenta que definir los tipos de archivos que Git LFS debe rastrear no convertirá, por sí solo, ningún archivo preexistente a Git LFS, como archivos en otras ramas o en su historial de confirmaciones anterior. Para hacer eso, use el commando [git lfs migrate(1)](https://github.com/git-lfs/git-lfs/blob/main/docs/man/git-lfs-migrate.adoc?utm_source=gitlfs_site&amp;amp;utm_medium=doc_man_migrate_link&amp;amp;utm_campaign=gitlfs), que tiene una variedad de opciones diseñadas para adaptarse a varios casos de uso potenciales.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;No existe el paso tres. Simplemente comprométete y presiona como lo harías normalmente; por ejemplo, si su sucursal actual se llama &lt;code&gt;main&lt;/code&gt;:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; git add file.psd
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; git commit -m &lt;span class="s2"&gt;&amp;#34;Add design file&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; git push origin main
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Git. Retroceder En Github</title><link>https://volteret4.github.io/notas/p/git.-retroceder-en-github/</link><pubDate>Tue, 22 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/git.-retroceder-en-github/</guid><description>&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; git restore archivo1 archivo2
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si además de restaurarlos quieres deshacer cualquier cambio que hayas &lt;em&gt;staged&lt;/em&gt; con &lt;code&gt;git add&lt;/code&gt;, usa:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; git restore --staged archivo1 archivo2 git restore archivo1 archivo2
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Crear Commit Aleatorio</title><link>https://volteret4.github.io/notas/p/crear-commit-aleatorio/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-commit-aleatorio/</guid><description>&lt;p&gt;Puedes usar estos comandos para añadir aleatoriedad a diferentes programas.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Commits aleatorios
+&lt;code&gt;curl -s https://whatthecommit.com/index.txt&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Chistes de padres
+&lt;code&gt;curl https://icanhazdadjoke.com&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Puede usarse por ejemplo en un &lt;strong&gt;alias&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Para chezmoi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;alias&lt;/span&gt; &lt;span class="nv"&gt;chzu&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;chezmoi git add . ; chezmoi git -- commit -m &amp;#34;$(curl -s https://whatthecommit.com/index.txt)&amp;#34; ; chezmoi git push&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Para git&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;alias&lt;/span&gt; &lt;span class="nv"&gt;gitodo&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;git add . ; git commit -m &amp;#34;$(curl -s https://whatthecommit.com/index.txt)&amp;#34; ; git push&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

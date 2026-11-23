@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>L2ping on memoria digital</title><link>https://volteret4.github.io/notas/tags/l2ping/</link><description>Recent content in L2ping on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/l2ping/index.xml" rel="self" type="application/rss+xml"/><item><title>Detector de presencia por Bluetooth con aviso a Home Assistant</title><link>https://volteret4.github.io/notas/p/presencia-bluetooth-home-assistant/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/presencia-bluetooth-home-assistant/</guid><description>&lt;h1 id="cómo-funciona"&gt;Cómo funciona
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/gits/pollo/mando_bluetooth/rpi/presence.py&lt;/code&gt; (en la misma Raspberry que hace de &lt;a class="link" href="../raspberry-teclado-bluetooth-tv" &gt;teclado Bluetooth&lt;/a&gt;):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cada &lt;code&gt;scan_interval&lt;/code&gt; segundos hace &lt;code&gt;l2ping -c 1 -t 5 &amp;lt;MAC&amp;gt;&lt;/code&gt; a cada dispositivo de la lista. &lt;strong&gt;No hace falta que esté emparejado&lt;/strong&gt; ni visible: basta con que tenga el Bluetooth encendido.&lt;/li&gt;
+&lt;li&gt;Lo marca &lt;strong&gt;ausente&lt;/strong&gt; tras &lt;code&gt;absent_threshold&lt;/code&gt; fallos seguidos, para no dar falsos &amp;ldquo;se ha ido&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;En cada cambio ejecuta &lt;code&gt;on_arrive&lt;/code&gt; u &lt;code&gt;on_leave&lt;/code&gt; (comandos de shell, opcionales) y avisa a Home Assistant.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="configuración"&gt;Configuración
+&lt;/h1&gt;&lt;p&gt;Copia &lt;code&gt;rpi/presence_config.json.example&lt;/code&gt; a &lt;code&gt;rpi/presence_config.json&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;devices&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;AA:BB:CC:DD:EE:FF&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;name&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Mi movil&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;on_arrive&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;on_leave&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;scan_interval&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;absent_threshold&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;home_assistant&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;url&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;http://192.168.1.X:8123&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;token&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;TU_TOKEN_DE_LARGA_DURACION&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;notify_service&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;notify.mobile_app_tu_movil&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El token es un &lt;em&gt;token de acceso de larga duración&lt;/em&gt; (Home Assistant → tu perfil → &lt;em&gt;Seguridad&lt;/em&gt;). &lt;code&gt;presence_config.json&lt;/code&gt; está en &lt;code&gt;.gitignore&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="qué-crea-en-home-assistant"&gt;Qué crea en Home Assistant
+&lt;/h1&gt;&lt;p&gt;Con la API REST (&lt;code&gt;POST /api/states/&amp;lt;entity&amp;gt;&lt;/code&gt;) crea o actualiza &lt;strong&gt;un &lt;code&gt;binary_sensor&lt;/code&gt; por dispositivo&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;binary_sensor.bt_presence_mi_movil on / off
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; friendly_name: BT Mi movil
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; device_class: presence
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; mac: AA:BB:CC:DD:EE:FF
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; source: mando_bluetooth
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si hay &lt;code&gt;notify_service&lt;/code&gt;, además llama a &lt;code&gt;POST /api/services/notify/&amp;lt;servicio&amp;gt;&lt;/code&gt; con el mensaje de llegada o salida.&lt;/p&gt;
+&lt;p&gt;Ojo: las entidades creadas por &lt;code&gt;/api/states&lt;/code&gt; &lt;strong&gt;no sobreviven a un reinicio&lt;/strong&gt; de Home Assistant hasta el siguiente cambio de estado. Si las usas en automatizaciones, el script las vuelve a publicar en el siguiente ciclo.&lt;/p&gt;
+&lt;h1 id="consultarlo-desde-fuera"&gt;Consultarlo desde fuera
+&lt;/h1&gt;&lt;p&gt;El servidor HID (&lt;code&gt;bt_hid_server.py&lt;/code&gt;) carga el detector y acepta en el puerto 5555:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;presence&amp;#34;} -&amp;gt; estado de todos (JSON)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{&amp;#34;action&amp;#34;: &amp;#34;presence&amp;#34;, &amp;#34;mac&amp;#34;: &amp;#34;AA:BB:...&amp;#34;} -&amp;gt; presence:AA:BB:...:present|absent
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm ~/gits/pollo/mando_bluetooth/rpi/presence.py ~/gits/pollo/mando_bluetooth/rpi/presence_config.json
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Quita del servidor la importación de &lt;code&gt;PresenceDetector&lt;/code&gt;, borra en Home Assistant las entidades &lt;code&gt;binary_sensor.bt_presence_*&lt;/code&gt; (&lt;em&gt;Herramientas para desarrolladores → Estados&lt;/em&gt;) y revoca el token.&lt;/p&gt;
+&lt;p&gt;Los cambios no están commiteados en el repo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/gits/pollo/mando_bluetooth status --short
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

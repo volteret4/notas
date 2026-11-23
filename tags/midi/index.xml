@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Midi on memoria digital</title><link>https://volteret4.github.io/notas/tags/midi/</link><description>Recent content in Midi on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/midi/index.xml" rel="self" type="application/rss+xml"/><item><title>Roland DJ-202 en Mixxx 2.5, botones y perillas de efectos</title><link>https://volteret4.github.io/notas/p/roland-dj-202-mixxx-2.5/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/roland-dj-202-mixxx-2.5/</guid><description>&lt;h1 id="el-error"&gt;El error
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Uncaught exception: file:///home/huan/.mixxx/controllers/Roland_DJ-202-scripts.js:651:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;TypeError: Property &amp;#39;flash&amp;#39; of object [object Object] is not a function
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Saltaba sobre todo al mantener pulsado un botón de efecto, que es lo que hace parpadear el LED.&lt;/p&gt;
+&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;Desde Mixxx &lt;strong&gt;2.4&lt;/strong&gt; (tengo la 2.5.6), &lt;code&gt;engine.beginTimer&lt;/code&gt; ya no ejecuta el callback con el &lt;code&gt;this&lt;/code&gt; del componente cuando se le pasa una &lt;code&gt;function() { ... }&lt;/code&gt;. Dentro del temporizador, &lt;code&gt;this&lt;/code&gt; dejaba de ser el botón y &lt;code&gt;this.flash&lt;/code&gt; no existía.&lt;/p&gt;
+&lt;h1 id="el-arreglo"&gt;El arreglo
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/.mixxx/controllers/Roland_DJ-202-scripts.js&lt;/code&gt;, las &lt;strong&gt;9&lt;/strong&gt; llamadas a &lt;code&gt;engine.beginTimer&lt;/code&gt; pasan de &lt;code&gt;function&lt;/code&gt; a &lt;strong&gt;función flecha&lt;/strong&gt;, que mantiene el &lt;code&gt;this&lt;/code&gt; de fuera:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-diff" data-lang="diff"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gd"&gt;- this.timer = engine.beginTimer(250, function() {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gi"&gt;+ this.timer = engine.beginTimer(250, () =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; this.flash();
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Solo la línea 651 daba error, pero las otras tenían el mismo problema y fallaban sin avisar: pulsación larga en Sync, doble toque, cambio de deck, key +/−, etc.&lt;/p&gt;
+&lt;p&gt;Comprobación de sintaxis:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;node --check ~/.mixxx/controllers/Roland_DJ-202-scripts.js
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="las-perillas-de-efectos-no-hacían-nada"&gt;Las perillas de efectos no hacían nada
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/.mixxx/mixxx.log&lt;/code&gt; salía:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Script tried setting (, focused_effect) to NaN
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;La perilla solo controla el efecto &lt;strong&gt;seleccionado&lt;/strong&gt;, y para seleccionarlo hay que &lt;strong&gt;mantener pulsado&lt;/strong&gt; su botón. Esa pulsación larga estaba rota por el mismo fallo de &lt;code&gt;this&lt;/code&gt;, así que nunca había un efecto seleccionado.&lt;/p&gt;
+&lt;p&gt;Además del arreglo anterior, cambié el comportamiento:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Situación&lt;/th&gt;
+&lt;th&gt;Antes&lt;/th&gt;
+&lt;th&gt;Ahora&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Perilla sin efecto seleccionado&lt;/td&gt;
+&lt;td&gt;nada&lt;/td&gt;
+&lt;td&gt;mueve la perilla principal de la unidad (&lt;code&gt;super1&lt;/code&gt;), que actúa sobre los tres efectos&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Perilla con un efecto seleccionado&lt;/td&gt;
+&lt;td&gt;ese efecto&lt;/td&gt;
+&lt;td&gt;igual&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Shift + perilla&lt;/td&gt;
+&lt;td&gt;mezcla dry/wet&lt;/td&gt;
+&lt;td&gt;igual&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Puede que la perilla no responda hasta que pase por la posición que muestra Mixxx en pantalla. Es la &amp;ldquo;recogida suave&amp;rdquo; del script, para que el valor no pegue saltos.&lt;/p&gt;
+&lt;p&gt;Si sigue sin responder, mira si aparece algo nuevo en &lt;code&gt;~/.mixxx/mixxx.log&lt;/code&gt; al girarla. También puede que el DJ-202 mande la perilla por otro número MIDI distinto de &lt;code&gt;0xB8/0xB9 0x00/0x03&lt;/code&gt;; se comprueba con el asistente de aprendizaje MIDI de Mixxx.&lt;/p&gt;
+&lt;p&gt;Para aplicar los cambios: reinicia Mixxx o desactiva y vuelve a activar el controlador en &lt;em&gt;Preferencias → Controladores&lt;/em&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Copia&lt;/th&gt;
+&lt;th&gt;Estado&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;Roland_DJ-202-scripts.js.bak&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;antes de cambiar los temporizadores&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;Roland_DJ-202-scripts.js.bak2&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;antes de cambiar las perillas&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/.mixxx/controllers/Roland_DJ-202-scripts.js.bak ~/.mixxx/controllers/Roland_DJ-202-scripts.js
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El mapeo &lt;code&gt;Roland_DJ-202.midi.xml&lt;/code&gt; también está en chezmoi (&lt;code&gt;dot_mixxx/controllers/&lt;/code&gt;).&lt;/p&gt;</description></item></channel></rss>

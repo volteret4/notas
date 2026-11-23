@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Contenedores on memoria digital</title><link>https://volteret4.github.io/notas/categories/contenedores/</link><description>Recent content in Contenedores on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/categories/contenedores/index.xml" rel="self" type="application/rss+xml"/><item><title>escuchowsky, recomendaciones musicales con Last.fm en AWS</title><link>https://volteret4.github.io/notas/p/escuchowsky-recomendaciones-lastfm/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/escuchowsky-recomendaciones-lastfm/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Repo: &lt;code&gt;~/gits/pollo/escuchowsky&lt;/code&gt; (&lt;code&gt;https://github.com/volteret4/escuchowsky.git&lt;/code&gt;).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Recomendaciones&lt;/strong&gt; a partir de los scrobbles de Last.fm y &lt;strong&gt;ListenBrainz&lt;/strong&gt;, también con &lt;strong&gt;usuarios secundarios&lt;/strong&gt;: amigos cuyos gustos se cruzan con los tuyos.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Colecciones &amp;ldquo;must hear&amp;rdquo;&lt;/strong&gt; (listas de RYM, Scaruffi, AOTY…), con lo que ya has escuchado marcado.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Árbol de géneros&lt;/strong&gt; en mermaid (&lt;code&gt;app_genre_mermaid.py&lt;/code&gt;) y descubrimiento (&lt;code&gt;app_discover.py&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Traducciones (las claves tipo &lt;code&gt;um.search.button&lt;/code&gt; tienen que existir en todos los idiomas, o salen sin traducir).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="despliegue"&gt;Despliegue
+&lt;/h1&gt;&lt;p&gt;No corre en casa, sino en una instancia del &lt;strong&gt;free tier de AWS&lt;/strong&gt;. Fueron mis primeros pasos con AWS.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;docker-compose.yml&lt;/code&gt;: servicios &lt;code&gt;escuchowsky&lt;/code&gt;, &lt;code&gt;musthear&lt;/code&gt; y &lt;code&gt;tumtumpa&lt;/code&gt; (Flask + Gunicorn), un &lt;code&gt;nginx&lt;/code&gt; con &lt;strong&gt;ModSecurity&lt;/strong&gt; como proxy inverso (puertos 8085 y 8443 dentro, 80 y 443 hacia fuera con iptables), y &lt;code&gt;nginx-exporter&lt;/code&gt; + &lt;code&gt;node-exporter&lt;/code&gt; para Prometheus/Grafana en otro servidor.&lt;/p&gt;
+&lt;p&gt;Endurecimiento, según &lt;code&gt;CLAUDE.md&lt;/code&gt; del repo:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Docker &lt;strong&gt;rootless&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Solo 80/443 expuestos.&lt;/li&gt;
+&lt;li&gt;CrowdSec leyendo los logs del sistema y de las apps.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;auditd&lt;/code&gt;, rotación de logs y escaneos con &lt;strong&gt;trivy&lt;/strong&gt; (&lt;code&gt;trivy_reports/&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Certificados con acme.sh, uno de ellos solo para Prometheus.&lt;/li&gt;
+&lt;li&gt;Imágenes fijadas por &lt;code&gt;sha256&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose up -d --build
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los secretos van en &lt;code&gt;.env&lt;/code&gt; cifrado con sops (&lt;code&gt;sops_env.py&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Es un proyecto aparte: para quitarlo, &lt;code&gt;docker compose down -v&lt;/code&gt; en la instancia y terminar la instancia en la consola de AWS (vigila que no queden volúmenes EBS ni IPs elásticas facturando).&lt;/p&gt;</description></item><item><title>Sacar el audio de Airsonic en Docker por el PipeWire del host</title><link>https://volteret4.github.io/notas/p/airsonic-docker-audio-pipewire/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/airsonic-docker-audio-pipewire/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;El &lt;strong&gt;modo jukebox&lt;/strong&gt; de Airsonic reproduce la música en el propio servidor. En pepecono, Airsonic-Advanced corre en Docker (&lt;code&gt;lscr.io/linuxserver/airsonic-advanced&lt;/code&gt;), y dentro del contenedor no hay ninguna tarjeta de sonido. El host usa &lt;strong&gt;PipeWire&lt;/strong&gt;, no ALSA directo.&lt;/p&gt;
+&lt;p&gt;No hace falta recompilar Airsonic. Java usa ALSA, y ALSA puede mandar a un servidor pulse (el &lt;code&gt;pipewire-pulse&lt;/code&gt; del host) a través del plugin &lt;code&gt;alsa-plugins-pulse&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="cambios"&gt;Cambios
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/contenedores/airsonic/docker-compose.yml&lt;/code&gt; (en pepecono), lo añadido:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PULSE_SERVER=unix:/run/user/1000/pulse/native&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/run/user/1000/pulse/native:/run/user/1000/pulse/native&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/airsonic/config/.asoundrc:/etc/asound.conf&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/airsonic/config/custom-cont-init.d:/custom-cont-init.d&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;El socket pulse del host&lt;/strong&gt; (&lt;code&gt;/run/user/1000/pulse/native&lt;/code&gt;, del usuario &lt;code&gt;pepe&lt;/code&gt;, UID 1000) se monta en el contenedor, y &lt;code&gt;PULSE_SERVER&lt;/code&gt; apunta a él. Como el contenedor corre con &lt;code&gt;PUID=1000&lt;/code&gt;, tiene permiso.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;ALSA → pulse.&lt;/strong&gt; &lt;code&gt;config/.asoundrc&lt;/code&gt;, montado como &lt;code&gt;/etc/asound.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pcm.!default {
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; type pulse
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ctl.!default {
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; type pulse
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start="3"&gt;
+&lt;li&gt;&lt;strong&gt;El plugin.&lt;/strong&gt; La imagen de linuxserver es Alpine: no tiene &lt;code&gt;apt-get&lt;/code&gt; (&lt;code&gt;exec: &amp;quot;apt-get&amp;quot;: executable file not found&lt;/code&gt;) y se pierde lo que instales a mano al recrear el contenedor. Las imágenes de linuxserver ejecutan al arrancar lo que haya en &lt;code&gt;/custom-cont-init.d&lt;/code&gt;, así que va en &lt;code&gt;config/custom-cont-init.d/install-alsa-pulse.sh&lt;/code&gt;:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;apk add --no-cache alsa-plugins-pulse
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;cd ~/contenedores/airsonic &amp;amp;&amp;amp; docker compose up -d --force-recreate&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="comprobar"&gt;Comprobar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;docker exec airsonic-advanced ls -la /run/user/1000/pulse/native &amp;amp;&amp;amp; docker exec airsonic-advanced find /usr -name &amp;#34;libasound_module_pcm_pulse.so&amp;#34;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;En Airsonic: &lt;em&gt;Ajustes → Reproductores&lt;/em&gt; → un reproductor de tipo &lt;strong&gt;Jukebox&lt;/strong&gt;. Reproduce algo y mira en pepecono que aparece como cliente:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;pactl list short sink-inputs&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Con los túneles PipeWire, ese audio se puede mandar a otro equipo de la casa.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Quita del &lt;code&gt;docker-compose.yml&lt;/code&gt; la variable &lt;code&gt;PULSE_SERVER&lt;/code&gt; y los tres volúmenes (socket, &lt;code&gt;.asoundrc&lt;/code&gt; y &lt;code&gt;custom-cont-init.d&lt;/code&gt;), y recrea el contenedor.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;cd ~/contenedores/airsonic &amp;amp;&amp;amp; docker compose up -d --force-recreate&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Syncthing para llevar la carpeta de Mixxx a pepecono y Airsonic</title><link>https://volteret4.github.io/notas/p/syncthing-carpeta-mixxx/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/syncthing-carpeta-mixxx/</guid><description>&lt;h1 id="esquema"&gt;Esquema
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;arcolinux /mnt/windows/Mix ──(sendonly)──▶ pepecono /mnt/NFS/moode/Mixxx → Airsonic (carpeta &amp;#34;Mixxx&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; → mixxx_info
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;arcolinux /mnt/windows/Mix_Playlists ◀─(sendreceive)─▶ pepecono repeat-one/services/mixxx_info/playlists
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Carpeta (id)&lt;/th&gt;
+&lt;th&gt;arcolinux&lt;/th&gt;
+&lt;th&gt;pepecono (contenedor)&lt;/th&gt;
+&lt;th&gt;Tipo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mjugz-pcrud&lt;/code&gt; &amp;ldquo;Mixxx&amp;rdquo;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/mnt/windows/Mix&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/data/Mixxx&lt;/code&gt; → &lt;code&gt;/mnt/NFS/moode/Mixxx&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;sendonly&lt;/strong&gt; aquí, &lt;strong&gt;receiveonly&lt;/strong&gt; allí&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mixxx-playlists&lt;/code&gt; &amp;ldquo;Mixxx Playlists&amp;rdquo;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/mnt/windows/Mix_Playlists&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/data/MixxxPlaylists&lt;/code&gt; → &lt;code&gt;~/contenedores/repeat-one/services/mixxx_info/playlists&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;sendreceive&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;sendonly&lt;/code&gt; / &lt;code&gt;receiveonly&lt;/code&gt;: este PC es la fuente. Si algo se toca en pepecono, Syncthing no lo devuelve: lo marca como &amp;ldquo;cambios locales&amp;rdquo; y se puede revertir desde la web.&lt;/p&gt;
+&lt;h1 id="pepecono-el-contenedor"&gt;pepecono: el contenedor
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/contenedores/herramientas/syncthing/docker-compose.yml&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;syncthing&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;lscr.io/linuxserver/syncthing:latest&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;container_name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;syncthing&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;hostname&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;pepecono&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;#optional&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PUID=1000&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;PGID=1000&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;TZ=Europe/Madrid&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/herramientas/syncthing/config:/config&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/mnt/NFS/lidarr/torrents_backup/watch_torrents:/data/lidarr_torrents&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/mnt/NFS/Pelis/watch_folder:/data/pelis_torrents&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/mnt/NFS/moode/Mixxx:/data/Mixxx&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/repeat-one/services/mixxx_info/playlists:/data/MixxxPlaylists&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;/home/pepe/contenedores/repeat-one/data/mfuzz-db:/data/mfuzz-db&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;ports&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;8384&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;8384&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="l"&gt;/tcp&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;22000&lt;/span&gt;&lt;span class="l"&gt;/udp&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="m"&gt;21027&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;21027&lt;/span&gt;&lt;span class="l"&gt;/udp&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;restart&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;unless-stopped&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los volúmenes de &lt;code&gt;Mixxx&lt;/code&gt; y &lt;code&gt;MixxxPlaylists&lt;/code&gt; son los nuevos (copia anterior: &lt;code&gt;docker-compose.yml.bak-claude&lt;/code&gt;). Una carpeta nueva solo se ve dentro del contenedor si está montada: añadir el volumen, recrear el contenedor y luego aceptar la carpeta en la web (&lt;code&gt;http://pepecono:8384&lt;/code&gt;) con la ruta &lt;strong&gt;del contenedor&lt;/strong&gt; (&lt;code&gt;/data/...&lt;/code&gt;).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;cd ~/contenedores/herramientas/syncthing &amp;amp;&amp;amp; docker compose up -d&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="arcolinux"&gt;arcolinux
+&lt;/h1&gt;&lt;p&gt;Syncthing corre como servicio de usuario. La configuración está en &lt;code&gt;~/.local/state/syncthing/config.xml&lt;/code&gt;. Dos cosas por ser &lt;code&gt;/mnt/windows&lt;/code&gt; un disco &lt;strong&gt;exFAT&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;exFAT no guarda permisos de Unix. Marca &lt;em&gt;Ignorar permisos&lt;/em&gt; en la carpeta, o cada &lt;code&gt;chmod&lt;/code&gt; provocará cambios fantasma.&lt;/li&gt;
+&lt;li&gt;Los nombres no distinguen mayúsculas: no tengas &lt;code&gt;Techno/&lt;/code&gt; y &lt;code&gt;techno/&lt;/code&gt; a la vez.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Ojo: el &lt;code&gt;~/.config/syncthing/config.xml&lt;/code&gt; que está en chezmoi es una copia antigua de este PC. &lt;strong&gt;No lo apliques en pepecono&lt;/strong&gt;, porque allí la configuración real es la del contenedor.&lt;/p&gt;
+&lt;h1 id="lo-que-lo-usa-en-pepecono"&gt;Lo que lo usa en pepecono
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Airsonic&lt;/strong&gt;: monta &lt;code&gt;/mnt/NFS/moode/Mixxx&lt;/code&gt; como &lt;code&gt;/Mixxx&lt;/code&gt; (carpeta de medios &amp;ldquo;Mixxx&amp;rdquo;). Ver &lt;a class="link" href="../mixxx-cajones-y-playlists-en-airsonic" &gt;playlists de Mixxx en Airsonic&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;mixxx_info&lt;/strong&gt; (repeat-one): lee las playlists de &lt;code&gt;services/mixxx_info/playlists&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Una canción recién movida tarda en estar disponible: primero la sincroniza Syncthing y luego hay que esperar al escaneo de Airsonic (&lt;code&gt;mixxx_to_airsonic.py --scan&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;En la web de Syncthing de los dos equipos: &lt;em&gt;Editar carpeta → Eliminar&lt;/em&gt;. Los archivos no se borran. Después quita los volúmenes &lt;code&gt;/data/Mixxx&lt;/code&gt; y &lt;code&gt;/data/MixxxPlaylists&lt;/code&gt; del compose y recrea el contenedor.&lt;/p&gt;</description></item><item><title>Wallabag con FlareSolverr para las webs protegidas por Cloudflare</title><link>https://volteret4.github.io/notas/p/wallabag-con-flaresolverr/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/wallabag-con-flaresolverr/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Algunos artículos se guardaban en Wallabag vacíos o con la página de &amp;ldquo;Checking your browser&amp;rdquo; de &lt;strong&gt;Cloudflare&lt;/strong&gt;, o con el aviso de cookies en lugar del texto.&lt;/p&gt;
+&lt;p&gt;Wallabag no deja usar FlareSolverr directamente, pero sí un &lt;strong&gt;proxy HTTP&lt;/strong&gt;. La idea, basada en &lt;a class="link" href="https://github.com/Lenni0451/FlareSolverrProxy" target="_blank" rel="noopener"
+&gt;FlareSolverrProxy&lt;/a&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;wallabag ──proxy──▶ flaresolverr-proxy:8888 ──directo──▶ web
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; │ si responde con el challenge de Cloudflare
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; └──▶ flaresolverr:8191 (Chrome) ──▶ web
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para ver las páginas HTTPS, el proxy hace &lt;strong&gt;MITM&lt;/strong&gt; con una CA propia. Wallabag solo confía en esa CA, y el proxy sí verifica TLS de verdad contra las webs reales.&lt;/p&gt;
+&lt;h1 id="cambios-en-pepeconocontenedoresherramientas"&gt;Cambios en &lt;code&gt;pepecono:~/contenedores/herramientas/&lt;/code&gt;
+&lt;/h1&gt;&lt;h2 id="docker-compose-herramientasyml"&gt;&lt;code&gt;docker-compose-herramientas.yml&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Servicios nuevos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# FLARESOLVERR: wallabag sale por flaresolverr-proxy; si una web devuelve&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# el challenge de Cloudflare, el proxy la repite vía FlareSolverr (Chrome).&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;flaresolverr&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;ghcr.io/flaresolverr/flaresolverr:latest&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;container_name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;flaresolverr&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;LOG_LEVEL=info&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;TZ=Europe/Madrid&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;restart&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;unless-stopped&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;flaresolverr-proxy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;./flaresolverr-proxy&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;flaresolverr-proxy:local&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;container_name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;flaresolverr-proxy&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;FLARESOLVERR_URL=http://flaresolverr:8191/v1&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;FLARESOLVERR_TIMEOUT=60000&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;volumes&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;./flaresolverr-proxy/ca:/ca&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;labels&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;com.centurylinklabs.watchtower.enable=false&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;depends_on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;flaresolverr&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;restart&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;unless-stopped&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Volúmenes añadidos al servicio &lt;code&gt;wallabag&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;./wallabag/config_prod.yml:/var/www/wallabag/app/config/config_prod.yml:ro&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;./flaresolverr-proxy/ca/ca.pem:/etc/flaresolverr-proxy-ca/ca.pem:ro&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Ninguno publica puertos al host: solo se ven en la red de Docker.&lt;/p&gt;
+&lt;h2 id="flaresolverr-proxy"&gt;&lt;code&gt;flaresolverr-proxy/&lt;/code&gt;
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Dockerfile&lt;/code&gt;: &lt;code&gt;python:3.13-slim&lt;/code&gt; con &lt;code&gt;openssl&lt;/code&gt; y &lt;code&gt;requests&lt;/code&gt;, y expone el 8888.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;proxy.py&lt;/code&gt;: hace la petición directa (20 s). Si la respuesta es un challenge de Cloudflare, la repite con FlareSolverr (&lt;code&gt;request.get&lt;/code&gt;, hasta 60 s). Para HTTPS genera al vuelo un certificado por host firmado por la CA.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ca/ca.pem&lt;/code&gt; y &lt;code&gt;ca/ca.key&lt;/code&gt;: la CA. Si no existe, la genera al arrancar (validez de 100 años). &lt;strong&gt;&lt;code&gt;ca.key&lt;/code&gt; no debe salir de esa carpeta.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="wallabagconfig_prodyml"&gt;&lt;code&gt;wallabag/config_prod.yml&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Se monta desde fuera para que &lt;strong&gt;sobreviva a Watchtower&lt;/strong&gt;, que recrea el contenedor. Al final:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;httplug&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;clients&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;wallabag_core&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;config&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;defaults&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;timeout&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;90&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;verify&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;/etc/flaresolverr-proxy-ca/ca.pem&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;proxy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;http&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;http://flaresolverr-proxy:8888&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;http://flaresolverr-proxy:8888&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;timeout: 90&lt;/code&gt; deja margen a FlareSolverr, que tarda en resolver el challenge.&lt;/p&gt;
+&lt;p&gt;Aplicar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;cd ~/contenedores/herramientas &amp;amp;&amp;amp; docker compose -f docker-compose-herramientas.yml up -d --build flaresolverr flaresolverr-proxy wallabag &amp;amp;&amp;amp; docker exec wallabag bin/console cache:clear --env=prod&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="comprobar"&gt;Comprobar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;docker logs flaresolverr-proxy --since 10m | tail -20&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Guarda en Wallabag una web con Cloudflare: en el log del proxy debe verse que reintenta con FlareSolverr.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Hay copia del compose de antes: &lt;code&gt;docker-compose-herramientas.yml.bak-claude-20260930-124709&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;cd ~/contenedores/herramientas &amp;amp;&amp;amp; docker compose -f docker-compose-herramientas.yml stop flaresolverr flaresolverr-proxy &amp;amp;&amp;amp; cp docker-compose-herramientas.yml.bak-claude-20260930-124709 docker-compose-herramientas.yml &amp;amp;&amp;amp; docker compose -f docker-compose-herramientas.yml up -d --remove-orphans wallabag&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Ojo: esa copia es anterior también a cualquier otro cambio hecho en el compose después del 30-09.&lt;/p&gt;</description></item><item><title>Change LXC Container Root Password</title><link>https://volteret4.github.io/notas/p/change-lxc-container-root-password/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/change-lxc-container-root-password/</guid><description/></item><item><title>Instalar Invidious</title><link>https://volteret4.github.io/notas/p/instalar-invidious/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/instalar-invidious/</guid><description>&lt;p&gt;Clona el repositorio&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone https://github.com/iv-org/invidious.git
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; invidious
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para obtener &lt;code&gt;po_token&lt;/code&gt; y &lt;code&gt;visitor_data&lt;/code&gt; ejecuta:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; docker run quay.io/invidious/youtube-trusted-session-generator
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para obtener el hmac:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; openssl rand -base64 &lt;span class="m"&gt;21&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Necesitas editar el docker-compose.yml para añadir estos tres tokens&lt;/p&gt;
+&lt;p&gt;Tambien puedes correr estos commandos y cargar las variables desde un .env:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Ejecutar el contenedor y capturar la salida&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;OUTPUT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;docker run quay.io/invidious/youtube-trusted-session-generator&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Extraer los valores usando grep y sed o awk&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;VISITOR_DATA&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$OUTPUT&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s1"&gt;&amp;#39;visitor_data:&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sed &lt;span class="s1"&gt;&amp;#39;s/.*visitor_data: *//&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;PO_TOKEN&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$OUTPUT&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s1"&gt;&amp;#39;po_token:&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sed &lt;span class="s1"&gt;&amp;#39;s/.*po_token: *//&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Verifica que se hayan extraído correctamente&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[[&lt;/span&gt; -z &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$VISITOR_DATA&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; -z &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$PO_TOKEN&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Error: No se pudieron extraer los datos correctamente.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# hmac&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;hmac&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;openssl rand -base64 21&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Guardarlos en un archivo .env&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cat &lt;span class="s"&gt;&amp;lt;&amp;lt;EOF &amp;gt; .env
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;VISITOR_DATA=$VISITOR_DATA
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;PO_TOKEN=$PO_TOKEN
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;HMAC=$hmac
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;.env generado correctamente:&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cat .env
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Reset Lxc Password</title><link>https://volteret4.github.io/notas/p/reset-lxc-password/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/reset-lxc-password/</guid><description>&lt;h2 id="how-to-reset-your-proxmox-lxc-container-root-password"&gt;How to Reset Your Proxmox LXC Container Root Password
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Grab the container ID&lt;/p&gt;
+&lt;p&gt;First you need to grab the &lt;strong&gt;container ID&lt;/strong&gt;, which is the number next to the container name in the Proxmox node. For example, if the container name is “monitor”, the ID will be the number next to it.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Open up a shell&lt;/p&gt;
+&lt;p&gt;Next, open up a shell (as root) into the container from the Proxmox host. You can do this by running the command &lt;strong&gt;“lxc-attach -n [container_id]”&lt;/strong&gt;, with the appropriate container ID in place of the placeholder.&lt;/p&gt;
+&lt;p&gt;For example, if the container ID is 150, the command would be:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;lxc-attach -n &lt;span class="m"&gt;150&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Change your password&lt;/p&gt;
+&lt;p&gt;Finally, change your password by running the command &lt;strong&gt;“passwd”&lt;/strong&gt;. This will prompt you to enter a new password for your container.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;passwd
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Keepassxc on memoria digital</title><link>https://volteret4.github.io/notas/tags/keepassxc/</link><description>Recent content in Keepassxc on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Tue, 10 Nov 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/keepassxc/index.xml" rel="self" type="application/rss+xml"/><item><title>KeePassXC en el monitor activo y Super+Q a la bandeja</title><link>https://volteret4.github.io/notas/p/keepassxc-monitor-activo-awesomewm/</link><pubDate>Tue, 10 Nov 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/keepassxc-monitor-activo-awesomewm/</guid><description>&lt;h1 id="síntoma"&gt;Síntoma
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Con Super+F4 (&lt;code&gt;~/Scripts/Apps/kp_busqueda.sh&lt;/code&gt;), KeePassXC siempre salía en el mismo monitor, aunque estuviera trabajando en el otro.&lt;/li&gt;
+&lt;li&gt;Super+Q la minimizaba en vez de quitarla de en medio.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="causa"&gt;Causa
+&lt;/h1&gt;&lt;p&gt;No había ninguna regla en &lt;code&gt;rc.lua&lt;/code&gt; que la atara a un monitor o etiqueta. Las únicas que le afectaban eran:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;class = &amp;quot;keepassxc*&amp;quot;, role = &amp;quot;gimp-image-window&amp;quot;&lt;/code&gt;: un resto de una regla de GIMP que nunca coincidía.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;KeePassXC&amp;quot;&lt;/code&gt; en la regla de flotantes centradas: solo la pone flotante y centrada en la pantalla donde se crea.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;El motivo real:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;KeePassXC es de &lt;strong&gt;instancia única&lt;/strong&gt;. La ventana se crea una vez, en el monitor y la etiqueta enfocados en ese momento, y se queda ahí.&lt;/li&gt;
+&lt;li&gt;Las siguientes veces, &lt;code&gt;kp_busqueda.sh&lt;/code&gt; solo vuelve a mostrar esa ventana y la activa con &lt;code&gt;xdotool windowactivate&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Cuando una ventana pide activarse, awesome te lleva a su monitor y su etiqueta, no la trae a donde estás.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Un primer intento fue moverla con &lt;code&gt;awful.screen.focused()&lt;/code&gt; justo antes de activarla, y no bastó. Al restaurarse, KeePassXC coge el foco, y para entonces awesome ya considera enfocado el monitor de KeePassXC. Hay que apuntar el monitor &lt;strong&gt;antes&lt;/strong&gt; de lanzarla.&lt;/p&gt;
+&lt;p&gt;Lo de Super+Q: en &lt;code&gt;~/.config/keepassxc/keepassxc.ini&lt;/code&gt; estaban &lt;code&gt;MinimizeOnClose=true&lt;/code&gt; y &lt;code&gt;MinimizeToTray=true&lt;/code&gt;, pero también &lt;code&gt;ShowTrayIcon=false&lt;/code&gt;. Sin icono en la bandeja no hay dónde esconderla, así que solo se minimiza. Y con &lt;code&gt;MinimizeOnClose=false&lt;/code&gt; se cierra el programa, y con él la base de datos.&lt;/p&gt;
+&lt;h1 id="cambios"&gt;Cambios
+&lt;/h1&gt;&lt;h2 id="script-de-superf4"&gt;Script de Super+F4
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Apps/kp_busqueda.sh&lt;/code&gt; queda así:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;span class="lnt"&gt;29
+&lt;/span&gt;&lt;span class="lnt"&gt;30
+&lt;/span&gt;&lt;span class="lnt"&gt;31
+&lt;/span&gt;&lt;span class="lnt"&gt;32
+&lt;/span&gt;&lt;span class="lnt"&gt;33
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;#!/usr/bin/env bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Abrir/traer keepassxc al frente, en el monitor activo, con la búsqueda enfocada&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Guardar el monitor enfocado ANTES de lanzar: al restaurarse, keepassxc&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# coge el foco y awesome pasaría a considerar enfocado su monitor original&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;scr&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;awesome-client &lt;span class="s2"&gt;&amp;#34;return require(&amp;#39;awful&amp;#39;).screen.focused().index&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; awk &lt;span class="s1"&gt;&amp;#39;{print $2}&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Lanzar o traer al frente (instancia única: una 2ª llamada muestra la ventana existente)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; pgrep -x keepassxc &amp;gt;/dev/null&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; keepassxc &amp;gt;/dev/null 2&amp;gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; setsid -f keepassxc &amp;gt;/dev/null 2&amp;gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Esperar a que la ventana principal sea visible (máx ~10 s)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;wid&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; _ in &lt;span class="k"&gt;$(&lt;/span&gt;seq 50&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nv"&gt;wid&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;xdotool search --onlyvisible --name &lt;span class="s1"&gt;&amp;#39;KeePassXC$&amp;#39;&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class="p"&gt;|&lt;/span&gt; tail -n1&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="o"&gt;[&lt;/span&gt; -n &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$wid&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;break&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; sleep 0.2
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;[&lt;/span&gt; -z &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$wid&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Traer la ventana a la etiqueta visible de ese monitor y centrarla&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;awesome-client &lt;span class="s2"&gt;&amp;#34;local awful = require(&amp;#39;awful&amp;#39;); for _, c in ipairs(client.get()) do if c.window == &lt;/span&gt;&lt;span class="nv"&gt;$wid&lt;/span&gt;&lt;span class="s2"&gt; then c.minimized = false; c:move_to_tag(screen[&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;scr&lt;/span&gt;&lt;span class="k"&gt;:-&lt;/span&gt;&lt;span class="nv"&gt;1&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;].selected_tag); awful.placement.centered(c) end end&amp;#34;&lt;/span&gt; &amp;gt;/dev/null 2&amp;gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Activar vía EWMH&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;xdotool windowactivate --sync &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$wid&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sleep 0.15
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Esperar a soltar Super y mandar Ctrl+F sin modificadores colgados&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;xdotool keyup Super_L Super_R
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;xdotool key --clearmodifiers ctrl+f
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para ver qué monitor y etiqueta tiene la ventana:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;awesome-client &lt;span class="s2"&gt;&amp;#34;local r=&amp;#39;&amp;#39; for _, c in ipairs(client.get()) do if c.class==&amp;#39;KeePassXC&amp;#39; then r=r..c.window..&amp;#39; scr=&amp;#39;..c.screen.index..&amp;#39; tag=&amp;#39;..(c.first_tag and c.first_tag.name or &amp;#39;nil&amp;#39;) end end return r&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="regla-muerta-en-rclua"&gt;Regla muerta en rc.lua
+&lt;/h2&gt;&lt;p&gt;He borrado la regla &lt;code&gt;{ rule = { class = &amp;quot;keepassxc*&amp;quot;, role = &amp;quot;gimp-image-window&amp;quot; }, properties = { maximized = true } }&lt;/code&gt;. Lo comprobé con:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;awesome -k -c ~/.config/awesome/rc.lua
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="superq-a-la-bandeja"&gt;Super+Q a la bandeja
+&lt;/h2&gt;&lt;p&gt;En la interfaz es &amp;ldquo;Minimizar en lugar de salir de la aplicación&amp;rdquo; y el icono de bandeja, pero es más fácil editar el &lt;code&gt;.ini&lt;/code&gt;. Hay que hacerlo &lt;strong&gt;con KeePassXC cerrado del todo&lt;/strong&gt; (Ctrl+Q), porque guarda los ajustes al salir:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sed -i &lt;span class="s1"&gt;&amp;#39;s/^MinimizeOnClose=false/MinimizeOnClose=true/; s/^ShowTrayIcon=false/ShowTrayIcon=true/&amp;#39;&lt;/span&gt; ~/.config/keepassxc/keepassxc.ini
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Debe quedar así:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;MinimizeOnClose&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;MinimizeToTray&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;ShowTrayIcon&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;La barra de awesome ya tiene &lt;code&gt;wibox.widget.systray()&lt;/code&gt;, así que el icono tiene dónde aparecer. Queda así:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Super+F4:&lt;/strong&gt; abre KeePassXC o la saca de la bandeja en el monitor donde estoy.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Super+Q:&lt;/strong&gt; la esconde en la bandeja y la base de datos sigue abierta.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ctrl+Q dentro de KeePassXC:&lt;/strong&gt; sale de verdad.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Posts relacionados: &lt;a class="link" href="https://volteret4.github.io/notas/p/flameshot-se-cuelga-en-awesomewm/" &gt;Flameshot se cuelga en awesomewm&lt;/a&gt; y &lt;a class="link" href="https://volteret4.github.io/notas/p/hotkeyz-buscador-de-atajos/" &gt;Hotkeyz, buscador de atajos&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id="deshacer"&gt;Deshacer
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/Scripts/Apps/kp_busqueda.sh.bak ~/Scripts/Apps/kp_busqueda.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Con KeePassXC cerrado:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/.config/keepassxc/keepassxc.ini.bak ~/.config/keepassxc/keepassxc.ini
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;La regla borrada de &lt;code&gt;rc.lua&lt;/code&gt; está en la copia &lt;code&gt;~/.config/awesome/rc.lua.bak.&amp;lt;fecha&amp;gt;&lt;/code&gt; de este cambio. Recupérala de ahí si la quieres.&lt;/p&gt;</description></item><item><title>Element desktop pide un keyring al arrancar</title><link>https://volteret4.github.io/notas/p/element-desktop-keyring/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/element-desktop-keyring/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Al abrir &lt;code&gt;element-desktop&lt;/code&gt; salía un diálogo diciendo que no encontraba un llavero, con dos opciones: &lt;em&gt;Cancelar&lt;/em&gt; o usar &lt;strong&gt;weak security encryption&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Hace tiempo intenté dejar gnome-keyring para usar KeePassXC como gestor de contraseñas, y Element se quedó sin un &lt;em&gt;Secret Service&lt;/em&gt; claro.&lt;/p&gt;
+&lt;h1 id="la-causa"&gt;La causa
+&lt;/h1&gt;&lt;p&gt;Element guarda su clave de cifrado local (la de la base de datos de mensajes y la de Seshat, el buscador) con &lt;code&gt;safeStorage&lt;/code&gt; de Electron. Electron busca un backend: &lt;code&gt;gnome_libsecret&lt;/code&gt;, &lt;code&gt;kwallet&lt;/code&gt; o &lt;code&gt;basic&lt;/code&gt;. Si no encuentra ninguno desbloqueado, ofrece &lt;code&gt;basic&lt;/code&gt;, que es la &lt;em&gt;weak encryption&lt;/em&gt;: una clave fija en el código.&lt;/p&gt;
+&lt;h1 id="la-solución"&gt;La solución
+&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;Que haya &lt;strong&gt;un solo&lt;/strong&gt; proveedor de &lt;code&gt;org.freedesktop.secrets&lt;/code&gt;. En mi caso es gnome-keyring. KeePassXC sigue siendo mi gestor de contraseñas, pero con la integración de Secret Service &lt;strong&gt;desactivada&lt;/strong&gt; para que no se peleen. Para comprobar quién da el servicio:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;busctl --user list &lt;span class="p"&gt;|&lt;/span&gt; grep org.freedesktop.secrets
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start="2"&gt;
+&lt;li&gt;Decirle a Element qué backend usar. En &lt;code&gt;~/.config/Element/electron-config.json&lt;/code&gt;:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;safeStorageBackend&amp;#34;&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;gnome_libsecret&amp;#34;&lt;/span&gt;&lt;span class="err"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;safeStorageBackendOverride&amp;#34;&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Se puede hacer lo mismo lanzándolo con:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;element-desktop --password-store&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;gnome-libsecret&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start="3"&gt;
+&lt;li&gt;Que el llavero esté desbloqueado al iniciar sesión. Con autologin, ver &lt;a class="link" href="../supersonic-pide-la-contrasena" &gt;Supersonic pide la contraseña cada vez&lt;/a&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Ese día también reinstalé el paquete (&lt;code&gt;pacman -S element-desktop&lt;/code&gt;, versión 1.12.23).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Quita las dos líneas &lt;code&gt;safeStorageBackend*&lt;/code&gt; de &lt;code&gt;electron-config.json&lt;/code&gt;. Ojo: si cambias de backend, Element no podrá descifrar lo guardado y te pedirá iniciar sesión otra vez y restaurar la clave de seguridad.&lt;/p&gt;</description></item></channel></rss>

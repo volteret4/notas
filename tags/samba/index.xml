@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Samba on memoria digital</title><link>https://volteret4.github.io/notas/tags/samba/</link><description>Recent content in Samba on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/samba/index.xml" rel="self" type="application/rss+xml"/><item><title>Compartir carpetas de Linux con Windows por Samba (cuando NFS no va)</title><link>https://volteret4.github.io/notas/p/samba-para-compartir-con-windows/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/samba-para-compartir-con-windows/</guid><description>&lt;h1 id="por-qué-samba"&gt;Por qué Samba
+&lt;/h1&gt;&lt;p&gt;Quería jugar en Windows (RetroArch y ES-DE) a las copias de mis juegos que están en pepecono. Probé NFS, pero el cliente NFS de Windows 10 (&lt;em&gt;Servicios para NFS&lt;/em&gt;) daba problemas de permisos y de nombres de usuario. Samba es nativo en Windows y funcionó a la primera.&lt;/p&gt;
+&lt;h1 id="en-pepecono-arch"&gt;En pepecono (Arch)
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo pacman -S samba
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;/etc/samba/smb.conf&lt;/code&gt;. El original se guardó como &lt;code&gt;smb.conf.original&lt;/code&gt; y &lt;code&gt;smb.conf.arcolinux&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[ROMs]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="na"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;/home/pepe/ROMs
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt; browseable = yes
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt; read only = no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt; guest ok = no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt; valid users = pepe&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Pelis]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="na"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;/mnt/NFS/Pelis
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt; browseable = yes
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt; read only = yes
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt; guest ok = no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt; valid users = pepe&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El recurso &lt;code&gt;[Pelis]&lt;/code&gt; lo añadí más tarde (13-09) para montar las películas en Windows.&lt;/p&gt;
+&lt;p&gt;Samba tiene sus propias contraseñas:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo smbpasswd -a pepe
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; --now smb
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Comprobar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;testparm -s &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; smbclient -L //localhost -U pepe
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="en-windows-unidad-permanente"&gt;En Windows: unidad permanente
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bat" data-lang="bat"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;net use G: \\192.168.1.133\ROMs /user:pepe /persistent:yes
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Windows pide la contraseña de Samba. Para que la recuerde, marca &lt;em&gt;Recordar credenciales&lt;/em&gt; o guárdala con &lt;code&gt;cmdkey&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bat" data-lang="bat"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cmdkey /add:192.168.1.133 /user:pepe /pass
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para desmontar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bat" data-lang="bat"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;net use G: /delete
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="la-unidad-no-aparece-en-el-explorador"&gt;La unidad no aparece en el Explorador
+&lt;/h2&gt;&lt;p&gt;Si haces &lt;code&gt;net use&lt;/code&gt; desde una consola &lt;strong&gt;&amp;ldquo;Ejecutar como administrador&amp;rdquo;&lt;/strong&gt;, la unidad solo la ven los procesos elevados. El Explorador y los reproductores, que corren sin privilegios, no la ven. Lo mismo pasa si la mapeas por &lt;strong&gt;SSH&lt;/strong&gt;: es otra sesión de Windows, aunque sea el mismo usuario.&lt;/p&gt;
+&lt;p&gt;Hay que hacerlo en el escritorio, en una consola &lt;strong&gt;normal&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bat" data-lang="bat"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;net use Z: /delete
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;net use Z: \\192.168.1.133\Pelis /user:pepe /persistent:yes
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para comprobar la red desde PowerShell: &lt;code&gt;Test-NetConnection 192.168.1.133 -Port 445&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="error-1219"&gt;Error 1219
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-gdscript3" data-lang="gdscript3"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;Error&lt;/span&gt; &lt;span class="n"&gt;de&lt;/span&gt; &lt;span class="n"&gt;sistema&lt;/span&gt; &lt;span class="mf"&gt;1219.&lt;/span&gt; &lt;span class="n"&gt;No&lt;/span&gt; &lt;span class="n"&gt;se&lt;/span&gt; &lt;span class="n"&gt;permiten&lt;/span&gt; &lt;span class="n"&gt;varias&lt;/span&gt; &lt;span class="n"&gt;conexiones&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;un&lt;/span&gt; &lt;span class="n"&gt;servidor&lt;/span&gt; &lt;span class="n"&gt;o&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;un&lt;/span&gt; &lt;span class="n"&gt;recurso&lt;/span&gt; &lt;span class="n"&gt;compartido&lt;/span&gt; &lt;span class="n"&gt;por&lt;/span&gt; &lt;span class="n"&gt;el&lt;/span&gt; &lt;span class="n"&gt;mismo&lt;/span&gt; &lt;span class="n"&gt;usuario&lt;/span&gt; &lt;span class="n"&gt;usando&lt;/span&gt; &lt;span class="n"&gt;más&lt;/span&gt; &lt;span class="n"&gt;de&lt;/span&gt; &lt;span class="n"&gt;un&lt;/span&gt; &lt;span class="n"&gt;nombre&lt;/span&gt; &lt;span class="n"&gt;de&lt;/span&gt; &lt;span class="n"&gt;usuario&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Windows solo permite &lt;strong&gt;un usuario por servidor&lt;/strong&gt;. Si ya hay una conexión a &lt;code&gt;\\192.168.1.133&lt;/code&gt; con otro usuario (o como invitado), hay que cerrarla antes:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bat" data-lang="bat"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;net use * /delete /y
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Otra opción es usar el nombre en vez de la IP para la segunda conexión (&lt;code&gt;\\pepe-cono\Pelis&lt;/code&gt;), porque Windows lo considera otro servidor.&lt;/p&gt;
+&lt;h1 id="estado-actual-31-10-2026"&gt;Estado actual (31-10-2026)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;/home/pepe/ROMs&lt;/code&gt; &lt;strong&gt;ya no existe&lt;/strong&gt; en pepecono: las ROMs se movieron a &lt;code&gt;C:\ROMs&lt;/code&gt; en Windows (ver &lt;a class="link" href="../es-de-multidisco-y-accesos-de-steam" &gt;ES-DE&lt;/a&gt;). El recurso &lt;code&gt;[ROMs]&lt;/code&gt; sigue en &lt;code&gt;smb.conf&lt;/code&gt;, pero apunta a una carpeta vacía. Se puede quitar, o dejarlo si vuelves a tener una copia allí.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;En Windows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bat" data-lang="bat"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;net use G: /delete
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cmdkey /delete:192.168.1.133
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;En pepecono:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;sudo systemctl disable --now smb &amp;amp;&amp;amp; sudo cp /etc/samba/smb.conf.original /etc/samba/smb.conf&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

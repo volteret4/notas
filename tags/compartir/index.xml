@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Compartir on memoria digital</title><link>https://volteret4.github.io/notas/tags/compartir/</link><description>Recent content in Compartir on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Wed, 09 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/compartir/index.xml" rel="self" type="application/rss+xml"/><item><title>Compartir Archivo Oneline</title><link>https://volteret4.github.io/notas/p/compartir-archivo-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/compartir-archivo-oneline/</guid><description>&lt;p&gt;Con este comando puedes subir un archivo de texto para compartirlo fácilmente&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -F &lt;span class="nv"&gt;file&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;@starship.toml https://0x0.st
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Crear Código Qr Con Texto</title><link>https://volteret4.github.io/notas/p/crear-c%C3%B3digo-qr-con-texto/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-c%C3%B3digo-qr-con-texto/</guid><description>&lt;p&gt;&lt;code&gt;curl qrenco.de/STRING&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;echo STRING | curl -F-=\&amp;lt;- qrenco.de&lt;/code&gt;&lt;/p&gt;</description></item></channel></rss>

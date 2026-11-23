@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Podcasts on memoria digital</title><link>https://volteret4.github.io/notas/tags/podcasts/</link><description>Recent content in Podcasts on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/podcasts/index.xml" rel="self" type="application/rss+xml"/><item><title>ensayos-musicales, de podcasts a una base de datos de relaciones entre artistas</title><link>https://volteret4.github.io/notas/p/ensayos-musicales-podcasts-a-base-de-datos/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/ensayos-musicales-podcasts-a-base-de-datos/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Repo: &lt;code&gt;~/gits/pollo/ensayos-musicales&lt;/code&gt; (&lt;code&gt;https://github.com/volteret4/ensayos-musicales.git&lt;/code&gt;). Antes se llamaba &lt;code&gt;podcast_to_text&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Pipeline diario, &lt;code&gt;main.sh&lt;/code&gt;:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Transcribir&lt;/strong&gt; MP3 → TXT con &lt;strong&gt;Whisper&lt;/strong&gt; en local (&lt;code&gt;scripts/1_audio_to_text.py&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Resumir y extraer datos&lt;/strong&gt; de cada transcripción: artistas, discos, sellos, géneros y relaciones (influencias, colaboraciones…). Al principio con &lt;strong&gt;Gemini&lt;/strong&gt; (&lt;code&gt;scripts/2_gemini_resumen.py&lt;/code&gt;); ahora con &lt;strong&gt;Claude&lt;/strong&gt; (&lt;code&gt;claude -p&lt;/code&gt;, mismo prompt) por defecto. &lt;code&gt;RESUMEN=gemini ./main.sh&lt;/code&gt; vuelve a Gemini.&lt;/li&gt;
+&lt;li&gt;Si se acaba la cuota (código 1), el flujo se para.&lt;/li&gt;
+&lt;li&gt;Borrar los MP3 ya transcritos.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Incorporar&lt;/strong&gt; solo los resúmenes nuevos a &lt;code&gt;data/&lt;/code&gt; y &lt;code&gt;pendiente/&lt;/code&gt;, aplicando las decisiones de &lt;code&gt;correcciones/decisiones_artistas.txt&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Premios, charts y listas para los artistas que aún no los tienen.&lt;/li&gt;
+&lt;li&gt;Preparar &lt;code&gt;LOTES_DIARIOS&lt;/code&gt; lotes de &lt;code&gt;LOTE_TAM&lt;/code&gt; artistas para revisar (no llama a Claude; se revisan con &lt;code&gt;/revisar-lotes&lt;/code&gt; o desde el editor).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;LOTES_DIARIOS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt; &lt;span class="nv"&gt;LOTE_TAM&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;25&lt;/span&gt; ./main.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="editor-y-mapa"&gt;Editor y mapa
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Editor web&lt;/strong&gt; (&lt;code&gt;Dockerfile.editor&lt;/code&gt;, &lt;code&gt;ensayos_editor.service&lt;/code&gt;): para revisar y corregir artistas y relaciones, con una pestaña 🤖 &lt;em&gt;Lotes&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mapa&lt;/strong&gt; (&lt;code&gt;Dockerfile.map&lt;/code&gt;, d3.js): grafo de influencias. Los nodos se pueden arrastrar.&lt;/li&gt;
+&lt;li&gt;La base de datos normalizada es &lt;code&gt;music_facts.db&lt;/code&gt;. También la usa &lt;strong&gt;encarta&lt;/strong&gt; (la enciclopedia que cruza ensayos, Music_Books y rym_lastfm).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Los dos se publican en pepecono detrás de SWAG (&lt;code&gt;ensayos_editor.subdomain.conf&lt;/code&gt;, &lt;code&gt;ensayos_map.subdomain.conf&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;sudo systemctl disable --now ensayos_editor&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Y borra los dos &lt;code&gt;proxy-confs&lt;/code&gt; de SWAG. Los datos están en &lt;code&gt;data/&lt;/code&gt; y &lt;code&gt;db/&lt;/code&gt; del repo; haz una copia antes de tocar &lt;code&gt;music_facts.db&lt;/code&gt;.&lt;/p&gt;</description></item></channel></rss>

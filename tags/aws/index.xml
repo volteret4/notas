@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Aws on memoria digital</title><link>https://volteret4.github.io/notas/tags/aws/</link><description>Recent content in Aws on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/aws/index.xml" rel="self" type="application/rss+xml"/><item><title>escuchowsky, recomendaciones musicales con Last.fm en AWS</title><link>https://volteret4.github.io/notas/p/escuchowsky-recomendaciones-lastfm/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/escuchowsky-recomendaciones-lastfm/</guid><description>&lt;h1 id="qué-es"&gt;Qué es
+&lt;/h1&gt;&lt;p&gt;Repo: &lt;code&gt;~/gits/pollo/escuchowsky&lt;/code&gt; (&lt;code&gt;https://github.com/volteret4/escuchowsky.git&lt;/code&gt;).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Recomendaciones&lt;/strong&gt; a partir de los scrobbles de Last.fm y &lt;strong&gt;ListenBrainz&lt;/strong&gt;, también con &lt;strong&gt;usuarios secundarios&lt;/strong&gt;: amigos cuyos gustos se cruzan con los tuyos.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Colecciones &amp;ldquo;must hear&amp;rdquo;&lt;/strong&gt; (listas de RYM, Scaruffi, AOTY…), con lo que ya has escuchado marcado.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Árbol de géneros&lt;/strong&gt; en mermaid (&lt;code&gt;app_genre_mermaid.py&lt;/code&gt;) y descubrimiento (&lt;code&gt;app_discover.py&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Traducciones (las claves tipo &lt;code&gt;um.search.button&lt;/code&gt; tienen que existir en todos los idiomas, o salen sin traducir).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="despliegue"&gt;Despliegue
+&lt;/h1&gt;&lt;p&gt;No corre en casa, sino en una instancia del &lt;strong&gt;free tier de AWS&lt;/strong&gt;. Fueron mis primeros pasos con AWS.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;docker-compose.yml&lt;/code&gt;: servicios &lt;code&gt;escuchowsky&lt;/code&gt;, &lt;code&gt;musthear&lt;/code&gt; y &lt;code&gt;tumtumpa&lt;/code&gt; (Flask + Gunicorn), un &lt;code&gt;nginx&lt;/code&gt; con &lt;strong&gt;ModSecurity&lt;/strong&gt; como proxy inverso (puertos 8085 y 8443 dentro, 80 y 443 hacia fuera con iptables), y &lt;code&gt;nginx-exporter&lt;/code&gt; + &lt;code&gt;node-exporter&lt;/code&gt; para Prometheus/Grafana en otro servidor.&lt;/p&gt;
+&lt;p&gt;Endurecimiento, según &lt;code&gt;CLAUDE.md&lt;/code&gt; del repo:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Docker &lt;strong&gt;rootless&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Solo 80/443 expuestos.&lt;/li&gt;
+&lt;li&gt;CrowdSec leyendo los logs del sistema y de las apps.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;auditd&lt;/code&gt;, rotación de logs y escaneos con &lt;strong&gt;trivy&lt;/strong&gt; (&lt;code&gt;trivy_reports/&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Certificados con acme.sh, uno de ellos solo para Prometheus.&lt;/li&gt;
+&lt;li&gt;Imágenes fijadas por &lt;code&gt;sha256&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose up -d --build
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los secretos van en &lt;code&gt;.env&lt;/code&gt; cifrado con sops (&lt;code&gt;sops_env.py&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Es un proyecto aparte: para quitarlo, &lt;code&gt;docker compose down -v&lt;/code&gt; en la instancia y terminar la instancia en la consola de AWS (vigila que no queden volúmenes EBS ni IPs elásticas facturando).&lt;/p&gt;</description></item></channel></rss>

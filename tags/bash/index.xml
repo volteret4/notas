@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Bash on memoria digital</title><link>https://volteret4.github.io/notas/tags/bash/</link><description>Recent content in Bash on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/bash/index.xml" rel="self" type="application/rss+xml"/><item><title>Borrar de golpe las playlists temporales de Mixxx</title><link>https://volteret4.github.io/notas/p/mixxx-borrar-playlists/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mixxx-borrar-playlists/</guid><description>&lt;h1 id="para-qué"&gt;Para qué
+&lt;/h1&gt;&lt;p&gt;Uso las playlists de Mixxx para sesiones temporales y, una vez grabadas, sobran. Borrarlas una a una desde la interfaz es un rollo.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh&lt;/code&gt; muestra las listas con su número de canciones y pide confirmación:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Sin preguntar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh -y
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="qué-borra-y-qué-no"&gt;Qué borra y qué no
+&lt;/h1&gt;&lt;p&gt;En la tabla &lt;code&gt;Playlists&lt;/code&gt; de &lt;code&gt;~/.mixxx/mixxxdb.sqlite&lt;/code&gt;, la columna &lt;code&gt;hidden&lt;/code&gt; dice el tipo de lista: &lt;code&gt;0&lt;/code&gt; es una lista normal, &lt;code&gt;1&lt;/code&gt; es Auto DJ y &lt;code&gt;2&lt;/code&gt; es el historial de sesiones (las que tienen fecha). Solo se borran las que cumplen:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;hidden&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AND&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;locked&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;No toca&lt;/strong&gt; Auto DJ, el historial, las listas &lt;strong&gt;bloqueadas&lt;/strong&gt; con el candado de Mixxx ni los &lt;strong&gt;cajones&lt;/strong&gt; (crates). Para conservar alguna lista, bloquéala antes.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mixxx tiene que estar cerrado.&lt;/strong&gt; Si está abierto, el script se niega: Mixxx tiene la base de datos en memoria y pisaría los cambios al cerrar.&lt;/li&gt;
+&lt;li&gt;Antes de borrar hace una copia con &lt;code&gt;sqlite3 .backup&lt;/code&gt; en &lt;code&gt;~/.mixxx/backups_borrar_playlists/&lt;/code&gt; y guarda las 5 últimas.&lt;/li&gt;
+&lt;li&gt;Borra en una transacción: primero &lt;code&gt;PlaylistTracks&lt;/code&gt; y luego &lt;code&gt;Playlists&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="el-script"&gt;El script
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;DB&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.mixxx/mixxxdb.sqlite&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;BACKUP_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/.mixxx/backups_borrar_playlists&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# hidden=0: listas normales (1 = Auto DJ, 2 = historial); locked=0: no bloqueadas&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;WHERE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;hidden = 0 AND locked = 0&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; pgrep -x mixxx &amp;gt; /dev/null&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Mixxx está abierto: ciérralo antes de borrar las listas.&amp;#34;&lt;/span&gt; &amp;gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;list&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;sqlite3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$DB&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;SELECT name || &amp;#39; (&amp;#39; || (SELECT count(*) FROM PlaylistTracks WHERE playlist_id = p.id) || &amp;#39;)&amp;#39; FROM Playlists p WHERE &lt;/span&gt;&lt;span class="nv"&gt;$WHERE&lt;/span&gt;&lt;span class="s2"&gt; ORDER BY position&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; -z &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$list&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;No hay listas de reproducción que borrar.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$list&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;count&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$list&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; wc -l&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$1&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; !&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;-y&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;read&lt;/span&gt; -rp &lt;span class="s2"&gt;&amp;#34;¿Borrar estas &lt;/span&gt;&lt;span class="nv"&gt;$count&lt;/span&gt;&lt;span class="s2"&gt; listas? [s/N] &amp;#34;&lt;/span&gt; answer
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="o"&gt;[[&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$answer&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;sS&lt;span class="o"&gt;]&lt;/span&gt;* &lt;span class="o"&gt;]]&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Cancelado.&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; 0&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;mkdir -p &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sqlite3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$DB&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;.backup &amp;#39;&lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;/mixxxdb.&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;date +%Y%m%d%H%M%S&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;.sqlite&amp;#39;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ls -1t &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;/mixxxdb.*.sqlite &lt;span class="p"&gt;|&lt;/span&gt; tail -n +6 &lt;span class="p"&gt;|&lt;/span&gt; xargs -r rm --
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sqlite3 &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$DB&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;BEGIN; DELETE FROM PlaylistTracks WHERE playlist_id IN (SELECT id FROM Playlists WHERE &lt;/span&gt;&lt;span class="nv"&gt;$WHERE&lt;/span&gt;&lt;span class="s2"&gt;); DELETE FROM Playlists WHERE &lt;/span&gt;&lt;span class="nv"&gt;$WHERE&lt;/span&gt;&lt;span class="s2"&gt;; COMMIT;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Borradas &lt;/span&gt;&lt;span class="nv"&gt;$count&lt;/span&gt;&lt;span class="s2"&gt; listas. Copia en &lt;/span&gt;&lt;span class="nv"&gt;$BACKUP_DIR&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Un alias corto:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;alias mixxx-limpiar=&amp;#39;~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh&amp;#39;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; ~/.zsh_aliases
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="recuperar-listas-borradas"&gt;Recuperar listas borradas
+&lt;/h1&gt;&lt;p&gt;Con Mixxx cerrado, copia la última copia de seguridad encima de la base de datos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ls -1t ~/.mixxx/backups_borrar_playlists/mixxxdb.*.sqlite &lt;span class="p"&gt;|&lt;/span&gt; head -1&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; ~/.mixxx/mixxxdb.sqlite
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Ojo: también pierdes cualquier otro cambio en la biblioteca (BPM, cues…) hecho después de esa copia.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm ~/Scripts/Musica/playlists/mixxx/borrar_playlists.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Obtener Ip Pública</title><link>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</guid><description>&lt;p&gt;Ejecuta cualquiera de estos comandos en un terminal para obtener la ip pública del host.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://github.com/chubin/awesome-console-services?tab=readme-ov-file#new-line" target="_blank" rel="noopener"
+&gt;Ip publica&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;curl ipaddy.net&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl eth0.me&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ipaddr.site&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.co&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.pro&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl curlmyip.net&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ipinfo.io/ip&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl icanhazip.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl checkip.amazonaws.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ip-api.com/line?fields=query&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.io/ip&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl -s ip.liquidweb.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.es&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ipaddress.sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl 2ip.ru&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Musicbrainz on memoria digital</title><link>https://volteret4.github.io/notas/tags/musicbrainz/</link><description>Recent content in Musicbrainz on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/musicbrainz/index.xml" rel="self" type="application/rss+xml"/><item><title>mover_mix_playerctl.py, el script que manda canciones a mis carpetas de DJ</title><link>https://volteret4.github.io/notas/p/mover-mix-playerctl/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mover-mix-playerctl/</guid><description>&lt;h1 id="qué-hace"&gt;Qué hace
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py&lt;/code&gt; coge la canción que suena (por playerctl, o desde DeaDBeeF o Airsonic) y la manda a una carpeta de &lt;code&gt;/mnt/windows/Mix&lt;/code&gt; (exFAT, la de Mixxx). Luego:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;elige la carpeta en un menú, con subcarpetas de género (&lt;code&gt;TECHNO/techno_deep&lt;/code&gt;, &lt;code&gt;HOUSE/...&lt;/code&gt;) y atajos,&lt;/li&gt;
+&lt;li&gt;renombra el archivo a &lt;code&gt;Artista - Canción (año álbum) [sello]&lt;/code&gt; a partir de los tags,&lt;/li&gt;
+&lt;li&gt;pide un comentario opcional,&lt;/li&gt;
+&lt;li&gt;regenera los &lt;code&gt;.m3u&lt;/code&gt; de cada carpeta,&lt;/li&gt;
+&lt;li&gt;y lanza en segundo plano &lt;code&gt;sync_crates.py&lt;/code&gt; (cajones de Mixxx), &lt;code&gt;yt_sync_mixxx.py&lt;/code&gt; (playlists de YouTube) y &lt;code&gt;embeed_cover.py&lt;/code&gt; (carátula).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="cambios-por-orden"&gt;Cambios, por orden
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Fecha&lt;/th&gt;
+&lt;th&gt;Cambio&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;03 → 08&lt;/td&gt;
+&lt;td&gt;Credenciales de Airsonic en &lt;code&gt;.env&lt;/code&gt;, nombre de archivo a partir de la metadata, menú de carga y subcarpetas de género con atajos&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;05-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Mover en vez de copiar&lt;/strong&gt; cualquier canción cuya ruta empiece por &lt;code&gt;/mnt/windows/Mix/&lt;/code&gt; (antes solo dentro de TECHNO/HOUSE). No busca duplicados. Si eliges la carpeta en la que ya está, solo aplica el comentario&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;07-10&lt;/td&gt;
+&lt;td&gt;Llamada a &lt;code&gt;sync_crates.py&lt;/code&gt; tras regenerar los &lt;code&gt;.m3u&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;16-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Pistas dentro de un &lt;code&gt;.cue&lt;/code&gt;&lt;/strong&gt;: detecta el cue (incrustado como tag &lt;code&gt;CUESHEET&lt;/code&gt; o en un &lt;code&gt;.cue&lt;/code&gt; al lado), averigua la pista que suena por título, número o duración (si no, pregunta) y &lt;strong&gt;corta solo esa pista con ffmpeg&lt;/strong&gt; (FLAC/APE/WV/WAV → FLAC; MP3 sin recodificar). Corrige los tags y quita &lt;code&gt;CUESHEET&lt;/code&gt;, BPM y tonalidad del disco entero. Además, &lt;code&gt;unquote&lt;/code&gt; no estaba importado y la parte de playerctl siempre fallaba&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;16-10&lt;/td&gt;
+&lt;td&gt;Sincroniza la playlist de YouTube de la carpeta de destino y, al mover, también la de origen. Comentada la llamada a Spotify (su API ya no funciona sin pago)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;21-10&lt;/td&gt;
+&lt;td&gt;Fecha original vía MusicBrainz (script aparte, &lt;code&gt;fecha_original_mix.py&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;25-10&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;[Errno 1] Operación no permitida&lt;/code&gt; al copiar desde NFS: los permisos &lt;code&gt;rwxrwSr-x&lt;/code&gt; (setgid) no caben en exFAT. Nueva &lt;code&gt;copy_sin_permisos()&lt;/code&gt;, que copia contenido y fechas pero no permisos, usada en &lt;code&gt;copy_file&lt;/code&gt; y en &lt;code&gt;shutil.move(..., copy_function=copy_sin_permisos)&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;27-10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;No renombraba al reclasificar&lt;/strong&gt; (movía con &lt;code&gt;rename=False&lt;/code&gt;) y no leía tags escritos como &lt;code&gt;Artist&lt;/code&gt;/&lt;code&gt;Title&lt;/code&gt;. Ahora lee los tags sin distinguir mayúsculas, usa el artista del álbum si falta el artista y, si aun así falta algo, deja el nombre original. &lt;code&gt;[no label]&lt;/code&gt; ya no se pone en el nombre&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="fecha_original_mixpy"&gt;&lt;code&gt;fecha_original_mix.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Para los remasters que confunden: pone en &lt;code&gt;DATE&lt;/code&gt; la fecha &lt;strong&gt;más antigua&lt;/strong&gt; entre la actual, &lt;code&gt;ORIGINALDATE&lt;/code&gt; (Picard) y el primer lanzamiento de la grabación en MusicBrainz. Nunca retrasa una fecha, y guarda la que había en &lt;code&gt;RELEASEDATE&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="renombrar_mixpy"&gt;&lt;code&gt;renombrar_mix.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Arregla los nombres que quedaron mal por el fallo del 27-10 (encontró unos 1611): espacios dobles, &lt;code&gt;- ()&lt;/code&gt; al final, sin artista o sin título, o que empiezan por número de pista.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py &lt;span class="p"&gt;|&lt;/span&gt; less
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py --apply
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Con Mixxx &lt;strong&gt;cerrado&lt;/strong&gt;. Antes de tocar nada copia la base de datos de Mixxx en &lt;code&gt;~/.mixxx/backups_renombrar/&lt;/code&gt; y actualiza las rutas para no perder cues ni análisis.&lt;/li&gt;
+&lt;li&gt;Si el nombre nuevo ya existe, se lo salta. Si Mixxx tiene una entrada fantasma con ese nombre, intercambia las rutas.&lt;/li&gt;
+&lt;li&gt;Apunta cada cambio en &lt;code&gt;~/.mixxx/backups_renombrar/renombrados.&amp;lt;fecha&amp;gt;.tsv&lt;/code&gt;, y &lt;code&gt;--deshacer&lt;/code&gt; lo revierte.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="embeed_coverpy"&gt;&lt;code&gt;embeed_cover.py&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Ignoraba el archivo que le pasaba el mover y recorría &lt;strong&gt;todo&lt;/strong&gt; Mix (unas 1100 canciones), consultando MusicBrainz cada vez. Ahora procesa solo lo que se le pasa; sin argumentos sigue recorriendo todo Mix.&lt;/p&gt;
+&lt;h1 id="copias-de-seguridad"&gt;Copias de seguridad
+&lt;/h1&gt;&lt;p&gt;En &lt;code&gt;~/Scripts/Musica/MoverMusica/&lt;/code&gt;:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Copia&lt;/th&gt;
+&lt;th&gt;De antes de&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20260826210410&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;cambios de agosto&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261007183246&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;llamada a &lt;code&gt;sync_crates.py&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261016201948&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;soporte de cue&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261021220202&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;fecha original&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mover_mix_playerctl.py.bak.20261027195025&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;arreglo del renombrado&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;fecha_original_mix.py.bak.2026102*&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;cada iteración de ese script&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/Scripts/Musica/playlists/mixxx/embeed_cover.py.bak.20261016203210&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;El arreglo de permisos del 25-10 se guardó en una copia temporal que ya no existe; está entre &lt;code&gt;.bak.20261021220202&lt;/code&gt; y &lt;code&gt;.bak.20261027195025&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Para volver a una versión concreta:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py.bak.20261016201948 ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para ver qué cambió entre dos copias:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;diff ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py.bak.20261027195025 ~/Scripts/Musica/MoverMusica/mover_mix_playerctl.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Para deshacer un renombrado masivo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;~/Scripts/python_venv/bin/python ~/Scripts/Musica/MoverMusica/renombrar_mix.py --deshacer ~/.mixxx/backups_renombrar/renombrados.20261027195611.tsv
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Un panel propio para DeaDBeeF con letras, artista, álbum y similares</title><link>https://volteret4.github.io/notas/p/deadbeef-infobar-ng/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/deadbeef-infobar-ng/</guid><description>&lt;h1 id="por-qué"&gt;Por qué
+&lt;/h1&gt;&lt;p&gt;El plugin &lt;a class="link" href="https://github.com/DeaDBeeF-Player/deadbeef-infobar" target="_blank" rel="noopener"
+&gt;deadbeef-infobar&lt;/a&gt; tiene su último commit en 2014. Lo compilé en &lt;code&gt;~/gits/deadbeef-infobar&lt;/code&gt;, pero no aparecía en DeaDBeeF ni en el modo diseño. En lugar de arreglarlo, hice uno nuevo: &lt;strong&gt;Infobar NG&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1 id="cómo-está-hecho"&gt;Cómo está hecho
+&lt;/h1&gt;&lt;p&gt;El plugin en C solo crea el widget y lanza scripts. Los datos los buscan scripts de Python, mucho más fáciles de cambiar.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Archivo&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/Scripts/Musica/deadbeef/infobar/plugin.c&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;registra el widget &lt;code&gt;infobar_ng&lt;/code&gt; en gtkui y escucha &lt;code&gt;DB_EV_SONGCHANGED&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;infobar/ui.c&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;cabecera &amp;ldquo;Artista — Título&amp;rdquo; con spinner y un &lt;code&gt;GtkNotebook&lt;/code&gt; con 4 pestañas de solo lectura: &lt;strong&gt;Letras, Artista, Álbum, Similares&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;infobar/runner.c&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;ejecuta los scripts en segundo plano con un número de &amp;ldquo;generación&amp;rdquo;, para descartar resultados de una canción anterior si cambias rápido&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;letras_ovh.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;letra desde lyrics.ovh&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;letras_genius.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;letra desde Genius si lyrics.ovh falla (token &lt;code&gt;GENIUS_TOKEN&lt;/code&gt; en &lt;code&gt;.encrypted.env&lt;/code&gt; con sops)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;bio_artista.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;biografía (Last.fm, MusicBrainz, Wikipedia)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;info_album.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;información del álbum (MusicBrainz, Wikipedia, Last.fm)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;similares.py&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;canciones similares en Last.fm o, si no, artistas relacionados en MusicBrainz&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Los scripts reciben artista y título (o álbum) como argumentos y escriben texto plano en stdout. El intérprete se puede cambiar con la opción &lt;code&gt;infobar_ng.python_cmd&lt;/code&gt; de DeaDBeeF; por defecto usan el shebang &lt;code&gt;~/Scripts/python_venv/bin/python&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="compilar-e-instalar"&gt;Compilar e instalar
+&lt;/h1&gt;&lt;p&gt;Necesita las cabeceras de DeaDBeeF (&lt;code&gt;/usr/include/deadbeef&lt;/code&gt;) y GTK3.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; ~/Scripts/Musica/deadbeef/infobar &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; make install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;make install&lt;/code&gt; copia:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ddb_infobar_ng.so&lt;/code&gt; en &lt;code&gt;~/.local/lib/deadbeef/&lt;/code&gt;,&lt;/li&gt;
+&lt;li&gt;los cinco scripts en &lt;code&gt;~/.config/deadbeef/infobar_scripts/&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Después, reinicia DeaDBeeF, entra en &lt;em&gt;Ver → Modo diseño&lt;/em&gt; y añade el widget &lt;strong&gt;Infobar NG&lt;/strong&gt; donde quieras. En mi layout está como primera pestaña de un &lt;code&gt;tabs&lt;/code&gt; debajo de la carátula, junto a &amp;ldquo;propiedades&amp;rdquo; y &amp;ldquo;visuals&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Si cambias un script en &lt;code&gt;~/Scripts/Musica/deadbeef/&lt;/code&gt;, vuelve a ejecutar &lt;code&gt;make install&lt;/code&gt; para copiarlo a &lt;code&gt;infobar_scripts&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;En &lt;em&gt;Modo diseño&lt;/em&gt;, quita el widget y luego:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;rm ~/.local/lib/deadbeef/ddb_infobar_ng.so &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; rm -r ~/.config/deadbeef/infobar_scripts
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El clon del plugin viejo (&lt;code&gt;~/gits/deadbeef-infobar&lt;/code&gt;) no se usa y se puede borrar.&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mando on memoria digital</title><link>https://volteret4.github.io/notas/tags/mando/</link><description>Recent content in Mando on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/mando/index.xml" rel="self" type="application/rss+xml"/><item><title>Super Mario Galaxy en Dolphin con un mando de Xbox</title><link>https://volteret4.github.io/notas/p/dolphin-mario-galaxy-mando-xbox/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/dolphin-mario-galaxy-mando-xbox/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;En Windows (Dolphin en &lt;code&gt;C:\Program Files\Emulators\Dolphin-x64&lt;/code&gt;), &lt;em&gt;Super Mario Galaxy&lt;/em&gt; no reconocía bien el mando. El &lt;strong&gt;Wiimote 1&lt;/strong&gt; tenía tres fallos:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;La extensión era el &lt;strong&gt;Classic Controller&lt;/strong&gt;, que Galaxy no admite: necesita &lt;strong&gt;Nunchuk&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;El stick del Nunchuk estaba en &lt;strong&gt;W/A/S/D&lt;/strong&gt; del teclado, pero el dispositivo era el mando de Xbox, así que Mario no se movía.&lt;/li&gt;
+&lt;li&gt;El puntero estaba en el &lt;strong&gt;ratón&lt;/strong&gt; y el giro en el clic derecho.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Además, en el mando de GameCube la cruceta abajo estaba en &lt;code&gt;Pad W&lt;/code&gt; (izquierda) en vez de &lt;code&gt;Pad S&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="la-asignación"&gt;La asignación
+&lt;/h1&gt;&lt;p&gt;Dispositivo: &lt;code&gt;SDL/0/XInput Controller #1&lt;/code&gt;. Extensión: &lt;strong&gt;Nunchuk&lt;/strong&gt;.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Mando Xbox&lt;/th&gt;
+&lt;th&gt;Wii&lt;/th&gt;
+&lt;th&gt;En Galaxy&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Stick izquierdo&lt;/td&gt;
+&lt;td&gt;Stick del Nunchuk&lt;/td&gt;
+&lt;td&gt;moverse&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;saltar&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;td&gt;Agitar Wiimote&lt;/td&gt;
+&lt;td&gt;giro (ataque)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;RT&lt;/td&gt;
+&lt;td&gt;B&lt;/td&gt;
+&lt;td&gt;disparar trozos de estrella&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;LT&lt;/td&gt;
+&lt;td&gt;Z&lt;/td&gt;
+&lt;td&gt;agacharse&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;LB&lt;/td&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;centrar la cámara&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Stick derecho&lt;/td&gt;
+&lt;td&gt;Puntero (IR)&lt;/td&gt;
+&lt;td&gt;apuntar y recoger trozos de estrella&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Pulsar stick derecho&lt;/td&gt;
+&lt;td&gt;Recentrar puntero&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Start / Back / Guía&lt;/td&gt;
+&lt;td&gt;+ / − / Home&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Cruceta&lt;/td&gt;
+&lt;td&gt;Cruceta&lt;/td&gt;
+&lt;td&gt;cámara&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;WiimoteNew.ini&lt;/code&gt; completo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;span class="lnt"&gt;29
+&lt;/span&gt;&lt;span class="lnt"&gt;30
+&lt;/span&gt;&lt;span class="lnt"&gt;31
+&lt;/span&gt;&lt;span class="lnt"&gt;32
+&lt;/span&gt;&lt;span class="lnt"&gt;33
+&lt;/span&gt;&lt;span class="lnt"&gt;34
+&lt;/span&gt;&lt;span class="lnt"&gt;35
+&lt;/span&gt;&lt;span class="lnt"&gt;36
+&lt;/span&gt;&lt;span class="lnt"&gt;37
+&lt;/span&gt;&lt;span class="lnt"&gt;38
+&lt;/span&gt;&lt;span class="lnt"&gt;39
+&lt;/span&gt;&lt;span class="lnt"&gt;40
+&lt;/span&gt;&lt;span class="lnt"&gt;41
+&lt;/span&gt;&lt;span class="lnt"&gt;42
+&lt;/span&gt;&lt;span class="lnt"&gt;43
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Wiimote1]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Device&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;SDL/0/XInput Controller #1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/A&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button S`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/B&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Trigger R`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button N`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button E`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/-&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;Back&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/+&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;Start&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Buttons/Home&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;Guide&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;D-Pad/Up&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Pad N`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;D-Pad/Down&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Pad S`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;D-Pad/Left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Pad W`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;D-Pad/Right&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Pad E`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;IR/Up&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Right Y+`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;IR/Down&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Right Y-`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;IR/Left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Right X-`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;IR/Right&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Right X+`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;IR/Recenter&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Thumb R`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Shake/X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button W`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Shake/Y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button W`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Shake/Z&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Button W`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Extension&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;Nunchuk&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Buttons/C&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Shoulder L`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Buttons/Z&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Trigger L`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Stick/Up&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Left Y+`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Stick/Down&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Left Y-`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Stick/Left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Left X-`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Stick/Right&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;`Left X+`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Nunchuk/Stick/Calibration&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;100.00 141.42 100.00 141.42 100.00 141.42 100.00 141.42&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Extension/Attach MotionPlus&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;False&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Wiimote2]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Device&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;DInput/0/Keyboard Mouse&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Wiimote3]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Device&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;DInput/0/Keyboard Mouse&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Wiimote4]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Device&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;DInput/0/Keyboard Mouse&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[BalanceBoard]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Device&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;DInput/0/Keyboard Mouse&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los archivos están en &lt;code&gt;%APPDATA%\Dolphin Emulator\Config\&lt;/code&gt; (&lt;code&gt;WiimoteNew.ini&lt;/code&gt; y &lt;code&gt;GCPadNew.ini&lt;/code&gt;). Dolphin tiene que estar &lt;strong&gt;cerrado&lt;/strong&gt; al editarlos, o los sobrescribe.&lt;/p&gt;
+&lt;h1 id="si-algo-no-va"&gt;Si algo no va
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;El mando no responde&lt;/strong&gt;: &lt;em&gt;Controles → Wii Remote 1 → Configurar&lt;/em&gt;, y elige el mando en &lt;em&gt;Dispositivo&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El puntero vuelve al centro al soltar el stick&lt;/strong&gt;: activa &lt;em&gt;Entrada relativa&lt;/em&gt; en la pestaña del puntero (IR).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Las copias de seguridad están en &lt;code&gt;%APPDATA%\Dolphin Emulator\Config\&lt;/code&gt; con el sufijo &lt;code&gt;.bak.20261008015303&lt;/code&gt;. Con Dolphin cerrado, desde PowerShell:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-powershell" data-lang="powershell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd &lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$env:APPDATA&lt;/span&gt;&lt;span class="s2"&gt;\Dolphin Emulator\Config&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nb"&gt;Copy-Item&lt;/span&gt; &lt;span class="n"&gt;WiimoteNew&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;ini&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;bak&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;20261008015303&lt;/span&gt; &lt;span class="n"&gt;WiimoteNew&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;-Force&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nb"&gt;Copy-Item&lt;/span&gt; &lt;span class="n"&gt;GCPadNew&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;ini&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;bak&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;20261008015303&lt;/span&gt; &lt;span class="n"&gt;GCPadNew&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;-Force&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Windows reconoce el mando de Xbox como uno de PlayStation</title><link>https://volteret4.github.io/notas/p/mando-xbox-como-playstation-en-windows/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/mando-xbox-como-playstation-en-windows/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;Desde un día concreto (02-09-2026), Windows y los juegos trataban mi &lt;strong&gt;mando de Xbox&lt;/strong&gt; como uno de &lt;strong&gt;PlayStation&lt;/strong&gt;: botones △○✕□ y controles cambiados en cada juego.&lt;/p&gt;
+&lt;p&gt;Windows no hace eso por sí solo: un mando de Xbox es &lt;strong&gt;XInput&lt;/strong&gt; de forma nativa. Si aparece como DualShock, es que hay un &lt;strong&gt;mando virtual&lt;/strong&gt; emulado encima.&lt;/p&gt;
+&lt;h1 id="sospechosos-habituales"&gt;Sospechosos habituales
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Programa&lt;/th&gt;
+&lt;th&gt;Qué hace&lt;/th&gt;
+&lt;th&gt;Dónde mirarlo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;DS4Windows&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;emula un DualShock 4 con ViGEmBus&lt;/td&gt;
+&lt;td&gt;icono en la bandeja, perfil &amp;ldquo;DS4&amp;rdquo;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Steam Input&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;puede presentar el mando como PlayStation si está marcado &lt;em&gt;Soporte de configuración de PlayStation&lt;/em&gt;&lt;/td&gt;
+&lt;td&gt;Steam → &lt;em&gt;Ajustes → Mando&lt;/em&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;ViGEmBus / HidHide&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;el driver del mando virtual y el que oculta el físico&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;Administrador de dispositivos → Dispositivos del sistema&lt;/em&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Emuladores (PCSX2, RPCS3…)&lt;/td&gt;
+&lt;td&gt;algunos instalan drivers DS4&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;Panel de control → Programas&lt;/em&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Comprobar desde PowerShell qué mandos ve Windows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-powershell" data-lang="powershell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;Get-PnpDevice&lt;/span&gt; &lt;span class="n"&gt;-Class&lt;/span&gt; &lt;span class="n"&gt;HIDClass&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;XnaComposite&lt;/span&gt; &lt;span class="n"&gt;-PresentOnly&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="nb"&gt;Where-Object&lt;/span&gt; &lt;span class="n"&gt;FriendlyName&lt;/span&gt; &lt;span class="o"&gt;-match&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Xbox|XINPUT|Wireless Controller|DualShock|Game&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="nb"&gt;Select-Object&lt;/span&gt; &lt;span class="n"&gt;Status&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;FriendlyName&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;InstanceId&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si sale un &lt;em&gt;Wireless Controller&lt;/em&gt; (Sony) además del &lt;em&gt;Xbox Controller&lt;/em&gt;, el primero es el virtual. Quitarlo es tan simple como cerrar o desinstalar el programa que lo crea.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;joy.cpl&lt;/code&gt; (&lt;em&gt;Dispositivos de juego&lt;/em&gt;) muestra la lista que usan los juegos antiguos.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nota: la sesión del 03-09 ya no se conserva y hoy no puedo entrar en Windows, así que no sé cuál de estos fue la causa ni qué se cambió exactamente.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Si se desinstaló DS4Windows o ViGEmBus, se reinstalan desde sus releases de GitHub. Si fue un ajuste de Steam Input, se vuelve a marcar en &lt;em&gt;Ajustes → Mando&lt;/em&gt;.&lt;/p&gt;</description></item></channel></rss>

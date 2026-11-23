@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Oneline on memoria digital</title><link>https://volteret4.github.io/notas/tags/oneline/</link><description>Recent content in Oneline on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Tue, 20 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/oneline/index.xml" rel="self" type="application/rss+xml"/><item><title>Watch</title><link>https://volteret4.github.io/notas/p/watch/</link><pubDate>Tue, 20 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/watch/</guid><description>&lt;p&gt;Gracias a esta app puedes vigilar el output de una tarea repetitiva.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;watch ls -alh . &lt;span class="c1"&gt;# mostrará el contenido de la carpeta actual,, actualizando cada dos segundos&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;watch --differences df -h &lt;span class="c1"&gt;# mostrará el uso de los discos casi en tiempo real&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;watch --chgexit lsbl &lt;span class="c1"&gt;# Saldrá del comando al detectar un cambio&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>El Tiempo En El Terminal Oneline</title><link>https://volteret4.github.io/notas/p/el-tiempo-en-el-terminal-oneline/</link><pubDate>Sun, 18 Jan 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/el-tiempo-en-el-terminal-oneline/</guid><description>&lt;p&gt;Muestra la previsión metereológica para la ciudad que elijas durante los próximos días&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl wttr.in/Jerez
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Se Insultado Al Fallar Contraseña De Sudo</title><link>https://volteret4.github.io/notas/p/se-insultado-al-fallar-contrase%C3%B1a-de-sudo/</link><pubDate>Tue, 16 Dec 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/se-insultado-al-fallar-contrase%C3%B1a-de-sudo/</guid><description>&lt;p&gt;Primero edita las opciones de sudo con &lt;code&gt;sudo visudo&lt;/code&gt; y añade la línea:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Defaults insults
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Crear Multiples Archivos</title><link>https://volteret4.github.io/notas/p/crear-multiples-archivos/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-multiples-archivos/</guid><description>&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;touch roles/system/tasks/&lt;span class="o"&gt;{&lt;/span&gt;essential,main,user,ssh&lt;span class="o"&gt;}&lt;/span&gt;.yml
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;tree roles
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;roles
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└── system
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; └── tasks
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ├── essential.yml
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ├── main.yml
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ├── ssh.yml
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; └── user.yml
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="m"&gt;3&lt;/span&gt; directories, &lt;span class="m"&gt;4&lt;/span&gt; files
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Crear Multiples Archivos Oneline</title><link>https://volteret4.github.io/notas/p/crear-multiples-archivos-oneline/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-multiples-archivos-oneline/</guid><description/></item><item><title>Obtener Último Video De Un Canal De Youtube</title><link>https://volteret4.github.io/notas/p/obtener-%C3%BAltimo-video-de-un-canal-de-youtube/</link><pubDate>Thu, 31 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-%C3%BAltimo-video-de-un-canal-de-youtube/</guid><description>&lt;p&gt;&lt;code&gt;curl -s &amp;quot;https://decapi.me/youtube/latest_video?user=NPR&lt;/code&gt;&lt;/p&gt;</description></item><item><title>Buscar Cadena De Texto En Multiples Archivos</title><link>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</link><pubDate>Tue, 15 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/buscar-cadena-de-texto-en-multiples-archivos/</guid><description>&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="sb"&gt;`&lt;/span&gt;grep -rHni &lt;span class="s1"&gt;&amp;#39;cadena_de_texto&amp;#39;&lt;/span&gt; .&lt;span class="sb"&gt;`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;-r&lt;/code&gt; Recursivo.
+&lt;code&gt;-H&lt;/code&gt; mostrar nombre del archivo.
+&lt;code&gt;-n&lt;/code&gt; mostrar línea.&lt;/p&gt;</description></item><item><title>Compartir Archivo Oneline</title><link>https://volteret4.github.io/notas/p/compartir-archivo-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/compartir-archivo-oneline/</guid><description>&lt;p&gt;Con este comando puedes subir un archivo de texto para compartirlo fácilmente&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -F &lt;span class="nv"&gt;file&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;@starship.toml https://0x0.st
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Crear Código Qr Con Texto</title><link>https://volteret4.github.io/notas/p/crear-c%C3%B3digo-qr-con-texto/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-c%C3%B3digo-qr-con-texto/</guid><description>&lt;p&gt;&lt;code&gt;curl qrenco.de/STRING&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;echo STRING | curl -F-=\&amp;lt;- qrenco.de&lt;/code&gt;&lt;/p&gt;</description></item><item><title>Crear Commit Aleatorio</title><link>https://volteret4.github.io/notas/p/crear-commit-aleatorio/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/crear-commit-aleatorio/</guid><description>&lt;p&gt;Puedes usar estos comandos para añadir aleatoriedad a diferentes programas.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Commits aleatorios
+&lt;code&gt;curl -s https://whatthecommit.com/index.txt&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Chistes de padres
+&lt;code&gt;curl https://icanhazdadjoke.com&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Puede usarse por ejemplo en un &lt;strong&gt;alias&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Para chezmoi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;alias&lt;/span&gt; &lt;span class="nv"&gt;chzu&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;chezmoi git add . ; chezmoi git -- commit -m &amp;#34;$(curl -s https://whatthecommit.com/index.txt)&amp;#34; ; chezmoi git push&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Para git&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;alias&lt;/span&gt; &lt;span class="nv"&gt;gitodo&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;git add . ; git commit -m &amp;#34;$(curl -s https://whatthecommit.com/index.txt)&amp;#34; ; git push&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Obtener Ip Pública</title><link>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/obtener-ip-p%C3%BAblica/</guid><description>&lt;p&gt;Ejecuta cualquiera de estos comandos en un terminal para obtener la ip pública del host.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://github.com/chubin/awesome-console-services?tab=readme-ov-file#new-line" target="_blank" rel="noopener"
+&gt;Ip publica&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;curl ipaddy.net&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl eth0.me&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ipaddr.site&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.co&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.pro&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl curlmyip.net&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ipinfo.io/ip&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl icanhazip.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl checkip.amazonaws.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ip-api.com/line?fields=query&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.io/ip&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl -s ip.liquidweb.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ifconfig.es&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl ipaddress.sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl 2ip.ru&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Prueba De Velocidad De Internet</title><link>https://volteret4.github.io/notas/p/prueba-de-velocidad-de-internet/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/prueba-de-velocidad-de-internet/</guid><description>&lt;p&gt;Comprueba la velocidad de internet con este script online&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Valor Criptomonedas Oneline</title><link>https://volteret4.github.io/notas/p/valor-criptomonedas-oneline/</link><pubDate>Wed, 09 Jul 2025 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/valor-criptomonedas-oneline/</guid><description>&lt;p&gt;Con este linea puedes obtener información sobre el valor de diversas criptomonedas:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl rate.sx
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

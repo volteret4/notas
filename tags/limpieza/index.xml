@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Limpieza on memoria digital</title><link>https://volteret4.github.io/notas/tags/limpieza/</link><description>Recent content in Limpieza on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/limpieza/index.xml" rel="self" type="application/rss+xml"/><item><title>Encontrar los paquetes que no usas en Arch</title><link>https://volteret4.github.io/notas/p/paquetes-que-no-usas-en-arch/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/paquetes-que-no-usas-en-arch/</guid><description>&lt;h1 id="listar-lo-que-instalaste-tú"&gt;Listar lo que instalaste tú
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;pacman -Qe&lt;/code&gt; lista los paquetes instalados explícitamente, no como dependencias. &lt;code&gt;-m&lt;/code&gt; muestra solo los que no vienen de los repositorios (AUR):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pacman -Qeq &lt;span class="p"&gt;|&lt;/span&gt; wc -l
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pacman -Qmq
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Huérfanos (dependencias que ya nadie necesita):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pacman -Qdtq
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="ver-cuáles-no-usas"&gt;Ver cuáles no usas
+&lt;/h1&gt;&lt;p&gt;No hay un registro de uso, pero se puede mirar &lt;strong&gt;cuándo se ejecutó por última vez&lt;/strong&gt; el binario principal de cada paquete (&lt;code&gt;atime&lt;/code&gt;). Con &lt;code&gt;relatime&lt;/code&gt;, que es lo normal en ext4, el &lt;code&gt;atime&lt;/code&gt; se actualiza como mínimo una vez al día.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; p in &lt;span class="k"&gt;$(&lt;/span&gt;pacman -Qeq&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="nv"&gt;b&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;pacman -Qlq &lt;span class="nv"&gt;$p&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; grep -m1 &lt;span class="s1"&gt;&amp;#39;^/usr/bin/.&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; -n &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$b&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;printf&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;%s %s\n&amp;#39;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;stat -c %x &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$b&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; cut -d&lt;span class="s1"&gt;&amp;#39; &amp;#39;&lt;/span&gt; -f1&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$p&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;done&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sort &lt;span class="p"&gt;|&lt;/span&gt; head -60
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los de arriba son los que llevan más tiempo sin abrirse. Ojo con los que no tienen binario en &lt;code&gt;/usr/bin&lt;/code&gt; (fuentes, temas, librerías) y con los que se ejecutan como servicio.&lt;/p&gt;
+&lt;p&gt;Para ver qué instalaste y cuándo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;expac --timefmt&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;%F&amp;#39;&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;%l %n&amp;#39;&lt;/span&gt; &lt;span class="k"&gt;$(&lt;/span&gt;pacman -Qeq&lt;span class="k"&gt;)&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sort &lt;span class="p"&gt;|&lt;/span&gt; head -40
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="lo-que-quité-22-07-2026"&gt;Lo que quité (22-07-2026)
+&lt;/h1&gt;&lt;p&gt;Según &lt;code&gt;/var/log/pacman.log&lt;/code&gt;:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Tipo&lt;/th&gt;
+&lt;th&gt;Paquetes&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Terminales&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;terminator&lt;/code&gt;, &lt;code&gt;xfce4-terminal&lt;/code&gt;, &lt;code&gt;termite&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Navegador&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;brave-origin-beta-bin&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Mensajería&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;pidgin&lt;/code&gt;, &lt;code&gt;discord&lt;/code&gt;, &lt;code&gt;fluffychat&lt;/code&gt;, &lt;code&gt;matterbridge&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;YouTube&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;youtube-dl&lt;/code&gt; (ya está &lt;code&gt;yt-dlp&lt;/code&gt;), &lt;code&gt;ytfzf&lt;/code&gt;, &lt;code&gt;ytui-bin&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Backups&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;borg&lt;/code&gt;, &lt;code&gt;restic&lt;/code&gt; (uso Kopia)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;PDF&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;pdfarranger&lt;/code&gt;, &lt;code&gt;masterpdfeditor-free&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Otros&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;lf&lt;/code&gt;, &lt;code&gt;xfce4-artwork&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Para ver lo que borraste en una fecha concreta:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -E &lt;span class="s1"&gt;&amp;#39;^\[2026-07-22.*\] removed&amp;#39;&lt;/span&gt; /var/log/pacman.log
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Ojo: si un script o atajo lanzaba algún programa de la lista, deja de funcionar. Me pasó con &lt;code&gt;termite&lt;/code&gt; en &lt;code&gt;rc.lua&lt;/code&gt; de awesome, que cambié por alacritty.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -rn &lt;span class="s2"&gt;&amp;#34;termite\|terminator\|xfce4-terminal&amp;#34;&lt;/span&gt; ~/.config/awesome ~/Scripts 2&amp;gt;/dev/null &lt;span class="p"&gt;|&lt;/span&gt; grep -v &lt;span class="s2"&gt;&amp;#34;\.bak&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;Los del repositorio oficial se reinstalan con pacman (o desde &lt;code&gt;/var/cache/pacman/pkg&lt;/code&gt; si quieres la versión exacta):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo pacman -S terminator xfce4-terminal pidgin discord pdfarranger restic borg lf youtube-dl ytfzf
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Los de AUR (&lt;code&gt;termite&lt;/code&gt;, &lt;code&gt;brave-origin-beta-bin&lt;/code&gt;, &lt;code&gt;ytui-bin&lt;/code&gt;, &lt;code&gt;fluffychat&lt;/code&gt;, &lt;code&gt;masterpdfeditor-free&lt;/code&gt;, &lt;code&gt;matterbridge&lt;/code&gt;), con tu helper:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;yay -S brave-origin-beta-bin ytui-bin fluffychat masterpdfeditor-free matterbridge
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Recuperar espacio, copias ocultas de un repo con Git LFS</title><link>https://volteret4.github.io/notas/p/recuperar-espacio-repo-git-lfs/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/recuperar-espacio-repo-git-lfs/</guid><description>&lt;h1 id="el-problema"&gt;El problema
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;~/gits/pollo/rym_lastfm/.zed&lt;/code&gt; ocupaba muchísimo. Pero Zed es solo un editor: lo único suyo en esa carpeta es &lt;code&gt;settings.json&lt;/code&gt; (211 bytes).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;du -sh ~/gits/pollo/rym_lastfm/.zed/* ~/gits/pollo/rym_lastfm/.zed/.&lt;span class="o"&gt;[&lt;/span&gt;!.&lt;span class="o"&gt;]&lt;/span&gt;* 2&amp;gt;/dev/null &lt;span class="p"&gt;|&lt;/span&gt; sort -h
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Contenido de &lt;code&gt;.zed&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;Tamaño&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;.git&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;2,1 GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;.old&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;1,4 GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;docs&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;687 MB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;db&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;198 MB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Era &lt;strong&gt;una copia entera del repo&lt;/strong&gt; del 19-03-2026, de antes de reescribir el historial (cuando moví la base SQLite a Git LFS). Su &lt;code&gt;main&lt;/code&gt; estaba &amp;ldquo;353 delante, 349 detrás&amp;rdquo; de &lt;code&gt;origin/main&lt;/code&gt;: mismos mensajes de commit, pero con otros hashes.&lt;/p&gt;
+&lt;h1 id="cómo-comprobé-que-se-podía-borrar"&gt;Cómo comprobé que se podía borrar
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/gits/pollo/rym_lastfm/.zed log -1 --format&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;%H %ad %s&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git -C ~/gits/pollo/rym_lastfm/.zed rev-list --left-right --count main...origin/main
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Commits&lt;/strong&gt;: el historial viejo está entero en pepecono (&lt;code&gt;~/gits/pollo/rym_lastfm&lt;/code&gt;), y los mensajes están en el historial actual.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Archivos sueltos&lt;/strong&gt;: los &lt;code&gt;.sql&lt;/code&gt; y los scripts viejos son idénticos en &lt;code&gt;db/&lt;/code&gt; y &lt;code&gt;.old/&lt;/code&gt;, o se recuperan del historial de git.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Bases de datos&lt;/strong&gt;: eran versiones anteriores de las actuales de &lt;code&gt;db/&lt;/code&gt;, que son más nuevas.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="qué-borré-12-10-2026"&gt;Qué borré (12-10-2026)
+&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Ruta&lt;/th&gt;
+&lt;th&gt;Tamaño&lt;/th&gt;
+&lt;th&gt;Qué era&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/rym_lastfm/.zed/&lt;/code&gt; (todo menos &lt;code&gt;settings.json&lt;/code&gt;)&lt;/td&gt;
+&lt;td&gt;4,4 GB&lt;/td&gt;
+&lt;td&gt;copia del repo del 19-03&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/back_rym_lastfm/&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;4,4 GB&lt;/td&gt;
+&lt;td&gt;otra copia idéntica (mismo commit del 17-03)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~/gits/pollo/rym_lastfm/.old/db/db_new/lastfm_cache.db&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;1,4 GB&lt;/td&gt;
+&lt;td&gt;base de datos anterior a &lt;code&gt;lastfm_cache_rym_new_normalized.db&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Para conservar la configuración de Zed:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cp ~/gits/pollo/rym_lastfm/.zed/settings.json /tmp/zed-settings.json &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; rm -rf ~/gits/pollo/rym_lastfm/.zed &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; mkdir ~/gits/pollo/rym_lastfm/.zed &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; mv /tmp/zed-settings.json ~/gits/pollo/rym_lastfm/.zed/settings.json
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="lo-que-se-perdió-de-verdad"&gt;Lo que se perdió de verdad
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Dos versiones antiguas de las bases de datos (unos 723 MB), que no estaban ni en el repo ni en pepecono. Puede que sigan en el LFS de GitHub (no comprobado).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;lastfm_cache.db&lt;/code&gt;: &lt;code&gt;html_temporal.py&lt;/code&gt; y &lt;code&gt;html_usuarios.py&lt;/code&gt; todavía la usaban. Se adaptaron a la base normalizada: 7 rutas por defecto cambiadas y un error de SQL corregido en &lt;code&gt;db/db_reader.py&lt;/code&gt; (SQLite no admite &lt;code&gt;sub(ts)&lt;/code&gt; como alias de columnas).&lt;/li&gt;
+&lt;li&gt;Un &lt;code&gt;db/.env&lt;/code&gt; viejo (ya había uno más nuevo).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="moraleja"&gt;Moraleja
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Antes de copiar un repo &amp;ldquo;por si acaso&amp;rdquo; para reescribir su historial, haz &lt;code&gt;git bundle&lt;/code&gt; o &lt;code&gt;git clone --mirror&lt;/code&gt; &lt;strong&gt;fuera&lt;/strong&gt; del árbol de trabajo. Una copia dentro de una carpeta oculta se olvida y ocupa el doble.&lt;/li&gt;
+&lt;li&gt;Borrar archivos grandes del árbol no reduce &lt;code&gt;.git&lt;/code&gt; si siguen en el historial.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git count-objects -vH
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git lfs ls-files -s &lt;span class="p"&gt;|&lt;/span&gt; sort -k3 -h &lt;span class="p"&gt;|&lt;/span&gt; tail
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;No se puede: se borró, no se movió. Para recuperar el historial viejo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone pepecono:gits/pollo/rym_lastfm ~/rym_lastfm_viejo
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

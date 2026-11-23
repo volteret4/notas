@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Makemkv on memoria digital</title><link>https://volteret4.github.io/notas/tags/makemkv/</link><description>Recent content in Makemkv on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/makemkv/index.xml" rel="self" type="application/rss+xml"/><item><title>Tdarr en Proxmox, Blu-ray de Twin Peaks y avisos por Telegram</title><link>https://volteret4.github.io/notas/p/tdarr-proxmox-blu-ray-y-telegram/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/tdarr-proxmox-blu-ray-y-telegram/</guid><description>&lt;h1 id="montaje"&gt;Montaje
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Tdarr&lt;/strong&gt; corre en el LXC &lt;strong&gt;119&lt;/strong&gt; (&lt;code&gt;tdarr&lt;/code&gt;) de Proxmox. Servidor y nodo &lt;code&gt;live-lynx&lt;/code&gt; (el de la GPU) en &lt;code&gt;http://192.168.1.180:8265&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Puntos de montaje del LXC (&lt;code&gt;pct config 119&lt;/code&gt;):&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;mp&lt;/th&gt;
+&lt;th&gt;Host&lt;/th&gt;
+&lt;th&gt;Contenedor&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;mp0&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/mnt/pve/datos/shared/pelis&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/mnt/pelis&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;mp2&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/mnt/NFS/Pelis&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/mnt/NFS/Pelis&lt;/code&gt; (la biblioteca real de pepecono)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;Las ISOs de Blu-ray &lt;strong&gt;no las procesa Tdarr directamente&lt;/strong&gt;: primero hay que extraer los títulos a &lt;code&gt;.mkv&lt;/code&gt; y luego Tdarr los convierte.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="extracción-bd-extract-resumeservice"&gt;Extracción: &lt;code&gt;bd-extract-resume.service&lt;/code&gt;
+&lt;/h1&gt;&lt;p&gt;Un servicio systemd en Proxmox recorre las ISOs y extrae capítulo a capítulo, &lt;strong&gt;retomando&lt;/strong&gt; donde se quedó si se corta. El 18-07 se quedó colgado en el tercer capítulo y &lt;code&gt;sudo systemctl restart bd-extract-resume.service&lt;/code&gt; también se congelaba: el proceso de extracción estaba en estado &lt;code&gt;D&lt;/code&gt; (esperando E/S) y systemd esperaba a que muriera.&lt;/p&gt;
+&lt;p&gt;Para desatascarlo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh proxmox &lt;span class="s1"&gt;&amp;#39;systemctl status bd-extract-resume --no-pager; ps -eo pid,stat,cmd | grep -i -E &amp;#34;makemkv|ffmpeg|bd&amp;#34; | grep -v grep&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh proxmox &lt;span class="s1"&gt;&amp;#39;sudo systemctl kill -s KILL bd-extract-resume &amp;amp;&amp;amp; sudo systemctl reset-failed bd-extract-resume &amp;amp;&amp;amp; sudo systemctl start bd-extract-resume&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="avisos-de-telegram"&gt;Avisos de Telegram
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;pepecono:~/Scripts/utilities/tdarr/bd_notify.sh&lt;/code&gt; manda un mensaje con el progreso. Reutiliza el bot y el chat del flujo &lt;code&gt;tdarr-confirm&lt;/code&gt;, con el token cifrado con sops:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;span class="lnt"&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;#!/usr/bin/env bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;set&lt;/span&gt; -a
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;eval&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;sops --decrypt /home/pepe/Scripts/utilities/notificaciones/telegram/tdarr-confirm/.encrypted.env&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;set&lt;/span&gt; +a
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -s &lt;span class="s2"&gt;&amp;#34;https://api.telegram.org/bot&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;TELEGRAM_BOT_TOKEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/sendMessage&amp;#34;&lt;/span&gt; &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -d &lt;span class="nv"&gt;chat_id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;TELEGRAM_CHAT_ID&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -d &lt;span class="nv"&gt;text&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$1&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -d &lt;span class="nv"&gt;parse_mode&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;HTML&amp;#34;&lt;/span&gt; &amp;gt; /dev/null
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Uso: &lt;code&gt;bd_notify.sh &amp;quot;Twin Peaks: capítulo 3 extraído&amp;quot;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Para ver si Tdarr está convirtiendo de verdad (no basta con que esté &amp;ldquo;arrancado&amp;rdquo;):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -s http://192.168.1.180:8265/api/v2/status &lt;span class="p"&gt;|&lt;/span&gt; head -c &lt;span class="m"&gt;400&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;Nota: la sesión del 18-07 ya no se conserva y hoy no tengo acceso a Proxmox. Las rutas del servicio de extracción y su unidad exacta no las he podido comprobar; ver &lt;code&gt;systemctl cat bd-extract-resume&lt;/code&gt; en Proxmox.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh proxmox &lt;span class="s1"&gt;&amp;#39;sudo systemctl disable --now bd-extract-resume&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Borra la unidad de &lt;code&gt;/etc/systemd/system/&lt;/code&gt; y &lt;code&gt;bd_notify.sh&lt;/code&gt;. Los &lt;code&gt;.mkv&lt;/code&gt; extraídos están en la carpeta de entrada de Tdarr.&lt;/p&gt;</description></item></channel></rss>

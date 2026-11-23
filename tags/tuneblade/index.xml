@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tuneblade on memoria digital</title><link>https://volteret4.github.io/notas/tags/tuneblade/</link><description>Recent content in Tuneblade on memoria digital</description><generator>Hugo -- gohugo.io</generator><language>es-es</language><lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://volteret4.github.io/notas/tags/tuneblade/index.xml" rel="self" type="application/rss+xml"/><item><title>Mandar el audio de Windows a un Linux con PipeWire (Scream y AirPlay)</title><link>https://volteret4.github.io/notas/p/audio-de-windows-a-linux-pipewire/</link><pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate><guid>https://volteret4.github.io/notas/p/audio-de-windows-a-linux-pipewire/</guid><description>&lt;h1 id="contexto"&gt;Contexto
+&lt;/h1&gt;&lt;p&gt;pepecono tiene PipeWire con el módulo pulse por TCP (puerto &lt;strong&gt;4713&lt;/strong&gt;) y zeroconf, para que los otros Linux manden audio con un túnel. Para Windows hay dos opciones.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;~/.config/pipewire/pipewire-pulse.conf.d/&lt;/code&gt; en pepecono:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# auth.conf
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pulse.properties = {
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; server.address = [
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &amp;#34;unix:native&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &amp;#34;tcp:4713&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ]
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pulse.rules = [
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; matches = [ { tcp.port = 4713 } ]
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; actions = {
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; check-access = false
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# zeroconf.conf
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pulse.modules = [
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; { name = libpipewire-module-zeroconf-publish }
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;El fallo de los túneles entre Linux venía de &lt;strong&gt;IPv6&lt;/strong&gt;: avahi anunciaba la dirección &lt;code&gt;fe80::...&lt;/code&gt; y el túnel no llegaba a conectarse.&lt;/p&gt;
+&lt;h1 id="opción-1-scream"&gt;Opción 1: Scream
+&lt;/h1&gt;&lt;p&gt;&lt;a class="link" href="https://github.com/duncanthrax/scream" target="_blank" rel="noopener"
+&gt;Scream&lt;/a&gt; es una tarjeta de sonido virtual para Windows que manda el audio por la red. En Linux se recibe con &lt;code&gt;scream&lt;/code&gt; (en pepecono está en &lt;code&gt;/usr/bin/scream&lt;/code&gt;).&lt;/p&gt;
+&lt;h2 id="instalarlo-en-windows"&gt;Instalarlo en Windows
+&lt;/h2&gt;&lt;p&gt;El driver no está firmado por Microsoft, así que hay que activar el &lt;strong&gt;modo de prueba&lt;/strong&gt; antes de instalarlo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bat" data-lang="bat"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;bcdedit /set testsigning on
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Reinicia, instala el driver (&lt;code&gt;Install-x64.bat&lt;/code&gt; como administrador) y deja el modo de prueba &lt;strong&gt;activado&lt;/strong&gt;. Si lo desactivas, el driver deja de cargar.&lt;/p&gt;
+&lt;h2 id="unicast-en-lugar-de-multicast"&gt;Unicast en lugar de multicast
+&lt;/h2&gt;&lt;p&gt;Por defecto Scream manda en &lt;strong&gt;multicast&lt;/strong&gt; (239.255.77.77:4010). Con pi-hole y un router TP-Link no llegaba, aunque en Windows los vúmetros se movían. La solución es mandar en &lt;strong&gt;unicast&lt;/strong&gt; a la IP de pepecono, con valores en el registro.&lt;/p&gt;
+&lt;p&gt;La clave &lt;code&gt;Options&lt;/code&gt; &lt;strong&gt;no existe&lt;/strong&gt;: hay que crearla.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bat" data-lang="bat"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;reg add &lt;span class="s2"&gt;&amp;#34;HKLM\SYSTEM\CurrentControlSet\Services\Scream\Options&amp;#34;&lt;/span&gt; /v UnicastIPv4 /t REG_SZ /d 192.168.1.133 /f
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;reg add &lt;span class="s2"&gt;&amp;#34;HKLM\SYSTEM\CurrentControlSet\Services\Scream\Options&amp;#34;&lt;/span&gt; /v UnicastPort /t REG_DWORD /d 4010 /f
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Reinicia Windows (o desactiva y activa el dispositivo de audio Scream).&lt;/p&gt;
+&lt;h2 id="recibir-en-linux"&gt;Recibir en Linux
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;scream -o pulse -u -p &lt;span class="m"&gt;4010&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;-u&lt;/code&gt; escucha en unicast. Con PipeWire, &lt;code&gt;-o pulse&lt;/code&gt; aparece como un cliente más en &lt;code&gt;pavucontrol&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id="opción-2-airplay-con-tuneblade--shairport-sync"&gt;Opción 2: AirPlay con TuneBlade + shairport-sync
+&lt;/h1&gt;&lt;p&gt;TuneBlade, en Windows, manda el audio del sistema a receptores AirPlay. En pepecono el receptor es &lt;code&gt;shairport-sync&lt;/code&gt; con salida a PipeWire.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/etc/shairport-sync.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;general =
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; interface = &amp;#34;enp1s0&amp;#34;;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; port = 5005;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;interface = &amp;quot;enp1s0&amp;quot;&lt;/code&gt;: sin esto, shairport se anunciaba &lt;strong&gt;en cada interfaz&lt;/strong&gt;, incluidas las redes de Docker, y TuneBlade no conectaba con ninguna.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;port = 5005&lt;/code&gt;: el puerto por defecto, el &lt;strong&gt;5000&lt;/strong&gt;, estaba ocupado por un Flask (&lt;code&gt;ss -tlnp | grep 5000&lt;/code&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Para que use el PipeWire del usuario &lt;code&gt;pepe&lt;/code&gt; en lugar de ALSA, en &lt;code&gt;/etc/systemd/system/shairport-sync.service.d/override.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Service]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Environment&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;PIPEWIRE_RUNTIME_DIR=/run/user/1000&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;ExecStart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;ExecStart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/usr/bin/shairport-sync -o pw&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Sin esto salía &lt;code&gt;the default ALSA device is inaccessible -- &amp;quot;hw:0&amp;quot; used instead.&lt;/code&gt;: shairport, como usuario de sistema, no tiene acceso al PipeWire de la sesión. Para depurarlo a mano:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo &lt;span class="nv"&gt;PIPEWIRE_RUNTIME_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/run/user/&lt;span class="k"&gt;$(&lt;/span&gt;id -u pepe&lt;span class="k"&gt;)&lt;/span&gt; shairport-sync -o pw -vv
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Necesita &lt;code&gt;nqptp&lt;/code&gt; (AirPlay 2) y &lt;code&gt;avahi-daemon&lt;/code&gt; activos.&lt;/p&gt;
+&lt;p&gt;Un caso raro: con otro cliente Linux reproduciendo por túnel, el túnel del primero desaparecía de &lt;code&gt;pavucontrol&lt;/code&gt;. Cada cliente tenía que tener un nombre de &lt;em&gt;sink&lt;/em&gt; distinto.&lt;/p&gt;
+&lt;h1 id="estado-actual-31-10-2026"&gt;Estado actual (31-10-2026)
+&lt;/h1&gt;&lt;p&gt;&lt;code&gt;shairport-sync&lt;/code&gt; está en &lt;strong&gt;failed&lt;/strong&gt; desde el 28-10 (&lt;code&gt;start-limit-hit&lt;/code&gt;). El &lt;code&gt;pipewire.service&lt;/code&gt; de usuario de pepe solo arranca por socket, así que si no hay sesión de &lt;code&gt;pepe&lt;/code&gt; no hay PipeWire al que conectarse. Para volver a ponerlo en marcha:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;sudo systemctl reset-failed shairport-sync &amp;amp;&amp;amp; sudo systemctl restart shairport-sync &amp;amp;&amp;amp; journalctl -u shairport-sync -n 20 --no-pager&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Si falla por PipeWire, activa &lt;em&gt;lingering&lt;/em&gt; para que la sesión de &lt;code&gt;pepe&lt;/code&gt; arranque sin login:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;sudo loginctl enable-linger pepe&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h1 id="revertir"&gt;Revertir
+&lt;/h1&gt;&lt;p&gt;En Windows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bat" data-lang="bat"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;reg delete &lt;span class="s2"&gt;&amp;#34;HKLM\SYSTEM\CurrentControlSet\Services\Scream\Options&amp;#34;&lt;/span&gt; /f
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;bcdedit /set testsigning off
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Y desinstala el driver desde el &lt;em&gt;Administrador de dispositivos&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;En pepecono:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh pepecono &lt;span class="s1"&gt;&amp;#39;sudo rm -r /etc/systemd/system/shairport-sync.service.d &amp;amp;&amp;amp; sudo systemctl daemon-reload &amp;amp;&amp;amp; sudo systemctl disable --now shairport-sync&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Quita también &lt;code&gt;interface&lt;/code&gt; y &lt;code&gt;port&lt;/code&gt; de &lt;code&gt;/etc/shairport-sync.conf&lt;/code&gt;.&lt;/p&gt;</description></item></channel></rss>
